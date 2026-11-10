@@ -1,0 +1,828 @@
+{
+  "schemaVersion": 1,
+  "regions": [
+    {
+      "id": "R01",
+      "name": "Reedbank and Merewatch",
+      "level_min": 1,
+      "level_max": 5,
+      "chapter": 1,
+      "hub": "Reedbank camp / receiving shelter",
+      "landmarks": [
+        "Reed landing",
+        "Merewatch inspection gallery",
+        "Binding chamber"
+      ],
+      "connections": [
+        "R02"
+      ],
+      "rare_enemy_id": "R01_RARE",
+      "set_id": "R01_SET",
+      "hunt_unlock": "M02",
+      "exploration_set_cache": "Merewatch inspection lockbox",
+      "cache_relocation": "Unclaimed reward moves to receiving shelter if original site closes."
+    },
+    {
+      "id": "R02",
+      "name": "Salt Road and Dunmere",
+      "level_min": 5,
+      "level_max": 10,
+      "chapter": 2,
+      "hub": "Dunmere refuge hospice",
+      "landmarks": [
+        "Counting house",
+        "Toll station",
+        "Abandoned posthouse"
+      ],
+      "connections": [
+        "R01",
+        "R03",
+        "R05"
+      ],
+      "rare_enemy_id": "R02_RARE",
+      "set_id": "R02_SET",
+      "hunt_unlock": "B_R02_TOLL",
+      "exploration_set_cache": "Dunmere public depot strongbox",
+      "cache_relocation": "Unclaimed reward moves to receiving shelter if original site closes."
+    },
+    {
+      "id": "R03",
+      "name": "Alder Fen",
+      "level_min": 10,
+      "level_max": 16,
+      "chapter": 3,
+      "hub": "Sen's warded village",
+      "landmarks": [
+        "Plankwalk crossings",
+        "Flooded granary",
+        "Shelter trial refuges"
+      ],
+      "connections": [
+        "R02",
+        "R04"
+      ],
+      "rare_enemy_id": "R03_RARE",
+      "set_id": "R03_SET",
+      "hunt_unlock": "B_R03_SILT",
+      "exploration_set_cache": "Granary dry shelf",
+      "cache_relocation": "Unclaimed reward moves to receiving shelter if original site closes."
+    },
+    {
+      "id": "R04",
+      "name": "Orchard Highroad",
+      "level_min": 16,
+      "level_max": 22,
+      "chapter": 3,
+      "hub": "Restored orchard storehouse",
+      "landmarks": [
+        "Contaminated terraces",
+        "Old nursery",
+        "Ridge rest house"
+      ],
+      "connections": [
+        "R03",
+        "R05"
+      ],
+      "rare_enemy_id": "R04_RARE",
+      "set_id": "R04_SET",
+      "hunt_unlock": "B_R04_HART",
+      "exploration_set_cache": "Orchard rest-house cupboard",
+      "cache_relocation": "Unclaimed reward moves to receiving shelter if original site closes."
+    },
+    {
+      "id": "R05",
+      "name": "Crown Road and Regional Towers",
+      "level_min": 22,
+      "level_max": 28,
+      "chapter": 4,
+      "hub": "Bessa's handover depot",
+      "landmarks": [
+        "Disused watchhouse",
+        "Regional feeder approach",
+        "Unlit Quarry"
+      ],
+      "connections": [
+        "R04",
+        "R02",
+        "R06"
+      ],
+      "rare_enemy_id": "R05_RARE",
+      "set_id": "R05_SET",
+      "hunt_unlock": "M07",
+      "exploration_set_cache": "Crown Road depot returned-equipment chest",
+      "cache_relocation": "Unclaimed reward moves to receiving shelter if original site closes."
+    },
+    {
+      "id": "R06",
+      "name": "Veyr",
+      "level_min": 28,
+      "level_max": 34,
+      "chapter": 5,
+      "hub": "Refuge kitchen / allied receiving shelter",
+      "landmarks": [
+        "Intake ward",
+        "Neighborhood theater",
+        "Heart Bell service passage"
+      ],
+      "connections": [
+        "R05"
+      ],
+      "rare_enemy_id": "R06_RARE",
+      "set_id": "R06_SET",
+      "hunt_unlock": "M10",
+      "exploration_set_cache": "Veyr intake maintenance locker",
+      "cache_relocation": "Unclaimed reward moves to receiving shelter if original site closes."
+    }
+  ],
+  "families": [
+    {
+      "id": "REEDBACK",
+      "name": "Shelled reedback scavengers"
+    },
+    {
+      "id": "HOUND",
+      "name": "Road and fen hounds"
+    },
+    {
+      "id": "WISP",
+      "name": "Swarming Hush wisps"
+    },
+    {
+      "id": "SENTINEL",
+      "name": "Brass service constructs"
+    },
+    {
+      "id": "CANTOR",
+      "name": "Singing Hush"
+    },
+    {
+      "id": "WIDOW",
+      "name": "Venom-thread spiders and Hush"
+    },
+    {
+      "id": "HART",
+      "name": "Antlered Hush growths"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "R01_E1",
+      "name": "Mud Reedback",
+      "family": "REEDBACK",
+      "role": "armored",
+      "region_id": "R01",
+      "level": 1,
+      "weakness": [
+        "lightning"
+      ],
+      "resistance": [
+        "frost"
+      ],
+      "telegraph": "Pulls into its shell before a shove.",
+      "counter": "Use magic or guard the announced shove."
+    },
+    {
+      "id": "R01_E2",
+      "name": "Reed Hound",
+      "family": "HOUND",
+      "role": "striker",
+      "region_id": "R01",
+      "level": 2,
+      "weakness": [
+        "frost"
+      ],
+      "resistance": [],
+      "telegraph": "Lowers its head before a lunge.",
+      "counter": "Remove a pack member early."
+    },
+    {
+      "id": "R01_E3",
+      "name": "Soot Wisp",
+      "family": "WISP",
+      "role": "swarm",
+      "region_id": "R01",
+      "level": 2,
+      "weakness": [
+        "frost"
+      ],
+      "resistance": [
+        "fire"
+      ],
+      "telegraph": "Gathers sparks before spreading.",
+      "counter": "Area damage reduces the swarm's later actions."
+    },
+    {
+      "id": "R01_E4",
+      "name": "Brass Mite",
+      "family": "SENTINEL",
+      "role": "armored",
+      "region_id": "R01",
+      "level": 3,
+      "weakness": [
+        "lightning"
+      ],
+      "resistance": [
+        "poison_status"
+      ],
+      "telegraph": "Opens a vent to ready a piercing jab.",
+      "counter": "Strike while its mechanism is exposed."
+    },
+    {
+      "id": "R02_E1",
+      "name": "Salt Jackal",
+      "family": "HOUND",
+      "role": "striker",
+      "region_id": "R02",
+      "level": 5,
+      "weakness": [
+        "frost"
+      ],
+      "resistance": [],
+      "telegraph": "Watches the lowest-HP hero before its next attack.",
+      "counter": "Heal the threatened hero or guard."
+    },
+    {
+      "id": "R02_E2",
+      "name": "Coin Moth",
+      "family": "WISP",
+      "role": "swarm",
+      "region_id": "R02",
+      "level": 6,
+      "weakness": [
+        "fire"
+      ],
+      "resistance": [
+        "frost"
+      ],
+      "telegraph": "Reflective wings flare before a dust burst.",
+      "counter": "Favor reliable magical damage."
+    },
+    {
+      "id": "R02_E3",
+      "name": "Ledger Sentinel",
+      "family": "SENTINEL",
+      "role": "armored",
+      "region_id": "R02",
+      "level": 7,
+      "weakness": [
+        "lightning"
+      ],
+      "resistance": [
+        "poison_status"
+      ],
+      "telegraph": "Locks its shutters while supporting a caster.",
+      "counter": "Attack the fragile caster first."
+    },
+    {
+      "id": "R02_E4",
+      "name": "Wax Cantor",
+      "family": "CANTOR",
+      "role": "caster",
+      "region_id": "R02",
+      "level": 8,
+      "weakness": [
+        "fire"
+      ],
+      "resistance": [
+        "frost"
+      ],
+      "telegraph": "Inflates a wax throat before a silence attempt.",
+      "counter": "Prioritize it or prepare status recovery."
+    },
+    {
+      "id": "R03_E1",
+      "name": "Reed Widow",
+      "family": "WIDOW",
+      "role": "status",
+      "region_id": "R03",
+      "level": 10,
+      "weakness": [
+        "fire"
+      ],
+      "resistance": [
+        "poison_status"
+      ],
+      "telegraph": "Raises its marked forelegs before a venom strike.",
+      "counter": "Protect the marked hero or cure poison."
+    },
+    {
+      "id": "R03_E2",
+      "name": "Bog Reedback",
+      "family": "REEDBACK",
+      "role": "armored",
+      "region_id": "R03",
+      "level": 12,
+      "weakness": [
+        "lightning"
+      ],
+      "resistance": [
+        "frost"
+      ],
+      "telegraph": "Plants its shell before a sweeping ram.",
+      "counter": "Guard the announced heavy attack."
+    },
+    {
+      "id": "R03_E3",
+      "name": "Mourning Cantor",
+      "family": "CANTOR",
+      "role": "support",
+      "region_id": "R03",
+      "level": 13,
+      "weakness": [
+        "fire"
+      ],
+      "resistance": [
+        "frost"
+      ],
+      "telegraph": "A visible throat-ring brightens before a lullaby.",
+      "counter": "Defeat it before it supports the formation."
+    },
+    {
+      "id": "R03_E4",
+      "name": "Fen Hound",
+      "family": "HOUND",
+      "role": "striker",
+      "region_id": "R03",
+      "level": 14,
+      "weakness": [
+        "frost"
+      ],
+      "resistance": [],
+      "telegraph": "Circles a guarded hero, then chooses another.",
+      "counter": "Avoid relying on one protected tank."
+    },
+    {
+      "id": "R04_E1",
+      "name": "Thorn Spinner",
+      "family": "WIDOW",
+      "role": "status",
+      "region_id": "R04",
+      "level": 16,
+      "weakness": [
+        "fire"
+      ],
+      "resistance": [
+        "poison_status"
+      ],
+      "telegraph": "Weaves a dark knot before firing.",
+      "counter": "Use protection or focus fire."
+    },
+    {
+      "id": "R04_E2",
+      "name": "Cinder Hart",
+      "family": "HART",
+      "role": "striker",
+      "region_id": "R04",
+      "level": 18,
+      "weakness": [
+        "frost"
+      ],
+      "resistance": [
+        "fire"
+      ],
+      "telegraph": "Antlers brighten before a charge.",
+      "counter": "Guard, then exploit its recovery."
+    },
+    {
+      "id": "R04_E3",
+      "name": "Orchard Wisp",
+      "family": "WISP",
+      "role": "swarm",
+      "region_id": "R04",
+      "level": 19,
+      "weakness": [
+        "frost"
+      ],
+      "resistance": [
+        "fire"
+      ],
+      "telegraph": "Draws sparks toward a root before bursting.",
+      "counter": "Use area attacks to reduce the group."
+    },
+    {
+      "id": "R04_E4",
+      "name": "Husk Hound",
+      "family": "HOUND",
+      "role": "striker",
+      "region_id": "R04",
+      "level": 20,
+      "weakness": [
+        "frost"
+      ],
+      "resistance": [
+        "poison_status"
+      ],
+      "telegraph": "Scrapes the ground before attacking a wounded target.",
+      "counter": "Stabilize the threatened hero's HP."
+    },
+    {
+      "id": "R05_E1",
+      "name": "Road Bellwarden",
+      "family": "SENTINEL",
+      "role": "armored",
+      "region_id": "R05",
+      "level": 22,
+      "weakness": [
+        "lightning"
+      ],
+      "resistance": [
+        "poison_status"
+      ],
+      "telegraph": "Turns its shield toward an ally before covering it.",
+      "counter": "Change targets or use magic."
+    },
+    {
+      "id": "R05_E2",
+      "name": "Mirror Reedback",
+      "family": "REEDBACK",
+      "role": "armored",
+      "region_id": "R05",
+      "level": 24,
+      "weakness": [
+        "lightning"
+      ],
+      "resistance": [
+        "frost"
+      ],
+      "telegraph": "Raises reflective shell plates before a physical slam.",
+      "counter": "Guard the slam; its shell is not a magic-reflect effect."
+    },
+    {
+      "id": "R05_E3",
+      "name": "Gallows Cantor",
+      "family": "CANTOR",
+      "role": "support",
+      "region_id": "R05",
+      "level": 25,
+      "weakness": [
+        "fire"
+      ],
+      "resistance": [
+        "frost"
+      ],
+      "telegraph": "Its hanging throat-loop glows before the chant.",
+      "counter": "Keep silence recovery available."
+    },
+    {
+      "id": "R05_E4",
+      "name": "Antler Pilgrim",
+      "family": "HART",
+      "role": "striker",
+      "region_id": "R05",
+      "level": 26,
+      "weakness": [
+        "frost"
+      ],
+      "resistance": [
+        "fire"
+      ],
+      "telegraph": "Kneels before a heavy sweep.",
+      "counter": "Preserve protection for the telegraphed round."
+    },
+    {
+      "id": "R06_E1",
+      "name": "Crown Sentinel",
+      "family": "SENTINEL",
+      "role": "armored",
+      "region_id": "R06",
+      "level": 28,
+      "weakness": [
+        "lightning"
+      ],
+      "resistance": [
+        "poison_status"
+      ],
+      "telegraph": "Opens shoulder vents before its shield slam.",
+      "counter": "Attack during its recovery."
+    },
+    {
+      "id": "R06_E2",
+      "name": "Ink Widow",
+      "family": "WIDOW",
+      "role": "status",
+      "region_id": "R06",
+      "level": 29,
+      "weakness": [
+        "fire"
+      ],
+      "resistance": [
+        "poison_status"
+      ],
+      "telegraph": "Spreads its striped legs before marking a target.",
+      "counter": "Prioritize it or guard the marked hero."
+    },
+    {
+      "id": "R06_E3",
+      "name": "Glass Wisp",
+      "family": "WISP",
+      "role": "swarm",
+      "region_id": "R06",
+      "level": 30,
+      "weakness": [
+        "frost"
+      ],
+      "resistance": [
+        "fire"
+      ],
+      "telegraph": "Prisms align before a party-wide pulse.",
+      "counter": "Reduce the group quickly."
+    },
+    {
+      "id": "R06_E4",
+      "name": "Choir Shade",
+      "family": "CANTOR",
+      "role": "caster",
+      "region_id": "R06",
+      "level": 31,
+      "weakness": [
+        "fire"
+      ],
+      "resistance": [
+        "frost"
+      ],
+      "telegraph": "Its throat-rings light in sequence.",
+      "counter": "Defeat it before it supports the formation."
+    }
+  ],
+  "rares": [
+    {
+      "id": "R01_RARE",
+      "name": "Silver Reedback",
+      "region_id": "R01",
+      "level": 7,
+      "family": "REEDBACK",
+      "role": "armored",
+      "weakness": [
+        "lightning"
+      ],
+      "resistance": [
+        "frost"
+      ],
+      "telegraph": "Silver chevron shell withdraws before a powerful shove.",
+      "counter": "Guard the shove and strike during recovery."
+    },
+    {
+      "id": "R02_RARE",
+      "name": "Coinveil Jackal",
+      "region_id": "R02",
+      "level": 12,
+      "family": "HOUND",
+      "role": "striker",
+      "weakness": [
+        "frost"
+      ],
+      "resistance": [],
+      "telegraph": "Coin-shaped spots flare before a committed lunge.",
+      "counter": "Distinguish the visible lunge tell from its feint."
+    },
+    {
+      "id": "R03_RARE",
+      "name": "Moonlace Widow",
+      "region_id": "R03",
+      "level": 18,
+      "family": "WIDOW",
+      "role": "status",
+      "weakness": [
+        "fire"
+      ],
+      "resistance": [
+        "poison_status"
+      ],
+      "telegraph": "Crescent legs point at the next venom target.",
+      "counter": "Protect that hero and prepare poison recovery."
+    },
+    {
+      "id": "R04_RARE",
+      "name": "Amberglass Hart",
+      "region_id": "R04",
+      "level": 24,
+      "family": "HART",
+      "role": "striker",
+      "weakness": [
+        "frost"
+      ],
+      "resistance": [
+        "fire"
+      ],
+      "telegraph": "Amber antlers brighten before a sweeping charge.",
+      "counter": "Guard the sweep and use the reset to recover."
+    },
+    {
+      "id": "R05_RARE",
+      "name": "Ivory Bellwarden",
+      "region_id": "R05",
+      "level": 30,
+      "family": "SENTINEL",
+      "role": "armored",
+      "weakness": [
+        "lightning"
+      ],
+      "resistance": [
+        "poison_status"
+      ],
+      "telegraph": "Black handprints meet as the ivory plates brace.",
+      "counter": "Prepare during the defended assault, then attack the exposed core."
+    },
+    {
+      "id": "R06_RARE",
+      "name": "Starless Cantor",
+      "region_id": "R06",
+      "level": 36,
+      "family": "CANTOR",
+      "role": "caster",
+      "weakness": [
+        "fire"
+      ],
+      "resistance": [
+        "frost"
+      ],
+      "telegraph": "White throat-rings light before alternating chants.",
+      "counter": "Use its announced recovery window and keep silence recovery ready."
+    }
+  ],
+  "bosses": [
+    {
+      "id": "B_R01_BAILIFF",
+      "name": "Brass Bailiff",
+      "region_id": "R01",
+      "level": 4,
+      "optional": false,
+      "telegraph": "Hammer rises with a warning note before a heavy strike.",
+      "counter": "Guard, then attack external joints during recovery.",
+      "story_outcome": "Break the binding frame and rescue Orren alive; his body is not a target.",
+      "gold_party": 200,
+      "guaranteed_rewards": [
+        {
+          "type": "regional_set_choice",
+          "set_id": "R01_SET",
+          "source": "boss"
+        }
+      ]
+    },
+    {
+      "id": "B_R02_TOLL",
+      "name": "Toll Collector",
+      "region_id": "R02",
+      "level": 9,
+      "optional": false,
+      "telegraph": "Shutters rotate between protection and an exposed mechanism.",
+      "counter": "Prepare during the armored round and strike its opening.",
+      "story_outcome": "Free the holding yard by disabling the machine; no captive is inside it.",
+      "gold_party": 500,
+      "guaranteed_rewards": [
+        {
+          "type": "regional_set_choice",
+          "set_id": "R02_SET",
+          "source": "boss"
+        }
+      ]
+    },
+    {
+      "id": "B_R03_SILT",
+      "name": "Silt Crown",
+      "region_id": "R03",
+      "level": 15,
+      "optional": false,
+      "telegraph": "Floating debris forms a crown before a sweeping surge.",
+      "counter": "Guard the surge, then use fire against the exposed Hush growth.",
+      "story_outcome": "Open the flooded granary's existing food stores and supply route.",
+      "gold_party": 1200,
+      "guaranteed_rewards": [
+        {
+          "type": "regional_set_choice",
+          "set_id": "R03_SET",
+          "source": "boss"
+        }
+      ]
+    },
+    {
+      "id": "B_R04_HART",
+      "name": "Ashroot Hart",
+      "region_id": "R04",
+      "level": 21,
+      "optional": false,
+      "telegraph": "Roots darken before poison; antlers brighten before its charge.",
+      "counter": "Keep poison recovery ready and exploit the pause after a charge.",
+      "story_outcome": "Secure the orchard route and clean storehouse; soil does not instantly heal.",
+      "gold_party": 2600,
+      "guaranteed_rewards": [
+        {
+          "type": "regional_set_choice",
+          "set_id": "R04_SET",
+          "source": "boss"
+        }
+      ]
+    },
+    {
+      "id": "B_R05_CENSER",
+      "name": "Gate-Censer",
+      "region_id": "R05",
+      "level": 27,
+      "optional": false,
+      "telegraph": "Its armored bowl closes before a silencing chime.",
+      "counter": "Use physical attackers and recovery supplies, then strike the exposed stem.",
+      "story_outcome": "Open a regional feeder approach for captive rescue and supported handover.",
+      "gold_party": 4500,
+      "guaranteed_rewards": [
+        {
+          "type": "regional_set_choice",
+          "set_id": "R05_SET",
+          "source": "boss"
+        }
+      ]
+    },
+    {
+      "id": "B_R06_CHOIR",
+      "name": "Night Choir",
+      "region_id": "R06",
+      "level": 30,
+      "optional": false,
+      "telegraph": "Three sets of throat-rings identify the next chant.",
+      "counter": "Focus one singer while reserving protection and silence recovery.",
+      "story_outcome": "Open the final service stairwell for the rear guard.",
+      "gold_party": 2000,
+      "guaranteed_rewards": [
+        {
+          "type": "item",
+          "item_id": "HIGH_POTION",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "id": "B_R06_VALE",
+      "name": "Vale's Command Armor",
+      "region_id": "R06",
+      "level": 32,
+      "optional": false,
+      "telegraph": "Armor braces before a crushing order.",
+      "counter": "Guard and break external control braces.",
+      "story_outcome": "Extract Vale alive for judgment; victory does not pardon him.",
+      "gold_party": 0,
+      "guaranteed_rewards": []
+    },
+    {
+      "id": "B_R06_HEART",
+      "name": "Heart Bell",
+      "region_id": "R06",
+      "level": 34,
+      "optional": false,
+      "telegraph": "Resonance vanes visibly align before its strongest pulse.",
+      "counter": "Guard and conserve recovery through shield cycles.",
+      "story_outcome": "Stop the last active captive-fed bell after the evacuation preparations.",
+      "gold_party": 7000,
+      "guaranteed_rewards": [
+        {
+          "type": "regional_set_choice",
+          "set_id": "R06_SET",
+          "source": "boss"
+        }
+      ]
+    },
+    {
+      "id": "B_R04_WIDOW",
+      "name": "Briar Widow",
+      "region_id": "R04",
+      "level": 22,
+      "optional": true,
+      "telegraph": "Raised forelegs repeat the venom warning seen on damaged stems.",
+      "counter": "Protect the marked hero and cure poison.",
+      "story_outcome": "Recover Jessa's optional graft in SQ-R3 without affecting evacuation food.",
+      "gold_party": 1200,
+      "guaranteed_rewards": [
+        {
+          "type": "item",
+          "item_id": "ANTIDOTE",
+          "quantity": 3
+        },
+        {
+          "type": "item",
+          "item_id": "QUEST_FRUITWOOD_TOKEN",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "id": "B_R05_COLOSSUS",
+      "name": "Unlit Colossus",
+      "region_id": "R05",
+      "level": 42,
+      "optional": true,
+      "telegraph": "Quarry lamps outline its raised drill arm before an immense slam.",
+      "counter": "Prepare protection and exploit the long mechanical reset.",
+      "story_outcome": "Defeat an optional post-campaign testing construct; it is not the fog's cause.",
+      "gold_party": 10000,
+      "guaranteed_rewards": [
+        {
+          "type": "item",
+          "item_id": "DEEP_TEA",
+          "quantity": 1
+        },
+        {
+          "type": "cosmetic_unlock",
+          "id": "UNLIT_COLOSSUS_FINISH"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,319 @@
+{
+  "schemaVersion": 1,
+  "level_cap": 50,
+  "xp_curve": {
+    "quadratic": 10,
+    "cubic": 1.5,
+    "origin": "original campaign balance design"
+  },
+  "xp_policy": "Encounter XP_each is awarded to every hero, including KO heroes, after victory; never divide XP_each again. No main quest XP and no XP on flee/defeat.",
+  "heroes": {
+    "Mara": {
+      "hp": [
+        100,
+        17
+      ],
+      "strength": [
+        12,
+        2
+      ],
+      "magic": [
+        5,
+        0.6
+      ],
+      "accuracy": [
+        20,
+        2
+      ],
+      "armor": "heavy"
+    },
+    "Tavin": {
+      "hp": [
+        82,
+        14
+      ],
+      "strength": [
+        10,
+        2
+      ],
+      "magic": [
+        6,
+        0.7
+      ],
+      "accuracy": [
+        28,
+        3
+      ],
+      "armor": "light"
+    },
+    "Iona": {
+      "hp": [
+        74,
+        12
+      ],
+      "strength": [
+        7,
+        1
+      ],
+      "magic": [
+        12,
+        2
+      ],
+      "accuracy": [
+        14,
+        1
+      ],
+      "armor": "cloth"
+    },
+    "Soren": {
+      "hp": [
+        66,
+        11
+      ],
+      "strength": [
+        6,
+        1
+      ],
+      "magic": [
+        14,
+        2
+      ],
+      "accuracy": [
+        12,
+        1
+      ],
+      "armor": "cloth"
+    }
+  },
+  "spell_tier_unlocks": [
+    1,
+    5,
+    9,
+    13,
+    17,
+    21,
+    26,
+    31
+  ],
+  "max_charges_per_tier": 9,
+  "regions": [
+    {
+      "region_id": "R01",
+      "ordinary_battles_budget": 6,
+      "standard_formation_size": 2,
+      "normal_xp_each": 28,
+      "boss_xp_each_total": 88,
+      "normal_gold_party": 70,
+      "boss_gold_party_total": 200,
+      "weapon_price": 60,
+      "exit_level_target": 5
+    },
+    {
+      "region_id": "R02",
+      "ordinary_battles_budget": 12,
+      "standard_formation_size": 2,
+      "normal_xp_each": 110,
+      "boss_xp_each_total": 328,
+      "normal_gold_party": 180,
+      "boss_gold_party_total": 500,
+      "weapon_price": 180,
+      "exit_level_target": 10
+    },
+    {
+      "region_id": "R03",
+      "ordinary_battles_budget": 15,
+      "standard_formation_size": 2,
+      "normal_xp_each": 300,
+      "boss_xp_each_total": 908,
+      "normal_gold_party": 420,
+      "boss_gold_party_total": 1200,
+      "weapon_price": 480,
+      "exit_level_target": 16
+    },
+    {
+      "region_id": "R04",
+      "ordinary_battles_budget": 18,
+      "standard_formation_size": 2,
+      "normal_xp_each": 530,
+      "boss_xp_each_total": 1450,
+      "normal_gold_party": 850,
+      "boss_gold_party_total": 2600,
+      "weapon_price": 1100,
+      "exit_level_target": 22
+    },
+    {
+      "region_id": "R05",
+      "ordinary_battles_budget": 20,
+      "standard_formation_size": 2,
+      "normal_xp_each": 800,
+      "boss_xp_each_total": 2512,
+      "normal_gold_party": 1600,
+      "boss_gold_party_total": 4500,
+      "weapon_price": 2400,
+      "exit_level_target": 28
+    },
+    {
+      "region_id": "R06",
+      "ordinary_battles_budget": 24,
+      "standard_formation_size": 2,
+      "normal_xp_each": 1000,
+      "boss_xp_each_total": 3982,
+      "normal_gold_party": 2700,
+      "boss_gold_party_total": 9000,
+      "weapon_price": 4800,
+      "exit_level_target": 34
+    }
+  ],
+  "boss_xp_each": {
+    "B_R01_BAILIFF": 88,
+    "B_R02_TOLL": 328,
+    "B_R03_SILT": 908,
+    "B_R04_HART": 1450,
+    "B_R05_CENSER": 2512,
+    "B_R06_CHOIR": 950,
+    "B_R06_VALE": 1232,
+    "B_R06_HEART": 1800,
+    "B_R04_WIDOW": 1000,
+    "B_R05_COLOSSUS": 7000
+  },
+  "variants": [
+    {
+      "id": "BASE",
+      "prefix": "",
+      "level_offset": 0,
+      "palette": "native earth/metal color",
+      "rank_pips": 1,
+      "marking": "plain silhouette",
+      "placement": "authored regional roads"
+    },
+    {
+      "id": "ASHEN",
+      "prefix": "Ashen",
+      "level_offset": 3,
+      "palette": "cool slate with pale stripes",
+      "rank_pips": 2,
+      "marking": "pale diagonal stripe pattern",
+      "placement": "marked optional den or explicitly authored later region"
+    },
+    {
+      "id": "CRESTED",
+      "prefix": "Crested",
+      "level_offset": 6,
+      "palette": "deep violet",
+      "rank_pips": 3,
+      "marking": "raised crest and double stripe",
+      "placement": "marked optional den only unless explicitly added to a later formation"
+    }
+  ],
+  "loot": {
+    "natural_opportunity_chance": 0.02,
+    "tracked_hunt_after_wins": 12,
+    "unique_pieces_per_region": 3,
+    "pieces": [
+      "HEAD",
+      "MANTLE",
+      "CHARM"
+    ],
+    "one_time_sources": [
+      "cache",
+      "boss"
+    ],
+    "rare_reward": "choose unowned regional piece; supply_bundle after completion",
+    "normal_drop_chance": 0.2,
+    "normal_drop_pool": [
+      {
+        "item_id": "POTION",
+        "weight": 50
+      },
+      {
+        "item_id": "ANTIDOTE",
+        "weight": 25
+      },
+      {
+        "item_id": "SOOTHING_DRAUGHT",
+        "weight": 25
+      }
+    ],
+    "hunt_counter_policy": "saved per region; qualified authored victories only; no level restriction; no gain from summons, empty battles, tutorial resets, rare battles or losses; ready target persists until reward committed",
+    "normal_drop_semantics": "On a successful supply roll, choose exactly one item by relative weights. Independent of guaranteed set rewards.",
+    "bundles": {
+      "supply_bundle": [
+        {
+          "item_id": "POTION",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  "caps": {
+    "base_physical_hits": 4,
+    "hasted_hits": 8,
+    "set_status_resist_pp": 15,
+    "set_element_resist_percent": 10,
+    "set_physical_resist_percent": 3,
+    "set_magic_resist_percent": 3,
+    "set_first_hit_shield_percent": 5
+  },
+  "status": "All numbers are original analytical baselines, not playtested combat balance.",
+  "xp_thresholds": [
+    0,
+    12,
+    52,
+    130,
+    256,
+    438,
+    684,
+    1004,
+    1408,
+    1904,
+    2500,
+    3206,
+    4032,
+    4986,
+    6076,
+    7312,
+    8704,
+    10260,
+    11988,
+    13898,
+    16000,
+    18302,
+    20812,
+    23540,
+    26496,
+    29688,
+    33124,
+    36814,
+    40768,
+    44994,
+    49500,
+    54296,
+    59392,
+    64796,
+    70516,
+    76562,
+    82944,
+    89670,
+    96748,
+    104188,
+    112000,
+    120192,
+    128772,
+    137750,
+    147136,
+    156938,
+    167164,
+    177824,
+    188928,
+    200484
+  ],
+  "starting_loadout": {
+    "equipment_tier": 1,
+    "heroes": "All four begin with their own R01 weapon/body plus common R01 head/mantle/charm. Ordinary starter gear is not unique.",
+    "supplies": {
+      "POTION": 5,
+      "ANTIDOTE": 3,
+      "REVIVAL_SALT": 1
+    }
+  }
+}

@@ -1,0 +1,1874 @@
+{
+  "schemaVersion": 1,
+  "equipment_slots": [
+    "weapon",
+    "body",
+    "head",
+    "mantle",
+    "charm"
+  ],
+  "sets": [
+    {
+      "id": "R01_SET",
+      "name": "Reedwatch",
+      "region_id": "R01",
+      "pieces": [
+        "R01_SET_HEAD",
+        "R01_SET_MANTLE",
+        "R01_SET_CHARM"
+      ],
+      "two_piece_bonus": {
+        "first_hit_shield_percent": 5
+      },
+      "three_piece_additional_bonus": {
+        "poison_resist_pp": 10
+      },
+      "counting": "per wearer only; no party-wide set count; each unique piece can be worn by only one hero"
+    },
+    {
+      "id": "R02_SET",
+      "name": "Wayfarer",
+      "region_id": "R02",
+      "pieces": [
+        "R02_SET_HEAD",
+        "R02_SET_MANTLE",
+        "R02_SET_CHARM"
+      ],
+      "two_piece_bonus": {
+        "silence_resist_pp": 10
+      },
+      "three_piece_additional_bonus": {
+        "first_hit_shield_percent": 5
+      },
+      "counting": "per wearer only; no party-wide set count; each unique piece can be worn by only one hero"
+    },
+    {
+      "id": "R03_SET",
+      "name": "Fenkeeper",
+      "region_id": "R03",
+      "pieces": [
+        "R03_SET_HEAD",
+        "R03_SET_MANTLE",
+        "R03_SET_CHARM"
+      ],
+      "two_piece_bonus": {
+        "poison_resist_pp": 15
+      },
+      "three_piece_additional_bonus": {
+        "frost_resist_percent": 10
+      },
+      "counting": "per wearer only; no party-wide set count; each unique piece can be worn by only one hero"
+    },
+    {
+      "id": "R04_SET",
+      "name": "Orchard Vigil",
+      "region_id": "R04",
+      "pieces": [
+        "R04_SET_HEAD",
+        "R04_SET_MANTLE",
+        "R04_SET_CHARM"
+      ],
+      "two_piece_bonus": {
+        "sleep_resist_pp": 10
+      },
+      "three_piece_additional_bonus": {
+        "poison_resist_pp": 10
+      },
+      "counting": "per wearer only; no party-wide set count; each unique piece can be worn by only one hero"
+    },
+    {
+      "id": "R05_SET",
+      "name": "Roadward Oath",
+      "region_id": "R05",
+      "pieces": [
+        "R05_SET_HEAD",
+        "R05_SET_MANTLE",
+        "R05_SET_CHARM"
+      ],
+      "two_piece_bonus": {
+        "physical_resist_percent": 3
+      },
+      "three_piece_additional_bonus": {
+        "silence_resist_pp": 10
+      },
+      "counting": "per wearer only; no party-wide set count; each unique piece can be worn by only one hero"
+    },
+    {
+      "id": "R06_SET",
+      "name": "Open Hand",
+      "region_id": "R06",
+      "pieces": [
+        "R06_SET_HEAD",
+        "R06_SET_MANTLE",
+        "R06_SET_CHARM"
+      ],
+      "two_piece_bonus": {
+        "magic_resist_percent": 3
+      },
+      "three_piece_additional_bonus": {
+        "first_hit_shield_percent": 5
+      },
+      "counting": "per wearer only; no party-wide set count; each unique piece can be worn by only one hero"
+    }
+  ],
+  "items": [
+    {
+      "id": "R01_MARA_WEAPON",
+      "name": "Riveted Sword",
+      "kind": "equipment",
+      "slot": "weapon",
+      "tier": 1,
+      "region_id": "R01",
+      "users": [
+        "Mara"
+      ],
+      "stats": {
+        "attack": 8
+      },
+      "gold_price": 60,
+      "source": "regional shop; equivalent guaranteed chest rewards may substitute"
+    },
+    {
+      "id": "R01_MARA_BODY",
+      "name": "Reedbank Hauberk (Mara)",
+      "kind": "equipment",
+      "slot": "body",
+      "tier": 1,
+      "region_id": "R01",
+      "users": [
+        "Mara"
+      ],
+      "stats": {
+        "defense": 6
+      },
+      "gold_price": 48,
+      "source": "regional shop"
+    },
+    {
+      "id": "R01_TAVIN_WEAPON",
+      "name": "Woven Knucklewraps",
+      "kind": "equipment",
+      "slot": "weapon",
+      "tier": 1,
+      "region_id": "R01",
+      "users": [
+        "Tavin"
+      ],
+      "stats": {
+        "attack": 6
+      },
+      "gold_price": 60,
+      "source": "regional shop; equivalent guaranteed chest rewards may substitute"
+    },
+    {
+      "id": "R01_TAVIN_BODY",
+      "name": "Reedbank Vest (Tavin)",
+      "kind": "equipment",
+      "slot": "body",
+      "tier": 1,
+      "region_id": "R01",
+      "users": [
+        "Tavin"
+      ],
+      "stats": {
+        "defense": 4
+      },
+      "gold_price": 48,
+      "source": "regional shop"
+    },
+    {
+      "id": "R01_IONA_WEAPON",
+      "name": "Ashwood Staff",
+      "kind": "equipment",
+      "slot": "weapon",
+      "tier": 1,
+      "region_id": "R01",
+      "users": [
+        "Iona"
+      ],
+      "stats": {
+        "attack": 3,
+        "magic": 3
+      },
+      "gold_price": 60,
+      "source": "regional shop; equivalent guaranteed chest rewards may substitute"
+    },
+    {
+      "id": "R01_IONA_BODY",
+      "name": "Reedbank Robe (Iona)",
+      "kind": "equipment",
+      "slot": "body",
+      "tier": 1,
+      "region_id": "R01",
+      "users": [
+        "Iona"
+      ],
+      "stats": {
+        "defense": 2
+      },
+      "gold_price": 48,
+      "source": "regional shop"
+    },
+    {
+      "id": "R01_SOREN_WEAPON",
+      "name": "Copper Focus",
+      "kind": "equipment",
+      "slot": "weapon",
+      "tier": 1,
+      "region_id": "R01",
+      "users": [
+        "Soren"
+      ],
+      "stats": {
+        "attack": 3,
+        "magic": 3
+      },
+      "gold_price": 60,
+      "source": "regional shop; equivalent guaranteed chest rewards may substitute"
+    },
+    {
+      "id": "R01_SOREN_BODY",
+      "name": "Reedbank Robe (Soren)",
+      "kind": "equipment",
+      "slot": "body",
+      "tier": 1,
+      "region_id": "R01",
+      "users": [
+        "Soren"
+      ],
+      "stats": {
+        "defense": 2
+      },
+      "gold_price": 48,
+      "source": "regional shop"
+    },
+    {
+      "id": "R01_COMMON_HEAD",
+      "name": "Reedbank Travel Circlet",
+      "kind": "equipment",
+      "slot": "head",
+      "tier": 1,
+      "region_id": "R01",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "defense": 1
+      },
+      "gold_price": 12,
+      "source": "regional shop"
+    },
+    {
+      "id": "R01_COMMON_MANTLE",
+      "name": "Reedbank Road Mantle",
+      "kind": "equipment",
+      "slot": "mantle",
+      "tier": 1,
+      "region_id": "R01",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "defense": 0
+      },
+      "gold_price": 12,
+      "source": "regional shop"
+    },
+    {
+      "id": "R01_COMMON_CHARM",
+      "name": "Reedbank Ward Token",
+      "kind": "equipment",
+      "slot": "charm",
+      "tier": 1,
+      "region_id": "R01",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "magicDefense": 2
+      },
+      "gold_price": 12,
+      "source": "regional shop"
+    },
+    {
+      "id": "R02_MARA_WEAPON",
+      "name": "Roadguard Blade",
+      "kind": "equipment",
+      "slot": "weapon",
+      "tier": 2,
+      "region_id": "R02",
+      "users": [
+        "Mara"
+      ],
+      "stats": {
+        "attack": 14
+      },
+      "gold_price": 180,
+      "source": "regional shop; equivalent guaranteed chest rewards may substitute"
+    },
+    {
+      "id": "R02_MARA_BODY",
+      "name": "Saltroad Hauberk (Mara)",
+      "kind": "equipment",
+      "slot": "body",
+      "tier": 2,
+      "region_id": "R02",
+      "users": [
+        "Mara"
+      ],
+      "stats": {
+        "defense": 12
+      },
+      "gold_price": 144,
+      "source": "regional shop"
+    },
+    {
+      "id": "R02_TAVIN_WEAPON",
+      "name": "Courier Grips",
+      "kind": "equipment",
+      "slot": "weapon",
+      "tier": 2,
+      "region_id": "R02",
+      "users": [
+        "Tavin"
+      ],
+      "stats": {
+        "attack": 12
+      },
+      "gold_price": 180,
+      "source": "regional shop; equivalent guaranteed chest rewards may substitute"
+    },
+    {
+      "id": "R02_TAVIN_BODY",
+      "name": "Saltroad Vest (Tavin)",
+      "kind": "equipment",
+      "slot": "body",
+      "tier": 2,
+      "region_id": "R02",
+      "users": [
+        "Tavin"
+      ],
+      "stats": {
+        "defense": 8
+      },
+      "gold_price": 144,
+      "source": "regional shop"
+    },
+    {
+      "id": "R02_IONA_WEAPON",
+      "name": "Hospice Staff",
+      "kind": "equipment",
+      "slot": "weapon",
+      "tier": 2,
+      "region_id": "R02",
+      "users": [
+        "Iona"
+      ],
+      "stats": {
+        "attack": 6,
+        "magic": 6
+      },
+      "gold_price": 180,
+      "source": "regional shop; equivalent guaranteed chest rewards may substitute"
+    },
+    {
+      "id": "R02_IONA_BODY",
+      "name": "Saltroad Robe (Iona)",
+      "kind": "equipment",
+      "slot": "body",
+      "tier": 2,
+      "region_id": "R02",
+      "users": [
+        "Iona"
+      ],
+      "stats": {
+        "defense": 5
+      },
+      "gold_price": 144,
+      "source": "regional shop"
+    },
+    {
+      "id": "R02_SOREN_WEAPON",
+      "name": "Surveyor Focus",
+      "kind": "equipment",
+      "slot": "weapon",
+      "tier": 2,
+      "region_id": "R02",
+      "users": [
+        "Soren"
+      ],
+      "stats": {
+        "attack": 6,
+        "magic": 6
+      },
+      "gold_price": 180,
+      "source": "regional shop; equivalent guaranteed chest rewards may substitute"
+    },
+    {
+      "id": "R02_SOREN_BODY",
+      "name": "Saltroad Robe (Soren)",
+      "kind": "equipment",
+      "slot": "body",
+      "tier": 2,
+      "region_id": "R02",
+      "users": [
+        "Soren"
+      ],
+      "stats": {
+        "defense": 5
+      },
+      "gold_price": 144,
+      "source": "regional shop"
+    },
+    {
+      "id": "R02_COMMON_HEAD",
+      "name": "Saltroad Travel Circlet",
+      "kind": "equipment",
+      "slot": "head",
+      "tier": 2,
+      "region_id": "R02",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "defense": 2
+      },
+      "gold_price": 36,
+      "source": "regional shop"
+    },
+    {
+      "id": "R02_COMMON_MANTLE",
+      "name": "Saltroad Road Mantle",
+      "kind": "equipment",
+      "slot": "mantle",
+      "tier": 2,
+      "region_id": "R02",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "defense": 1
+      },
+      "gold_price": 36,
+      "source": "regional shop"
+    },
+    {
+      "id": "R02_COMMON_CHARM",
+      "name": "Saltroad Ward Token",
+      "kind": "equipment",
+      "slot": "charm",
+      "tier": 2,
+      "region_id": "R02",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "magicDefense": 4
+      },
+      "gold_price": 36,
+      "source": "regional shop"
+    },
+    {
+      "id": "R03_MARA_WEAPON",
+      "name": "Fensteel Sword",
+      "kind": "equipment",
+      "slot": "weapon",
+      "tier": 3,
+      "region_id": "R03",
+      "users": [
+        "Mara"
+      ],
+      "stats": {
+        "attack": 22
+      },
+      "gold_price": 480,
+      "source": "regional shop; equivalent guaranteed chest rewards may substitute"
+    },
+    {
+      "id": "R03_MARA_BODY",
+      "name": "Fenkeeper Hauberk (Mara)",
+      "kind": "equipment",
+      "slot": "body",
+      "tier": 3,
+      "region_id": "R03",
+      "users": [
+        "Mara"
+      ],
+      "stats": {
+        "defense": 20
+      },
+      "gold_price": 384,
+      "source": "regional shop"
+    },
+    {
+      "id": "R03_TAVIN_WEAPON",
+      "name": "Reedsteel Knuckles",
+      "kind": "equipment",
+      "slot": "weapon",
+      "tier": 3,
+      "region_id": "R03",
+      "users": [
+        "Tavin"
+      ],
+      "stats": {
+        "attack": 19
+      },
+      "gold_price": 480,
+      "source": "regional shop; equivalent guaranteed chest rewards may substitute"
+    },
+    {
+      "id": "R03_TAVIN_BODY",
+      "name": "Fenkeeper Vest (Tavin)",
+      "kind": "equipment",
+      "slot": "body",
+      "tier": 3,
+      "region_id": "R03",
+      "users": [
+        "Tavin"
+      ],
+      "stats": {
+        "defense": 14
+      },
+      "gold_price": 384,
+      "source": "regional shop"
+    },
+    {
+      "id": "R03_IONA_WEAPON",
+      "name": "Willow Crook",
+      "kind": "equipment",
+      "slot": "weapon",
+      "tier": 3,
+      "region_id": "R03",
+      "users": [
+        "Iona"
+      ],
+      "stats": {
+        "attack": 10,
+        "magic": 9
+      },
+      "gold_price": 480,
+      "source": "regional shop; equivalent guaranteed chest rewards may substitute"
+    },
+    {
+      "id": "R03_IONA_BODY",
+      "name": "Fenkeeper Robe (Iona)",
+      "kind": "equipment",
+      "slot": "body",
+      "tier": 3,
+      "region_id": "R03",
+      "users": [
+        "Iona"
+      ],
+      "stats": {
+        "defense": 9
+      },
+      "gold_price": 384,
+      "source": "regional shop"
+    },
+    {
+      "id": "R03_SOREN_WEAPON",
+      "name": "Marshglass Focus",
+      "kind": "equipment",
+      "slot": "weapon",
+      "tier": 3,
+      "region_id": "R03",
+      "users": [
+        "Soren"
+      ],
+      "stats": {
+        "attack": 10,
+        "magic": 9
+      },
+      "gold_price": 480,
+      "source": "regional shop; equivalent guaranteed chest rewards may substitute"
+    },
+    {
+      "id": "R03_SOREN_BODY",
+      "name": "Fenkeeper Robe (Soren)",
+      "kind": "equipment",
+      "slot": "body",
+      "tier": 3,
+      "region_id": "R03",
+      "users": [
+        "Soren"
+      ],
+      "stats": {
+        "defense": 9
+      },
+      "gold_price": 384,
+      "source": "regional shop"
+    },
+    {
+      "id": "R03_COMMON_HEAD",
+      "name": "Fenkeeper Travel Circlet",
+      "kind": "equipment",
+      "slot": "head",
+      "tier": 3,
+      "region_id": "R03",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "defense": 3
+      },
+      "gold_price": 96,
+      "source": "regional shop"
+    },
+    {
+      "id": "R03_COMMON_MANTLE",
+      "name": "Fenkeeper Road Mantle",
+      "kind": "equipment",
+      "slot": "mantle",
+      "tier": 3,
+      "region_id": "R03",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "defense": 2
+      },
+      "gold_price": 96,
+      "source": "regional shop"
+    },
+    {
+      "id": "R03_COMMON_CHARM",
+      "name": "Fenkeeper Ward Token",
+      "kind": "equipment",
+      "slot": "charm",
+      "tier": 3,
+      "region_id": "R03",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "magicDefense": 6
+      },
+      "gold_price": 96,
+      "source": "regional shop"
+    },
+    {
+      "id": "R04_MARA_WEAPON",
+      "name": "Orchard Falchion",
+      "kind": "equipment",
+      "slot": "weapon",
+      "tier": 4,
+      "region_id": "R04",
+      "users": [
+        "Mara"
+      ],
+      "stats": {
+        "attack": 31
+      },
+      "gold_price": 1100,
+      "source": "regional shop; equivalent guaranteed chest rewards may substitute"
+    },
+    {
+      "id": "R04_MARA_BODY",
+      "name": "Orchard Hauberk (Mara)",
+      "kind": "equipment",
+      "slot": "body",
+      "tier": 4,
+      "region_id": "R04",
+      "users": [
+        "Mara"
+      ],
+      "stats": {
+        "defense": 30
+      },
+      "gold_price": 880,
+      "source": "regional shop"
+    },
+    {
+      "id": "R04_TAVIN_WEAPON",
+      "name": "Thornbreaker Wraps",
+      "kind": "equipment",
+      "slot": "weapon",
+      "tier": 4,
+      "region_id": "R04",
+      "users": [
+        "Tavin"
+      ],
+      "stats": {
+        "attack": 27
+      },
+      "gold_price": 1100,
+      "source": "regional shop; equivalent guaranteed chest rewards may substitute"
+    },
+    {
+      "id": "R04_TAVIN_BODY",
+      "name": "Orchard Vest (Tavin)",
+      "kind": "equipment",
+      "slot": "body",
+      "tier": 4,
+      "region_id": "R04",
+      "users": [
+        "Tavin"
+      ],
+      "stats": {
+        "defense": 21
+      },
+      "gold_price": 880,
+      "source": "regional shop"
+    },
+    {
+      "id": "R04_IONA_WEAPON",
+      "name": "Orchardwood Staff",
+      "kind": "equipment",
+      "slot": "weapon",
+      "tier": 4,
+      "region_id": "R04",
+      "users": [
+        "Iona"
+      ],
+      "stats": {
+        "attack": 15,
+        "magic": 12
+      },
+      "gold_price": 1100,
+      "source": "regional shop; equivalent guaranteed chest rewards may substitute"
+    },
+    {
+      "id": "R04_IONA_BODY",
+      "name": "Orchard Robe (Iona)",
+      "kind": "equipment",
+      "slot": "body",
+      "tier": 4,
+      "region_id": "R04",
+      "users": [
+        "Iona"
+      ],
+      "stats": {
+        "defense": 14
+      },
+      "gold_price": 880,
+      "source": "regional shop"
+    },
+    {
+      "id": "R04_SOREN_WEAPON",
+      "name": "Amber Focus",
+      "kind": "equipment",
+      "slot": "weapon",
+      "tier": 4,
+      "region_id": "R04",
+      "users": [
+        "Soren"
+      ],
+      "stats": {
+        "attack": 15,
+        "magic": 12
+      },
+      "gold_price": 1100,
+      "source": "regional shop; equivalent guaranteed chest rewards may substitute"
+    },
+    {
+      "id": "R04_SOREN_BODY",
+      "name": "Orchard Robe (Soren)",
+      "kind": "equipment",
+      "slot": "body",
+      "tier": 4,
+      "region_id": "R04",
+      "users": [
+        "Soren"
+      ],
+      "stats": {
+        "defense": 14
+      },
+      "gold_price": 880,
+      "source": "regional shop"
+    },
+    {
+      "id": "R04_COMMON_HEAD",
+      "name": "Orchard Travel Circlet",
+      "kind": "equipment",
+      "slot": "head",
+      "tier": 4,
+      "region_id": "R04",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "defense": 5
+      },
+      "gold_price": 220,
+      "source": "regional shop"
+    },
+    {
+      "id": "R04_COMMON_MANTLE",
+      "name": "Orchard Road Mantle",
+      "kind": "equipment",
+      "slot": "mantle",
+      "tier": 4,
+      "region_id": "R04",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "defense": 3
+      },
+      "gold_price": 220,
+      "source": "regional shop"
+    },
+    {
+      "id": "R04_COMMON_CHARM",
+      "name": "Orchard Ward Token",
+      "kind": "equipment",
+      "slot": "charm",
+      "tier": 4,
+      "region_id": "R04",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "magicDefense": 8
+      },
+      "gold_price": 220,
+      "source": "regional shop"
+    },
+    {
+      "id": "R05_MARA_WEAPON",
+      "name": "Convoy Longsword",
+      "kind": "equipment",
+      "slot": "weapon",
+      "tier": 5,
+      "region_id": "R05",
+      "users": [
+        "Mara"
+      ],
+      "stats": {
+        "attack": 42
+      },
+      "gold_price": 2400,
+      "source": "regional shop; equivalent guaranteed chest rewards may substitute"
+    },
+    {
+      "id": "R05_MARA_BODY",
+      "name": "Roadwarden Hauberk (Mara)",
+      "kind": "equipment",
+      "slot": "body",
+      "tier": 5,
+      "region_id": "R05",
+      "users": [
+        "Mara"
+      ],
+      "stats": {
+        "defense": 42
+      },
+      "gold_price": 1920,
+      "source": "regional shop"
+    },
+    {
+      "id": "R05_TAVIN_WEAPON",
+      "name": "Watchrunner Grips",
+      "kind": "equipment",
+      "slot": "weapon",
+      "tier": 5,
+      "region_id": "R05",
+      "users": [
+        "Tavin"
+      ],
+      "stats": {
+        "attack": 36
+      },
+      "gold_price": 2400,
+      "source": "regional shop; equivalent guaranteed chest rewards may substitute"
+    },
+    {
+      "id": "R05_TAVIN_BODY",
+      "name": "Roadwarden Vest (Tavin)",
+      "kind": "equipment",
+      "slot": "body",
+      "tier": 5,
+      "region_id": "R05",
+      "users": [
+        "Tavin"
+      ],
+      "stats": {
+        "defense": 30
+      },
+      "gold_price": 1920,
+      "source": "regional shop"
+    },
+    {
+      "id": "R05_IONA_WEAPON",
+      "name": "Shelterkeeper Crook",
+      "kind": "equipment",
+      "slot": "weapon",
+      "tier": 5,
+      "region_id": "R05",
+      "users": [
+        "Iona"
+      ],
+      "stats": {
+        "attack": 21,
+        "magic": 15
+      },
+      "gold_price": 2400,
+      "source": "regional shop; equivalent guaranteed chest rewards may substitute"
+    },
+    {
+      "id": "R05_IONA_BODY",
+      "name": "Roadwarden Robe (Iona)",
+      "kind": "equipment",
+      "slot": "body",
+      "tier": 5,
+      "region_id": "R05",
+      "users": [
+        "Iona"
+      ],
+      "stats": {
+        "defense": 20
+      },
+      "gold_price": 1920,
+      "source": "regional shop"
+    },
+    {
+      "id": "R05_SOREN_WEAPON",
+      "name": "Open-Coil Focus",
+      "kind": "equipment",
+      "slot": "weapon",
+      "tier": 5,
+      "region_id": "R05",
+      "users": [
+        "Soren"
+      ],
+      "stats": {
+        "attack": 21,
+        "magic": 15
+      },
+      "gold_price": 2400,
+      "source": "regional shop; equivalent guaranteed chest rewards may substitute"
+    },
+    {
+      "id": "R05_SOREN_BODY",
+      "name": "Roadwarden Robe (Soren)",
+      "kind": "equipment",
+      "slot": "body",
+      "tier": 5,
+      "region_id": "R05",
+      "users": [
+        "Soren"
+      ],
+      "stats": {
+        "defense": 20
+      },
+      "gold_price": 1920,
+      "source": "regional shop"
+    },
+    {
+      "id": "R05_COMMON_HEAD",
+      "name": "Roadwarden Travel Circlet",
+      "kind": "equipment",
+      "slot": "head",
+      "tier": 5,
+      "region_id": "R05",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "defense": 7
+      },
+      "gold_price": 480,
+      "source": "regional shop"
+    },
+    {
+      "id": "R05_COMMON_MANTLE",
+      "name": "Roadwarden Road Mantle",
+      "kind": "equipment",
+      "slot": "mantle",
+      "tier": 5,
+      "region_id": "R05",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "defense": 4
+      },
+      "gold_price": 480,
+      "source": "regional shop"
+    },
+    {
+      "id": "R05_COMMON_CHARM",
+      "name": "Roadwarden Ward Token",
+      "kind": "equipment",
+      "slot": "charm",
+      "tier": 5,
+      "region_id": "R05",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "magicDefense": 10
+      },
+      "gold_price": 480,
+      "source": "regional shop"
+    },
+    {
+      "id": "R06_MARA_WEAPON",
+      "name": "Open-Gate Blade",
+      "kind": "equipment",
+      "slot": "weapon",
+      "tier": 6,
+      "region_id": "R06",
+      "users": [
+        "Mara"
+      ],
+      "stats": {
+        "attack": 54
+      },
+      "gold_price": 4800,
+      "source": "regional shop; equivalent guaranteed chest rewards may substitute"
+    },
+    {
+      "id": "R06_MARA_BODY",
+      "name": "Veyr Hauberk (Mara)",
+      "kind": "equipment",
+      "slot": "body",
+      "tier": 6,
+      "region_id": "R06",
+      "users": [
+        "Mara"
+      ],
+      "stats": {
+        "defense": 56
+      },
+      "gold_price": 3840,
+      "source": "regional shop"
+    },
+    {
+      "id": "R06_TAVIN_WEAPON",
+      "name": "Dawnrunner Wraps",
+      "kind": "equipment",
+      "slot": "weapon",
+      "tier": 6,
+      "region_id": "R06",
+      "users": [
+        "Tavin"
+      ],
+      "stats": {
+        "attack": 46
+      },
+      "gold_price": 4800,
+      "source": "regional shop; equivalent guaranteed chest rewards may substitute"
+    },
+    {
+      "id": "R06_TAVIN_BODY",
+      "name": "Veyr Vest (Tavin)",
+      "kind": "equipment",
+      "slot": "body",
+      "tier": 6,
+      "region_id": "R06",
+      "users": [
+        "Tavin"
+      ],
+      "stats": {
+        "defense": 40
+      },
+      "gold_price": 3840,
+      "source": "regional shop"
+    },
+    {
+      "id": "R06_IONA_WEAPON",
+      "name": "Many-Hands Staff",
+      "kind": "equipment",
+      "slot": "weapon",
+      "tier": 6,
+      "region_id": "R06",
+      "users": [
+        "Iona"
+      ],
+      "stats": {
+        "attack": 28,
+        "magic": 18
+      },
+      "gold_price": 4800,
+      "source": "regional shop; equivalent guaranteed chest rewards may substitute"
+    },
+    {
+      "id": "R06_IONA_BODY",
+      "name": "Veyr Robe (Iona)",
+      "kind": "equipment",
+      "slot": "body",
+      "tier": 6,
+      "region_id": "R06",
+      "users": [
+        "Iona"
+      ],
+      "stats": {
+        "defense": 27
+      },
+      "gold_price": 3840,
+      "source": "regional shop"
+    },
+    {
+      "id": "R06_SOREN_WEAPON",
+      "name": "Unbound Focus",
+      "kind": "equipment",
+      "slot": "weapon",
+      "tier": 6,
+      "region_id": "R06",
+      "users": [
+        "Soren"
+      ],
+      "stats": {
+        "attack": 28,
+        "magic": 18
+      },
+      "gold_price": 4800,
+      "source": "regional shop; equivalent guaranteed chest rewards may substitute"
+    },
+    {
+      "id": "R06_SOREN_BODY",
+      "name": "Veyr Robe (Soren)",
+      "kind": "equipment",
+      "slot": "body",
+      "tier": 6,
+      "region_id": "R06",
+      "users": [
+        "Soren"
+      ],
+      "stats": {
+        "defense": 27
+      },
+      "gold_price": 3840,
+      "source": "regional shop"
+    },
+    {
+      "id": "R06_COMMON_HEAD",
+      "name": "Veyr Travel Circlet",
+      "kind": "equipment",
+      "slot": "head",
+      "tier": 6,
+      "region_id": "R06",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "defense": 9
+      },
+      "gold_price": 960,
+      "source": "regional shop"
+    },
+    {
+      "id": "R06_COMMON_MANTLE",
+      "name": "Veyr Road Mantle",
+      "kind": "equipment",
+      "slot": "mantle",
+      "tier": 6,
+      "region_id": "R06",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "defense": 5
+      },
+      "gold_price": 960,
+      "source": "regional shop"
+    },
+    {
+      "id": "R06_COMMON_CHARM",
+      "name": "Veyr Ward Token",
+      "kind": "equipment",
+      "slot": "charm",
+      "tier": 6,
+      "region_id": "R06",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "magicDefense": 12
+      },
+      "gold_price": 960,
+      "source": "regional shop"
+    },
+    {
+      "id": "R01_SET_HEAD",
+      "name": "Reedwatch Circlet",
+      "kind": "equipment",
+      "slot": "head",
+      "tier": 1,
+      "region_id": "R01",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "defense": 1
+      },
+      "set_id": "R01_SET",
+      "unique_per_save": true,
+      "sellable": false,
+      "gold_price": null,
+      "source": "regional exploration cache, main boss stamp or rare victory; choose unowned piece",
+      "refurbish": "At a reached regional artisan, pay 125% of the common target-tier slot price to replace base stats with that tier. No random rolls; keep same set ID and bonuses."
+    },
+    {
+      "id": "R01_SET_MANTLE",
+      "name": "Reedwatch Mantle",
+      "kind": "equipment",
+      "slot": "mantle",
+      "tier": 1,
+      "region_id": "R01",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "defense": 0
+      },
+      "set_id": "R01_SET",
+      "unique_per_save": true,
+      "sellable": false,
+      "gold_price": null,
+      "source": "regional exploration cache, main boss stamp or rare victory; choose unowned piece",
+      "refurbish": "At a reached regional artisan, pay 125% of the common target-tier slot price to replace base stats with that tier. No random rolls; keep same set ID and bonuses."
+    },
+    {
+      "id": "R01_SET_CHARM",
+      "name": "Reedwatch Charm",
+      "kind": "equipment",
+      "slot": "charm",
+      "tier": 1,
+      "region_id": "R01",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "magicDefense": 2
+      },
+      "set_id": "R01_SET",
+      "unique_per_save": true,
+      "sellable": false,
+      "gold_price": null,
+      "source": "regional exploration cache, main boss stamp or rare victory; choose unowned piece",
+      "refurbish": "At a reached regional artisan, pay 125% of the common target-tier slot price to replace base stats with that tier. No random rolls; keep same set ID and bonuses."
+    },
+    {
+      "id": "R02_SET_HEAD",
+      "name": "Wayfarer Circlet",
+      "kind": "equipment",
+      "slot": "head",
+      "tier": 2,
+      "region_id": "R02",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "defense": 2
+      },
+      "set_id": "R02_SET",
+      "unique_per_save": true,
+      "sellable": false,
+      "gold_price": null,
+      "source": "regional exploration cache, main boss stamp or rare victory; choose unowned piece",
+      "refurbish": "At a reached regional artisan, pay 125% of the common target-tier slot price to replace base stats with that tier. No random rolls; keep same set ID and bonuses."
+    },
+    {
+      "id": "R02_SET_MANTLE",
+      "name": "Wayfarer Mantle",
+      "kind": "equipment",
+      "slot": "mantle",
+      "tier": 2,
+      "region_id": "R02",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "defense": 1
+      },
+      "set_id": "R02_SET",
+      "unique_per_save": true,
+      "sellable": false,
+      "gold_price": null,
+      "source": "regional exploration cache, main boss stamp or rare victory; choose unowned piece",
+      "refurbish": "At a reached regional artisan, pay 125% of the common target-tier slot price to replace base stats with that tier. No random rolls; keep same set ID and bonuses."
+    },
+    {
+      "id": "R02_SET_CHARM",
+      "name": "Wayfarer Charm",
+      "kind": "equipment",
+      "slot": "charm",
+      "tier": 2,
+      "region_id": "R02",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "magicDefense": 4
+      },
+      "set_id": "R02_SET",
+      "unique_per_save": true,
+      "sellable": false,
+      "gold_price": null,
+      "source": "regional exploration cache, main boss stamp or rare victory; choose unowned piece",
+      "refurbish": "At a reached regional artisan, pay 125% of the common target-tier slot price to replace base stats with that tier. No random rolls; keep same set ID and bonuses."
+    },
+    {
+      "id": "R03_SET_HEAD",
+      "name": "Fenkeeper Circlet",
+      "kind": "equipment",
+      "slot": "head",
+      "tier": 3,
+      "region_id": "R03",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "defense": 3
+      },
+      "set_id": "R03_SET",
+      "unique_per_save": true,
+      "sellable": false,
+      "gold_price": null,
+      "source": "regional exploration cache, main boss stamp or rare victory; choose unowned piece",
+      "refurbish": "At a reached regional artisan, pay 125% of the common target-tier slot price to replace base stats with that tier. No random rolls; keep same set ID and bonuses."
+    },
+    {
+      "id": "R03_SET_MANTLE",
+      "name": "Fenkeeper Mantle",
+      "kind": "equipment",
+      "slot": "mantle",
+      "tier": 3,
+      "region_id": "R03",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "defense": 2
+      },
+      "set_id": "R03_SET",
+      "unique_per_save": true,
+      "sellable": false,
+      "gold_price": null,
+      "source": "regional exploration cache, main boss stamp or rare victory; choose unowned piece",
+      "refurbish": "At a reached regional artisan, pay 125% of the common target-tier slot price to replace base stats with that tier. No random rolls; keep same set ID and bonuses."
+    },
+    {
+      "id": "R03_SET_CHARM",
+      "name": "Fenkeeper Charm",
+      "kind": "equipment",
+      "slot": "charm",
+      "tier": 3,
+      "region_id": "R03",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "magicDefense": 6
+      },
+      "set_id": "R03_SET",
+      "unique_per_save": true,
+      "sellable": false,
+      "gold_price": null,
+      "source": "regional exploration cache, main boss stamp or rare victory; choose unowned piece",
+      "refurbish": "At a reached regional artisan, pay 125% of the common target-tier slot price to replace base stats with that tier. No random rolls; keep same set ID and bonuses."
+    },
+    {
+      "id": "R04_SET_HEAD",
+      "name": "Orchard Vigil Circlet",
+      "kind": "equipment",
+      "slot": "head",
+      "tier": 4,
+      "region_id": "R04",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "defense": 5
+      },
+      "set_id": "R04_SET",
+      "unique_per_save": true,
+      "sellable": false,
+      "gold_price": null,
+      "source": "regional exploration cache, main boss stamp or rare victory; choose unowned piece",
+      "refurbish": "At a reached regional artisan, pay 125% of the common target-tier slot price to replace base stats with that tier. No random rolls; keep same set ID and bonuses."
+    },
+    {
+      "id": "R04_SET_MANTLE",
+      "name": "Orchard Vigil Mantle",
+      "kind": "equipment",
+      "slot": "mantle",
+      "tier": 4,
+      "region_id": "R04",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "defense": 3
+      },
+      "set_id": "R04_SET",
+      "unique_per_save": true,
+      "sellable": false,
+      "gold_price": null,
+      "source": "regional exploration cache, main boss stamp or rare victory; choose unowned piece",
+      "refurbish": "At a reached regional artisan, pay 125% of the common target-tier slot price to replace base stats with that tier. No random rolls; keep same set ID and bonuses."
+    },
+    {
+      "id": "R04_SET_CHARM",
+      "name": "Orchard Vigil Charm",
+      "kind": "equipment",
+      "slot": "charm",
+      "tier": 4,
+      "region_id": "R04",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "magicDefense": 8
+      },
+      "set_id": "R04_SET",
+      "unique_per_save": true,
+      "sellable": false,
+      "gold_price": null,
+      "source": "regional exploration cache, main boss stamp or rare victory; choose unowned piece",
+      "refurbish": "At a reached regional artisan, pay 125% of the common target-tier slot price to replace base stats with that tier. No random rolls; keep same set ID and bonuses."
+    },
+    {
+      "id": "R05_SET_HEAD",
+      "name": "Roadward Oath Circlet",
+      "kind": "equipment",
+      "slot": "head",
+      "tier": 5,
+      "region_id": "R05",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "defense": 7
+      },
+      "set_id": "R05_SET",
+      "unique_per_save": true,
+      "sellable": false,
+      "gold_price": null,
+      "source": "regional exploration cache, main boss stamp or rare victory; choose unowned piece",
+      "refurbish": "At a reached regional artisan, pay 125% of the common target-tier slot price to replace base stats with that tier. No random rolls; keep same set ID and bonuses."
+    },
+    {
+      "id": "R05_SET_MANTLE",
+      "name": "Roadward Oath Mantle",
+      "kind": "equipment",
+      "slot": "mantle",
+      "tier": 5,
+      "region_id": "R05",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "defense": 4
+      },
+      "set_id": "R05_SET",
+      "unique_per_save": true,
+      "sellable": false,
+      "gold_price": null,
+      "source": "regional exploration cache, main boss stamp or rare victory; choose unowned piece",
+      "refurbish": "At a reached regional artisan, pay 125% of the common target-tier slot price to replace base stats with that tier. No random rolls; keep same set ID and bonuses."
+    },
+    {
+      "id": "R05_SET_CHARM",
+      "name": "Roadward Oath Charm",
+      "kind": "equipment",
+      "slot": "charm",
+      "tier": 5,
+      "region_id": "R05",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "magicDefense": 10
+      },
+      "set_id": "R05_SET",
+      "unique_per_save": true,
+      "sellable": false,
+      "gold_price": null,
+      "source": "regional exploration cache, main boss stamp or rare victory; choose unowned piece",
+      "refurbish": "At a reached regional artisan, pay 125% of the common target-tier slot price to replace base stats with that tier. No random rolls; keep same set ID and bonuses."
+    },
+    {
+      "id": "R06_SET_HEAD",
+      "name": "Open Hand Circlet",
+      "kind": "equipment",
+      "slot": "head",
+      "tier": 6,
+      "region_id": "R06",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "defense": 9
+      },
+      "set_id": "R06_SET",
+      "unique_per_save": true,
+      "sellable": false,
+      "gold_price": null,
+      "source": "regional exploration cache, main boss stamp or rare victory; choose unowned piece",
+      "refurbish": "At a reached regional artisan, pay 125% of the common target-tier slot price to replace base stats with that tier. No random rolls; keep same set ID and bonuses."
+    },
+    {
+      "id": "R06_SET_MANTLE",
+      "name": "Open Hand Mantle",
+      "kind": "equipment",
+      "slot": "mantle",
+      "tier": 6,
+      "region_id": "R06",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "defense": 5
+      },
+      "set_id": "R06_SET",
+      "unique_per_save": true,
+      "sellable": false,
+      "gold_price": null,
+      "source": "regional exploration cache, main boss stamp or rare victory; choose unowned piece",
+      "refurbish": "At a reached regional artisan, pay 125% of the common target-tier slot price to replace base stats with that tier. No random rolls; keep same set ID and bonuses."
+    },
+    {
+      "id": "R06_SET_CHARM",
+      "name": "Open Hand Charm",
+      "kind": "equipment",
+      "slot": "charm",
+      "tier": 6,
+      "region_id": "R06",
+      "users": [
+        "Mara",
+        "Tavin",
+        "Iona",
+        "Soren"
+      ],
+      "stats": {
+        "magicDefense": 12
+      },
+      "set_id": "R06_SET",
+      "unique_per_save": true,
+      "sellable": false,
+      "gold_price": null,
+      "source": "regional exploration cache, main boss stamp or rare victory; choose unowned piece",
+      "refurbish": "At a reached regional artisan, pay 125% of the common target-tier slot price to replace base stats with that tier. No random rolls; keep same set ID and bonuses."
+    },
+    {
+      "id": "POTION",
+      "name": "Field Potion",
+      "kind": "consumable",
+      "gold_price": 30,
+      "effect": "Restore 60 HP to one living ally.",
+      "stack_limit": 20
+    },
+    {
+      "id": "HIGH_POTION",
+      "name": "Greater Potion",
+      "kind": "consumable",
+      "gold_price": 180,
+      "effect": "Restore 250 HP to one living ally.",
+      "stack_limit": 20
+    },
+    {
+      "id": "ANTIDOTE",
+      "name": "Antitoxin",
+      "kind": "consumable",
+      "gold_price": 20,
+      "effect": "Remove poison from one ally.",
+      "stack_limit": 20
+    },
+    {
+      "id": "SOOTHING_DRAUGHT",
+      "name": "Soothing Draught",
+      "kind": "consumable",
+      "gold_price": 25,
+      "effect": "Remove sleep from one ally.",
+      "stack_limit": 20
+    },
+    {
+      "id": "CLEAR_TONIC",
+      "name": "Clear Tonic",
+      "kind": "consumable",
+      "gold_price": 35,
+      "effect": "Remove silence from one ally.",
+      "stack_limit": 20
+    },
+    {
+      "id": "REVIVAL_SALT",
+      "name": "Revival Salt",
+      "kind": "consumable",
+      "gold_price": 300,
+      "effect": "Revive one fallen ally at 20% maximum HP; no effect on living allies.",
+      "stack_limit": 20
+    },
+    {
+      "id": "SPARK_TEA",
+      "name": "Spark Tea",
+      "kind": "consumable",
+      "gold_price": 450,
+      "effect": "Restore one spent tier1-2 spell charge chosen by the player; never exceeds maximum. Sold from R03; not in ordinary drop pool.",
+      "stack_limit": 20
+    },
+    {
+      "id": "DEEP_TEA",
+      "name": "Deep Tea",
+      "kind": "consumable",
+      "gold_price": 1500,
+      "effect": "Restore one spent tier1-4 charge; scarce fixed chest/optional boss supplies, not a repeatable normal drop.",
+      "stack_limit": 20
+    },
+    {
+      "id": "CAMP_MEAL",
+      "name": "Packed Meal",
+      "kind": "consumable",
+      "gold_price": 40,
+      "effect": "Restore 30% maximum HP to one living hero outside battle; no charge recovery.",
+      "stack_limit": 20
+    },
+    {
+      "id": "WARD_SMOKE",
+      "name": "Ward Smoke",
+      "kind": "consumable",
+      "gold_price": 120,
+      "effect": "Guarantee the next legal Flee attempt; never bypasses a no-run boss flag.",
+      "stack_limit": 20
+    },
+    {
+      "id": "MENDING_BALM",
+      "name": "Mending Balm",
+      "kind": "consumable",
+      "gold_price": 90,
+      "effect": "Restore 120 HP to one living ally.",
+      "stack_limit": 20
+    },
+    {
+      "id": "SURVEY_CHALK",
+      "name": "Survey Chalk",
+      "kind": "consumable",
+      "gold_price": 15,
+      "effect": "Reveals authored hunt/treasure clues already available nearby; never advances a hunt counter.",
+      "stack_limit": 20
+    },
+    {
+      "id": "QUEST_CONVOY_BUCKLER",
+      "name": "Convoy Buckler and Shortblade",
+      "kind": "equipment",
+      "slot": "weapon",
+      "tier": 2,
+      "users": [
+        "Mara"
+      ],
+      "stats": {
+        "attack": 10,
+        "defense": 3
+      },
+      "gold_price": null,
+      "sellable": false,
+      "source": "SQ-M1",
+      "note": "Fixed quest sidegrade; no extra equipment slot or mandatory progression benefit."
+    },
+    {
+      "id": "QUEST_HALDEN_CLOAK",
+      "name": "Mended Convoy Cloak",
+      "kind": "equipment",
+      "slot": "mantle",
+      "tier": 3,
+      "users": [
+        "Mara"
+      ],
+      "stats": {
+        "defense": 1,
+        "magicDefense": 2
+      },
+      "gold_price": null,
+      "sellable": false,
+      "source": "SQ-M2",
+      "note": "Fixed quest sidegrade; no extra equipment slot or mandatory progression benefit."
+    },
+    {
+      "id": "QUEST_COURIER_MANTLE",
+      "name": "Weatherproof Courier Mantle",
+      "kind": "equipment",
+      "slot": "mantle",
+      "tier": 3,
+      "users": [
+        "Tavin"
+      ],
+      "stats": {
+        "defense": 1,
+        "magicDefense": 3
+      },
+      "gold_price": null,
+      "sellable": false,
+      "source": "SQ-T2",
+      "note": "Fixed quest sidegrade; no extra equipment slot or mandatory progression benefit."
+    },
+    {
+      "id": "QUEST_FIELD_SATCHEL",
+      "name": "Hospice Field Satchel",
+      "kind": "equipment",
+      "slot": "charm",
+      "tier": 2,
+      "users": [
+        "Iona"
+      ],
+      "stats": {
+        "magicDefense": 3,
+        "magic": 1
+      },
+      "gold_price": null,
+      "sellable": false,
+      "source": "SQ-I1",
+      "note": "Fixed quest sidegrade; no extra equipment slot or mandatory progression benefit."
+    },
+    {
+      "id": "QUEST_ANET_FOCUS",
+      "name": "Rebuilt Workshop Focus",
+      "kind": "equipment",
+      "slot": "weapon",
+      "tier": 2,
+      "users": [
+        "Soren"
+      ],
+      "stats": {
+        "attack": 5,
+        "magic": 7
+      },
+      "gold_price": null,
+      "sellable": false,
+      "source": "SQ-S1",
+      "note": "Fixed quest sidegrade; no extra equipment slot or mandatory progression benefit."
+    },
+    {
+      "id": "QUEST_OPEN_HAND_EMBLEM",
+      "name": "Open-Hand Emblem",
+      "kind": "keepsake",
+      "gold_price": null,
+      "sellable": false,
+      "source": "SQ-S2",
+      "effect": "Appearance or journal keepsake only; no combat statistic."
+    },
+    {
+      "id": "QUEST_FRUITWOOD_TOKEN",
+      "name": "Fruitwood Token",
+      "kind": "keepsake",
+      "gold_price": null,
+      "sellable": false,
+      "source": "SQ-R3",
+      "effect": "Appearance or journal keepsake only; no combat statistic."
+    },
+    {
+      "id": "QUEST_WOODEN_BIRD",
+      "name": "New Wooden Bird",
+      "kind": "keepsake",
+      "gold_price": null,
+      "sellable": false,
+      "source": "SQ-R2",
+      "effect": "Appearance or journal keepsake only; no combat statistic."
+    },
+    {
+      "id": "QUEST_STAGECOAT",
+      "name": "Pella\u2019s Stagecoat",
+      "kind": "cosmetic",
+      "gold_price": null,
+      "sellable": false,
+      "source": "SQ-R4",
+      "effect": "Appearance or journal keepsake only; no combat statistic."
+    }
+  ]
+}
