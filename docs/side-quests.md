@@ -1,6 +1,6 @@
 # Side quests — The Road Beyond the Bells
 
-Companion to the [expanded campaign](story.md) and [combat brief](combat-design.md). These are narrative designs, not implemented quests.
+Companion to the [expanded campaign](story.md) and [combat brief](combat-design.md). These are campaign quest designs. SQ-R1 has a small playable version in the First Watch demo; the other quests remain to be implemented.
 
 There are **12 optional quests**: four two-part companion stories and four regional stories. The main campaign always rescues Neri, provides a viable evacuation, accounts for the missing crew, shuts down the captive-fed bells, and brings Vale to a hearing. Optional quests change relationships, local arrangements, keepsakes, and epilogue scenes; skipping one does not secretly condemn anyone.
 

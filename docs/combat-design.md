@@ -120,4 +120,4 @@ Use original locations, enemy designs, portraits, spell effects, music, and inte
 - Keyboard and pointer play both complete an ordinary battle and the boss fight.
 - A full short expedition demonstrates that elemental choices, healing timing, and conservation matter.
 
-This document defines what to build next. It does not claim that these checks have run or that a playable game exists yet.
+This document records campaign requirements. The [First Watch baseline](demo-baseline.md) identifies the playable slice and its validation; the later campaign remains to be implemented and tested.
