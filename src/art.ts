@@ -1,4 +1,6 @@
 import Phaser from 'phaser';
+import type { CharacterProfile } from './contracts';
+import { appearanceKey, COMPANION_PROFILES, paintCharacter } from './appearance';
 
 const palette = {
   ink: '#14232b', shadow: '#0b171d', moss: '#364d43', brass: '#b58c48', light: '#ead2a0',
@@ -63,6 +65,11 @@ export function createArt(scene: Phaser.Scene) {
       if (name === 'Iona') { box(c, '#e0dbc0', 8, 5, 5, 10); box(c, '#f0e5be', 9, 2, 16, 3); }
       box(c, '#d8cba144', 10, 18, 15, 2);
     });
+  }
+  // Portraits and game sprites share the same original pixel instructions.
+  for (const name of ['Mara', 'Tavin', 'Iona', 'Soren'] as const) {
+    scene.textures.remove(`hero-${name}`);
+    canvas(scene, `hero-${name}`, 32, 40, c => paintCharacter(c, COMPANION_PROFILES[name]));
   }
   canvas(scene, 'tree', 52, 66, c => {
     box(c, '#142d2d66', 8, 57, 39, 7); box(c, '#493e30', 24, 40, 8, 22);
@@ -190,6 +197,22 @@ export function createArt(scene: Phaser.Scene) {
   }
 }
 
+export function ensureLeadArt(scene: Phaser.Scene, profile: CharacterProfile, back = false) {
+  const key = `lead-${appearanceKey(profile)}${back ? '-back' : ''}`;
+  canvas(scene, key, 32, 40, c => {
+    paintCharacter(c, profile);
+    if (back) {
+      const colors = { chestnut: '#684535', black: '#292c35', silver: '#c4c5c0', copper: '#a9633e' };
+      const hair = colors[profile.hair] || colors.chestnut;
+      box(c, hair, 10, 5, 13, 12);
+      box(c, '#14232b', 9, 6, 1, 10); box(c, '#14232b', 23, 6, 1, 10);
+      if (profile.hairStyle === 'tied') box(c, hair, 15, 15, 5, 7);
+      if (profile.hairStyle === 'long') box(c, hair, 10, 14, 13, 8);
+    }
+  });
+  return key;
+}
+
 export function textureForEntity(sprite: string, kind: string) {
   const key = sprite.toLowerCase();
   if (kind === 'boss' || /bailiff/.test(key)) return 'enemy-bailiff';
@@ -225,10 +248,32 @@ export function paintWorld(scene: Phaser.Scene, map: { width: number; height: nu
       box(c, '#a59961', ox + x * tile + 8, oy + y * tile + 9, 2, 2);
       box(c, '#6a8052', ox + x * tile + 8, oy + y * tile + 11, 1, 4);
     }
+    if (char === 'g' && rand() > .94) {
+      const px = ox + x * tile + 17, py = oy + y * tile + 19;
+      box(c, '#879578', px - 1, py + 2, 1, 4);
+      box(c, '#d6bd83', px - 2, py, 3, 2);
+      box(c, '#baa9bc', px + 3, py + 4, 3, 2);
+    }
+    if (area === 'works' && char === '#') {
+      const px = ox + x * tile, py = oy + y * tile;
+      box(c, '#56615a', px + 2, py + 6, tile - 4, 2);
+      box(c, '#243337', px + ((x + y) % 2 ? 9 : 21), py + 8, 2, 13);
+      box(c, '#18292e', px, py + tile - 4, tile, 4);
+      if (map.tiles[y + 1]?.[x] === 'f') box(c, '#12242966', px, py + tile, tile, 6);
+    }
     if (area === 'works' && char === '#' && y % 4 === 1 && x % 4 === 0) {
       box(c, '#8d7447', ox + x * tile + 13, oy + y * tile, 6, tile);
       box(c, '#b69a5e', ox + x * tile + 14, oy + y * tile, 2, tile);
     }
+  }
+  // Light pools are painted into the scenery, never used as collision objects.
+  const lights = area === 'camp' ? [[12.5, 12.5, 96], [9.5, 8.5, 52], [28.5, 8.5, 48]] : [[8, 4, 56], [16, 8, 72], [27, 3, 100]];
+  for (const [x, y, radius] of lights) {
+    const px = ox + x * tile, py = oy + y * tile;
+    const light = c.createRadialGradient(px, py, 4, px, py, radius);
+    light.addColorStop(0, area === 'camp' ? '#f3b66324' : '#ccb06e18');
+    light.addColorStop(1, '#e6b06500');
+    c.fillStyle = light; c.fillRect(px - radius, py - radius, radius * 2, radius * 2);
   }
   // Large scenery is drawn after the ground so tree canopies cross tile edges.
   for (let y = 0; y < map.height; y++) for (let x = 0; x < map.width; x++) {
@@ -256,6 +301,13 @@ export function paintWorld(scene: Phaser.Scene, map: { width: number; height: nu
         box(c, '#42514b', ox + x * tile + 5, oy + 2, 19, tile * 2);
         box(c, '#947849', ox + x * tile + 7, oy + 10, 3, tile * 2 - 10);
       }
+    }
+    for (const [x, y] of [[7, 4], [15, 8], [26, 3]]) {
+      const px = ox + x * tile, py = oy + y * tile;
+      box(c, '#756343', px + 7, py - 10, 5, 25);
+      box(c, '#be9856', px + 3, py - 3, 13, 4);
+      box(c, '#edc77d', px + 7, py - 1, 5, 8);
+      box(c, '#e9c07944', px + 4, py + 14, 11, 2);
     }
   }
   // A restrained vignette keeps UI labels and the dusk palette together.

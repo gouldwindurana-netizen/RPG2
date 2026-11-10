@@ -1,7 +1,9 @@
 import progression from '../data/progression.json';
 import itemData from '../data/items.json';
 import world from '../data/world.json';
-import type { Area, Battle, DemoEngine, Direction, Enemy, GameMap, GameState, Hero, HeroId, Item, MapEntity, PlannedAction, Slot, Spell } from './contracts';
+import { canCast, isEquipmentAllowed, DEFAULT_PROFILE, LEGACY_PROFILE, normalizeProfile, getIntroSteps, jobFor } from './characters';
+export { canCast, isEquipmentAllowed } from './characters';
+import type { Area, Battle, CharacterProfile, DemoEngine, Direction, Enemy, GameMap, GameSettings, GameState, Hero, HeroId, Item, JobId, MapEntity, PlannedAction, Slot, Spell } from './contracts';
 
 export const SAVE_KEY = 'avel-demo-v1';
 export const ITEMS = itemData.items as Item[];
@@ -17,12 +19,11 @@ export const SPELLS: Spell[] = [
 ];
 
 const HERO_IDS: HeroId[] = ['Mara', 'Tavin', 'Iona', 'Soren'];
-const ROLES = { Mara: 'Warden', Tavin: 'Striker', Iona: 'Mender', Soren: 'Arcanist' };
+const COMPANION_JOBS: Record<HeroId, JobId> = { Mara:'warden', Tavin:'striker', Iona:'mender', Soren:'arcanist' };
 const SLOTS: Slot[] = ['weapon', 'body', 'head', 'mantle', 'charm'];
 const SET_PIECES = ['R01_SET_HEAD', 'R01_SET_MANTLE', 'R01_SET_CHARM'];
 const PASSABLE = 'gdsf';
 const ENCOUNTER_IDS = ['encounter1', 'encounter2', 'encounter3', 'encounter4', 'encounter5', 'encounter6', 'bailiff', 'silver'];
-const CASTER_IDS: HeroId[] = ['Iona', 'Soren'];
 const BATTLE_ITEMS = ['POTION', 'HIGH_POTION', 'MENDING_BALM', 'REVIVAL_SALT', 'ANTIDOTE', 'SOOTHING_DRAUGHT', 'CLEAR_TONIC'];
 const SHOP_PRICES: Record<string, number> = { POTION: 30, ANTIDOTE: 20, REVIVAL_SALT: 300, CLEAR_TONIC: 35 };
 
@@ -73,37 +74,40 @@ function levelFromXp(xp: number): number {
   return Math.max(1, progression.xp_thresholds.filter(threshold => xp >= threshold).length);
 }
 
-function chargesAt(level: number, id: HeroId): number[] {
-  return progression.spell_tier_unlocks.map(unlock => !CASTER_IDS.includes(id) || level < unlock ? 0 : Math.min(9, 2 + Math.floor((level - unlock) / 4)));
+function chargesAt(level: number, job: JobId): number[] {
+  if (job === 'spellblade') return [Math.min(4, 1 + Math.floor((level - 1) / 6)), 0, 0, 0, 0, 0, 0, 0];
+  return progression.spell_tier_unlocks.map(unlock => !['mender','arcanist'].includes(job) || level < unlock ? 0 : Math.min(9, 2 + Math.floor((level - unlock) / 4)));
 }
 
-function starterEquipment(id: HeroId): Record<Slot, string> {
-  return { weapon: `R01_${id.toUpperCase()}_WEAPON`, body: `R01_${id.toUpperCase()}_BODY`, head: 'R01_COMMON_HEAD', mantle: 'R01_COMMON_MANTLE', charm: 'R01_COMMON_CHARM' };
+function heroJob(id: HeroId, profile: CharacterProfile): JobId { return id === 'Mara' ? profile.job : COMPANION_JOBS[id]; }
+function starterEquipment(id: HeroId, profile: CharacterProfile): Record<Slot, string> {
+  const source = jobFor(heroJob(id, profile)).starterSourceHero.toUpperCase();
+  return { weapon: `R01_${source}_WEAPON`, body: `R01_${source}_BODY`, head: 'R01_COMMON_HEAD', mantle: 'R01_COMMON_MANTLE', charm: 'R01_COMMON_CHARM' };
 }
 
-function deriveHero(id: HeroId, level: number, equipment: Record<Slot, string>): Hero {
-  const base = progression.heroes[id];
+function deriveHero(id: HeroId, level: number, equipment: Record<Slot, string>, profile: CharacterProfile): Hero {
+  const job = heroJob(id, profile);
+  const base = job === 'scout' ? {hp:[78,13],strength:[9,1.7],magic:[6,.8],accuracy:[34,3.2]} : job === 'spellblade' ? {hp:[90,15],strength:[10,1.6],magic:[10,1.5],accuracy:[22,2]} : progression.heroes[jobFor(job).starterSourceHero];
   const values = Object.values(equipment).map(getItem).filter((item): item is Item => Boolean(item));
   const gearStat = (key: string) => values.reduce((sum, item) => sum + (item.stats?.[key] ?? 0), 0);
   const accuracy = Math.floor(base.accuracy[0] + base.accuracy[1] * (level - 1));
-  const hp = base.hp[0] + base.hp[1] * (level - 1);
-  const charges = chargesAt(level, id);
-  return { id, role: ROLES[id], level, hp, maxHp: hp,
+  const hp = Math.floor(base.hp[0] + base.hp[1] * (level - 1));
+  const charges = chargesAt(level, job);
+  return { id, name:id === 'Mara' ? profile.name : id, job, role:jobFor(job).name, level, hp, maxHp:hp,
     attack: Math.floor(base.strength[0] + base.strength[1] * (level - 1)) + gearStat('attack'),
     defense: 2 + Math.floor((level - 1) / 3) + gearStat('defense'),
     magic: Math.floor(base.magic[0] + base.magic[1] * (level - 1)) + gearStat('magic'),
-    accuracy, hits: Math.min(4, 1 + Math.floor(accuracy / 40)),
-    charges: [...charges], maxCharges: charges, status: null, equipment: { ...equipment } };
+    accuracy, hits: Math.min(4, 1 + Math.floor(accuracy / 40) + (job === 'striker' ? 1 : 0)),
+    charges:[...charges], maxCharges:charges, status:null, equipment:{...equipment} };
 }
 
-function freshState(seed: number): GameState {
-  const inventory: Record<string, number> = { ...progression.starting_loadout.supplies };
-  for (const id of HERO_IDS) for (const item of Object.values(starterEquipment(id))) inventory[item] = (inventory[item] ?? 0) + 1;
-  return { version: 1, mode: 'explore', area: 'camp', player: { x: 11, y: 10, facing: 'right' },
-    heroes: HERO_IDS.map(id => deriveHero(id, 1, starterEquipment(id))), inventory, gold: 60, xp: 0,
-    flags: { briefed: false, bossDefeated: false, completed: false, sideQuest: false, chest: false, stamp: false },
-    cleared: [], tracks: 0, rareReady: false, setAcquired: [], battle: null, reward: null, steps: 0,
-    message: { speaker: 'The First Watch', text: 'Merewatch’s bell has fallen silent. Speak to Bessa, then follow the eastern path into the bellworks. Find the missing workers. Bring them home.' }, rng: seed >>> 0 || 7321 };
+function freshState(seed: number, profile: CharacterProfile = DEFAULT_PROFILE): GameState {
+  const inventory: Record<string, number> = {...progression.starting_loadout.supplies};
+  for(const id of HERO_IDS) for(const item of Object.values(starterEquipment(id, profile))) inventory[item] = (inventory[item] ?? 0) + 1;
+  return {version:2, mode:'creation', profile:{...profile}, introStep:0, settings:{battleSpeed:1,encounters:'classic'},encounterSteps:0, area:'camp', player:{x:11,y:10,facing:'right'},
+    heroes:HERO_IDS.map(id=>deriveHero(id,1,starterEquipment(id,profile),profile)),inventory,gold:60,xp:0,
+    flags:{briefed:false,bossDefeated:false,completed:false,sideQuest:false,chest:false,stamp:false},
+    cleared:[],tracks:0,rareReady:false,setAcquired:[],battle:null,reward:null,steps:0,message:null,rng:seed >>> 0 || 7321};
 }
 
 const isRecord = (value: unknown): value is Record<string, unknown> => !!value && typeof value === 'object' && !Array.isArray(value);
@@ -113,15 +117,24 @@ const intRange = (value: unknown, lo: number, hi: number): value is number => ty
 function restore(raw: string, seed: number): GameState | null {
   try {
     const value: unknown = JSON.parse(raw);
-    if (!isRecord(value) || value.version !== 1 || !['explore', 'victory', 'ending'].includes(String(value.mode)) || !['camp', 'works'].includes(String(value.area))) return null;
+    if (!isRecord(value) || (value.version !== 1 && value.version !== 2) || !['intro', 'explore', 'victory', 'ending'].includes(value.mode as string) || !['camp', 'works'].includes(value.area as string)) return null;
+    if(value.version === 1 && value.mode === 'intro')return null;
     if (!intRange(value.xp, 0, 1_000_000_000) || !intRange(value.gold, 0, 10_000_000) || !intRange(value.rng, 0, 0xffffffff) || !intRange(value.steps, 0, 100_000_000)) return null;
     const flags = value.flags;
     if (!isRecord(flags) || !['briefed', 'bossDefeated', 'completed', 'sideQuest', 'chest', 'stamp'].every(flag => typeof flags[flag] === 'boolean')) return null;
-    if (!isRecord(value.player) || !intRange(value.player.x, 0, 31) || !intRange(value.player.y, 0, 17) || !['up', 'down', 'left', 'right'].includes(String(value.player.facing))) return null;
+    if (!isRecord(value.player) || !intRange(value.player.x, 0, 31) || !intRange(value.player.y, 0, 17) || !['up', 'down', 'left', 'right'].includes(value.player.facing as string)) return null;
     if (!Array.isArray(value.cleared) || !value.cleared.every(id => typeof id === 'string' && ENCOUNTER_IDS.includes(id)) || new Set(value.cleared).size !== value.cleared.length) return null;
     if (!intRange(value.tracks, 0, 12) || typeof value.rareReady !== 'boolean' || !Array.isArray(value.setAcquired) || !value.setAcquired.every(id => typeof id === 'string' && SET_PIECES.includes(id)) || new Set(value.setAcquired).size !== value.setAcquired.length) return null;
     if (!isRecord(value.inventory) || !Object.entries(value.inventory).every(([id, amount]) => getItem(id) && intRange(amount, 0, 99))) return null;
-    const state = freshState(seed);
+    const profile = value.version === 1 ? {...LEGACY_PROFILE} : normalizeProfile(value.profile);
+    if(!profile)return null;
+    const state = freshState(seed, profile);
+    if(value.version === 1) { state.introStep=getIntroSteps(profile).length;state.settings={battleSpeed:1,encounters:'visible'}; }
+    else {
+      if(!intRange(value.introStep,0,getIntroSteps(profile).length) || !intRange(value.encounterSteps,0,18) || !isRecord(value.settings) || ![1,2,3].includes(value.settings.battleSpeed as number) || !['classic','visible','off'].includes(value.settings.encounters as string))return null;
+      state.introStep=value.introStep;state.encounterSteps=value.encounterSteps;state.settings={battleSpeed:value.settings.battleSpeed as GameSettings['battleSpeed'],encounters:value.settings.encounters as GameSettings['encounters']};
+      if(value.mode === 'intro' && state.introStep >= getIntroSteps(profile).length)return null;
+    }
     state.mode = value.mode as GameState['mode']; state.area = value.area as Area;
     state.xp = value.xp; state.gold = value.gold; state.rng = value.rng; state.steps = value.steps;
     state.flags = { ...flags } as GameState['flags']; state.player = { ...value.player } as GameState['player'];
@@ -139,12 +152,12 @@ function restore(raw: string, seed: number): GameState | null {
         const itemId = saved.equipment[slot];
         if (typeof itemId !== 'string') throw new Error('Invalid equipment');
         const item = getItem(itemId);
-        if (!item || item.kind !== 'equipment' || item.slot !== slot || !item.users?.includes(id) || !state.inventory[itemId]) throw new Error('Unavailable equipment');
+        if (!item || item.kind !== 'equipment' || item.slot !== slot || !isEquipmentAllowed({job:heroJob(id,profile)},item) || !state.inventory[itemId]) throw new Error('Unavailable equipment');
         if (item.set_id && (!state.setAcquired.includes(itemId) || uniqueEquipped.has(itemId))) throw new Error('Duplicated set item');
         if (item.set_id) uniqueEquipped.add(itemId);
         equipment[slot] = itemId;
       }
-      const hero = deriveHero(id, levelFromXp(state.xp), equipment);
+      const hero = deriveHero(id, levelFromXp(state.xp), equipment, profile);
       if (!intRange(saved.hp, 0, hero.maxHp) || !Array.isArray(saved.charges) || saved.charges.length !== 8 || !saved.charges.every((n, i) => intRange(n, 0, hero.maxCharges[i]))) throw new Error('Invalid resources');
       if (saved.status !== null && !['poison', 'sleep', 'silence'].includes(String(saved.status))) throw new Error('Invalid status');
       return { ...hero, hp: saved.hp, charges: [...saved.charges] as number[], status: saved.status as Hero['status'] };
@@ -190,11 +203,12 @@ export function createEngine(options: { storage?: Storage | null; roundDelay?: n
   const living = () => state.heroes.filter(hero => hero.hp > 0);
   const say = (speaker: string, text: string) => { state.message = { speaker, text }; emit(); engine.save(); };
   const log = (text: string, cue?: Battle['cue']) => { if (state.battle) { state.battle.log.push(text); state.battle.log = state.battle.log.slice(-24); state.battle.cue = cue; } emit(); };
-  const wait = () => delay > 0 ? new Promise<void>(resolve => setTimeout(resolve, delay)) : Promise.resolve();
+  const wait = () => delay > 0 ? new Promise<void>(resolve => setTimeout(resolve, delay / state.settings.battleSpeed)) : Promise.resolve();
 
   function map(): GameMap {
     const source = MAPS[state.area];
     return { ...source, entities: source.entities.filter(entity => {
+      if(entity.kind === 'enemy' && state.settings.encounters !== 'visible')return false;
       if (entity.id === 'chest' && state.flags.chest) return false;
       if (ENCOUNTER_IDS.includes(entity.id) && state.cleared.includes(entity.id)) return false;
       if (entity.id === 'silver' && (!state.flags.completed || !state.rareReady)) return false;
@@ -205,7 +219,7 @@ export function createEngine(options: { storage?: Storage | null; roundDelay?: n
   function updateHeroes() {
     const level = levelFromXp(state.xp);
     state.heroes = state.heroes.map(old => {
-      const next = deriveHero(old.id, level, old.equipment);
+      const next = deriveHero(old.id, level, old.equipment, state.profile);
       next.hp = Math.min(next.maxHp, old.hp + (old.hp > 0 ? Math.max(0, next.maxHp - old.maxHp) : 0));
       next.charges = next.maxCharges.map((max, i) => Math.min(max, old.charges[i] + Math.max(0, max - old.maxCharges[i])));
       next.status = old.status;
@@ -214,6 +228,7 @@ export function createEngine(options: { storage?: Storage | null; roundDelay?: n
   }
 
   function startBattle(id: string) {
+    state.encounterSteps = 0;
     engine.save();
     let enemies: Enemy[];
     let kind: Battle['kind'] = 'normal';
@@ -301,7 +316,16 @@ export function createEngine(options: { storage?: Storage | null; roundDelay?: n
       const current = map();
       if (y < 0 || y >= current.height || x < 0 || x >= current.width || !PASSABLE.includes(current.tiles[y][x])) return;
       if (current.entities.some(entity => entity.x === x && entity.y === y && entity.kind !== 'exit')) return;
-      state.player.x = x; state.player.y = y; state.steps += 1; emit(); engine.save();
+      state.player.x=x;state.player.y=y;state.steps++;
+      if(state.area === 'works' && state.settings.encounters === 'classic') {
+        const remaining=ENCOUNTER_IDS.filter(id=>id.startsWith('encounter')&&!state.cleared.includes(id));
+        const nearSafeInteraction=MAPS.works.entities.some(entity=>entity.kind!=='enemy' && Math.abs(entity.x-x)+Math.abs(entity.y-y)<=2);
+        if(remaining.length && !nearSafeInteraction) {
+          state.encounterSteps++;
+          if(state.encounterSteps>=12 && (state.encounterSteps>=18 || random()<1/(19-state.encounterSteps))) {startBattle(choose(remaining));return;}
+        }
+      }
+      emit();engine.save();
     },
     interact(entityId) {
       if (state.message) { engine.dismiss(); return; }
@@ -310,8 +334,8 @@ export function createEngine(options: { storage?: Storage | null; roundDelay?: n
       const entity = entityId ? near.find(row => row.id === entityId) : near[0];
       if (!entity) return;
       if (entity.id === 'toWorks') {
-        if (!state.flags.briefed) { say('Mara', 'We should speak to Bessa before entering the bellworks.'); return; }
-        state.area = 'works'; state.player = { x: 3, y: 15, facing: 'up' }; say('Merewatch', 'The meal tins are still warm. Six visible patrols guard the passages. You can return to the watchfire to recover at any time.');
+        if (!state.flags.briefed) { say(state.profile.name, 'We should speak to Bessa before entering the bellworks.'); return; }
+        state.encounterSteps=0;state.area = 'works'; state.player = { x: 3, y: 15, facing: 'up' }; say('Merewatch', state.settings.encounters==='classic' ? 'The meal tins are still warm. Danger stirs as you walk the passages. You can return to the watchfire to recover at any time.' : state.settings.encounters==='off' ? 'The meal tins are still warm. Ordinary encounters are disabled; the binding chamber is still guarded. You can change encounters in Settings.' : 'The meal tins are still warm. Six visible patrols guard the passages. You can return to the watchfire to recover at any time.');
       } else if (entity.id === 'toCamp') {
         state.area = 'camp'; state.player = { x: 27, y: 8, facing: 'left' }; emit(); engine.save();
       } else if (entity.id === 'bessa') {
@@ -343,7 +367,7 @@ export function createEngine(options: { storage?: Storage | null; roundDelay?: n
       if (action.type === 'attack' && !battle.enemies.some(enemy => enemy.id === action.target && enemy.hp > 0)) return false;
       if (action.type === 'spell') {
         const spell = SPELLS.find(spell => spell.id === action.spellId);
-        if (!spell || !spell.users.includes(hero.id) || hero.charges[spell.tier - 1] <= 0 || hero.status === 'silence') return false;
+        if (!spell || !canCast(hero,spell) || hero.charges[spell.tier - 1] <= 0 || hero.status === 'silence') return false;
         if (spell.target === 'enemy' && !battle.enemies.some(enemy => enemy.id === action.target && enemy.hp > 0)) return false;
         if (spell.target === 'ally' && !state.heroes.some(ally => ally.id === action.target && ally.hp > 0)) return false;
       }
@@ -376,72 +400,74 @@ export function createEngine(options: { storage?: Storage | null; roundDelay?: n
         if (actor.hero) {
           const hero = state.heroes.find(row => row.id === actor.id)!;
           if (hero.hp <= 0) continue;
-          if (hero.status === 'sleep') { hero.status = null; log(`${hero.id} wakes, losing this turn.`); await wait(); continue; }
+          if (hero.status === 'sleep') { hero.status = null; log(`${hero.name} wakes, losing this turn.`); await wait(); continue; }
           const action = battle.plans[hero.id]; if (!action) continue;
-          if (action.type === 'guard') log(`${hero.id} stands ready to guard.`, { actor: hero.id, target: hero.id, amount: 0, kind: 'guard' });
+          if (action.type === 'guard') log(`${hero.name} stands ready to guard.`, { actor: hero.id, target: hero.id, amount: 0, kind: 'guard' });
           else if (action.type === 'attack') {
             const target = battle.enemies.find(row => row.id === action.target && row.hp > 0) ?? battle.enemies.find(row => row.hp > 0);
             if (!target) { checkEnd(); return; }
             let damage = 0, hits = 0;
             for (let hit = 0; hit < hero.hits; hit++) if (random() < .93) { hits++; damage += Math.max(1, Math.round(hero.attack * (1.2 + random() * .45)) - target.defense); }
             target.hp = Math.max(0, target.hp - damage);
-            log(`${hero.id} attacks ${target.name}: ${damage} damage${hits > 1 ? ` (${hits} hits)` : hits === 0 ? ' — missed' : ''}.`, { actor: hero.id, target: target.id, amount: damage, kind: 'hit' });
+            log(`${hero.name} attacks ${target.name}: ${damage} damage${hits > 1 ? ` (${hits} hits)` : hits === 0 ? ' — missed' : ''}.`, { actor: hero.id, target: target.id, amount: damage, kind: 'hit' });
           } else if (action.type === 'spell') {
             const spell = SPELLS.find(row => row.id === action.spellId)!;
-            if (hero.status === 'silence' || hero.charges[spell.tier - 1] <= 0) log(`${hero.id} cannot cast. No charge spent.`);
+            if (hero.status === 'silence' || hero.charges[spell.tier - 1] <= 0) log(`${hero.name} cannot cast. No charge spent.`);
             else if (spell.target === 'ally') {
               const target = state.heroes.find(row => row.id === action.target && row.hp > 0);
-              if (!target) log(`${hero.id}'s target is no longer valid. No charge spent.`);
-              else { hero.charges[spell.tier - 1]--; const amount = Math.min(target.maxHp - target.hp, 20 + hero.magic * 2); target.hp += amount;
-                log(`${hero.id} casts ${spell.name}: ${target.id} recovers ${amount} HP.`, { actor: hero.id, target: target.id, amount, kind: 'heal' }); }
+              if (!target) log(`${hero.name}'s target is no longer valid. No charge spent.`);
+              else { hero.charges[spell.tier - 1]--; const amount = Math.min(target.maxHp - target.hp, Math.round((20 + hero.magic * 2) * (hero.job === 'mender' ? 1.2 : 1))); target.hp += amount;
+                log(`${hero.name} casts ${spell.name}: ${target.name} recovers ${amount} HP.`, { actor: hero.id, target: target.id, amount, kind: 'heal' }); }
             } else if (spell.id === 'shelter') {
-              hero.charges[0]--; living().forEach(ally => guard.add(ally.id)); log('Iona casts Shelter. Living allies are protected for the rest of the round.', { actor: hero.id, target: hero.id, amount: 0, kind: 'guard' });
+              hero.charges[0]--; living().forEach(ally => guard.add(ally.id)); log(`${hero.name} casts Shelter. Living allies are protected for the rest of the round.`, { actor: hero.id, target: hero.id, amount: 0, kind: 'guard' });
             } else if (spell.id === 'renew') {
-              hero.charges[1]--; for (const target of living()) target.hp = Math.min(target.maxHp, target.hp + Math.round(20 + hero.magic * 1.5));
-              log('Iona casts Renew. The whole party recovers HP.', { actor: hero.id, target: hero.id, amount: Math.round(20 + hero.magic * 1.5), kind: 'heal' });
+              hero.charges[1]--; for (const target of living()) target.hp = Math.min(target.maxHp, target.hp + Math.round((20 + hero.magic * 1.5) * (hero.job === 'mender' ? 1.2 : 1)));
+              log(`${hero.name} casts Renew. The whole party recovers HP.`, { actor: hero.id, target: hero.id, amount: Math.round((20 + hero.magic * 1.5) * (hero.job === 'mender' ? 1.2 : 1)), kind: 'heal' });
             } else {
               const targets = spell.target === 'allEnemies' ? battle.enemies.filter(row => row.hp > 0) : [battle.enemies.find(row => row.id === action.target && row.hp > 0) ?? battle.enemies.find(row => row.hp > 0)].filter((row): row is Enemy => Boolean(row));
               if (!targets.length) { checkEnd(); return; }
               hero.charges[spell.tier - 1]--;
               const element = spell.id === 'ember' ? 'fire' : spell.id === 'frost' ? 'frost' : 'lightning';
               for (const target of targets) {
-                const multiplier = target.weakness.includes(element) ? 1.5 : target.resistance.includes(element) ? .5 : 1;
+                const multiplier = target.weakness.includes(element) ? (hero.job==='arcanist'?1.65:1.5) : target.resistance.includes(element) ? .5 : 1;
                 const damage = Math.round((12 + hero.magic * 2) * multiplier * (targets.length > 1 ? .7 : 1));
                 target.hp = Math.max(0, target.hp - damage);
-                log(`${hero.id} casts ${spell.name} on ${target.name}: ${damage}${multiplier > 1 ? ' — weak point!' : multiplier < 1 ? ' — resisted' : ''}.`, { actor: hero.id, target: target.id, amount: damage, kind: 'spell' });
+                log(`${hero.name} casts ${spell.name} on ${target.name}: ${damage}${multiplier > 1 ? ' — weak point!' : multiplier < 1 ? ' — resisted' : ''}.`, { actor: hero.id, target: target.id, amount: damage, kind: 'spell' });
               }
             }
           } else if (action.type === 'item') {
             const target = state.heroes.find(row => row.id === action.target);
             const before = target?.hp ?? 0;
-            if (target && action.itemId && applyItem(action.itemId, target)) log(`${hero.id} uses ${getItem(action.itemId)?.name} on ${target.id}.`, { actor: hero.id, target: target.id, amount: target.hp - before, kind: 'heal' });
-            else log(`${hero.id}'s item target changed. The item is kept.`);
+            if (target && action.itemId && applyItem(action.itemId, target)) log(`${hero.name} uses ${getItem(action.itemId)?.name} on ${target.name}.`, { actor: hero.id, target: target.id, amount: target.hp - before, kind: 'heal' });
+            else log(`${hero.name}'s item target changed. The item is kept.`);
           }
         } else {
           const enemy = battle.enemies.find(row => row.id === actor.id)!;
           if (enemy.hp <= 0) continue;
           if (enemy.status === 'sleep') { enemy.status = null; log(`${enemy.name} wakes.`); await wait(); continue; }
           const available = living(); if (!available.length) { checkEnd(); return; }
-          const weighted = available.flatMap(hero => Array(hero.id === 'Mara' ? 4 : hero.id === 'Tavin' ? 2 : 1).fill(hero)) as Hero[];
+          const weighted = available.flatMap(hero => Array(hero.job === 'warden' ? 4 : ['striker','spellblade'].includes(hero.job) ? 2 : 1).fill(hero)) as Hero[];
           const target = choose(weighted);
+          if(target.job === 'scout' && random()<.15) {log(`${target.name} slips past ${enemy.name}'s strike.`,{actor:enemy.id,target:target.id,amount:0,kind:'hit'});await wait();continue;}
           const heavy = battle.kind !== 'normal' && battle.round % 2 === 0;
           let damage = Math.max(2, Math.round(enemy.attack * (heavy ? 3 : 1.4) + random() * 4) - target.defense);
-          if (guard.has(target.id)) damage = Math.max(1, Math.floor(damage * .5));
+          if (guard.has(target.id)) damage = Math.max(1, Math.floor(damage * (target.job === 'warden' ? .35 : .5)));
           const barrier = shield.get(target.id) ?? 0;
           if (barrier > 0) { const absorbed = Math.min(barrier, damage); damage -= absorbed; shield.set(target.id, barrier - absorbed); }
           target.hp = Math.max(0, target.hp - damage);
           const setCount = Object.values(target.equipment).filter(id => SET_PIECES.includes(id)).length;
           if (enemy.family === 'WISP' && target.hp > 0 && random() < (setCount >= 3 ? .1 : .2)) target.status = 'poison';
-          log(`${enemy.name} ${heavy ? 'unleashes its warned heavy strike' : 'strikes'} ${target.id}: ${damage}${guard.has(target.id) ? ' (guarded)' : ''}.`, { actor: enemy.id, target: target.id, amount: damage, kind: 'hit' });
+          log(`${enemy.name} ${heavy ? 'unleashes its warned heavy strike' : 'strikes'} ${target.name}: ${damage}${guard.has(target.id) ? ' (guarded)' : ''}.`, { actor: enemy.id, target: target.id, amount: damage, kind: 'hit' });
         }
         if (checkEnd()) return;
         await wait();
       }
       if (token !== generation || state.mode !== 'battle') return;
       for (const hero of living()) if (hero.status === 'poison') {
-        const amount = Math.max(2, Math.floor(hero.maxHp * .05)); hero.hp = Math.max(0, hero.hp - amount); log(`${hero.id} suffers ${amount} poison damage.`);
+        const amount = Math.max(2, Math.floor(hero.maxHp * .05)); hero.hp = Math.max(0, hero.hp - amount); log(`${hero.name} suffers ${amount} poison damage.`);
       }
       if (checkEnd()) return;
+      battle.lastPlans=structuredClone(battle.plans);
       battle.round++; battle.phase = 'planning'; battle.plans = {}; battle.cue = undefined;
       for (const enemy of battle.enemies) if (enemy.rank === 'boss' || enemy.rank === 'rare') enemy.intent = battle.round % 2 === 0 ? 'HEAVY STRIKE THIS ROUND — Guard reduces damage.' : 'Recovering and preparing its next heavy strike.';
       log(`Round ${battle.round}. Plan the party’s actions.`);
@@ -450,7 +476,7 @@ export function createEngine(options: { storage?: Storage | null; roundDelay?: n
       const battle = state.battle;
       if (state.mode !== 'battle' || !battle || battle.phase !== 'planning' || battle.kind === 'boss') return;
       if (random() < (battle.kind === 'rare' ? .8 : .9)) {
-        state.mode = 'explore'; state.battle = null; say('Retreat', 'The party withdraws. No EXP or gold gained. The enemy remains, and your hunt progress is kept.');
+        state.encounterSteps=0;state.mode = 'explore'; state.battle = null; say('Retreat', 'The party withdraws. No EXP or gold gained. The enemy remains, and your hunt progress is kept.');
       } else {
         for (const hero of living()) if (hero.status !== 'sleep') battle.plans[hero.id] = { type: 'guard', target: hero.id };
         log('The escape route closes! The party guards while the enemies act.'); await engine.resolveRound();
@@ -480,7 +506,7 @@ export function createEngine(options: { storage?: Storage | null; roundDelay?: n
     equip(heroId, itemId) {
       if (state.mode !== 'explore' || state.reward) return false;
       const hero = state.heroes.find(row => row.id === heroId); const item = getItem(itemId);
-      if (!hero || !item || item.kind !== 'equipment' || !item.slot || !item.users?.includes(heroId) || !(state.inventory[itemId] > 0)) return false;
+      if (!hero || !item || item.kind !== 'equipment' || !item.slot || !isEquipmentAllowed(hero,item) || !(state.inventory[itemId] > 0)) return false;
       const worn = state.heroes.filter(row => row.id !== heroId && Object.values(row.equipment).includes(itemId)).length;
       if (worn >= state.inventory[itemId]) return false;
       hero.equipment[item.slot] = itemId; updateHeroes(); emit(); engine.save(); return true;
@@ -497,9 +523,52 @@ export function createEngine(options: { storage?: Storage | null; roundDelay?: n
       if (!cost || state.gold < cost || (state.inventory[itemId] ?? 0) >= 20) return false;
       state.gold -= cost; state.inventory[itemId] = (state.inventory[itemId] ?? 0) + 1; emit(); engine.save(); return true;
     },
+    beginAdventure(input) {
+      const profile=normalizeProfile(input);
+      if(!profile)return false;
+      generation++;battleShields.clear();state=freshState(seed,profile);state.mode='intro';emit();engine.save();return true;
+    },
+    advanceIntro() {
+      if(state.mode!=='intro')return;
+      state.introStep++;
+      if(state.introStep>=getIntroSteps(state.profile).length){state.mode='explore';state.message=null;}
+      emit();engine.save();
+    },
+    skipIntro() {
+      if(state.mode!=='intro')return;
+      state.introStep=getIntroSteps(state.profile).length;state.mode='explore';state.message=null;emit();engine.save();
+    },
+    configure(settings) {
+      if(settings.battleSpeed!==undefined && ![1,2,3].includes(settings.battleSpeed))return;
+      if(settings.encounters!==undefined && !['classic','visible','off'].includes(settings.encounters))return;
+      if(settings.battleSpeed!==undefined)state.settings.battleSpeed=settings.battleSpeed;
+      if(settings.encounters!==undefined){state.settings.encounters=settings.encounters;state.encounterSteps=0;}
+      emit();engine.save();
+    },
+    repeatPlans() {
+      const battle=state.battle;
+      if(state.mode!=='battle' || !battle || battle.phase!=='planning' || !battle.lastPlans)return;
+      const first=battle.enemies.find(e=>e.hp>0);
+      if(!first)return;
+      // Repeat replaces the partial plan, including its item reservations.
+      battle.plans={};
+      for(const hero of living()) {
+        if(hero.status==='sleep')continue;
+        const previous=battle.lastPlans[hero.id];
+        if(previous) {
+          const action={...previous};
+          if(action.type==='attack' || action.type==='spell' && SPELLS.find(s=>s.id===action.spellId)?.target==='enemy') {
+            if(!battle.enemies.some(e=>e.id===action.target&&e.hp>0))action.target=first.id;
+          }
+          if(engine.plan(hero.id,action))continue;
+        }
+        engine.plan(hero.id,{type:'attack',target:first.id});
+      }
+      emit();
+    },
     reset() { generation++; state = freshState(seed); try { storage?.removeItem(SAVE_KEY); } catch { /* optional storage */ } emit(); },
     save() {
-      if (!storage || state.mode === 'battle' || state.mode === 'defeat') return false;
+      if (!storage || state.mode === 'creation' || state.mode === 'battle' || state.mode === 'defeat') return false;
       try { storage.setItem(SAVE_KEY, JSON.stringify(state)); return true; } catch { return false; }
     },
   };

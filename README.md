@@ -19,18 +19,21 @@ npm run build
 
 The build produces **`dist/index.html`** and a distributable copy at [demo/index.html](demo/index.html): a self-contained HTML game with its JavaScript, styles, data, original pixel artwork, and third-party notices embedded. Download it to play without installing dependencies, or serve it using `npm run preview`. Managed browsers may restrict direct `file://` navigation; serving the file avoids that browser policy.
 
-Move with **WASD / arrow keys** or click/tap a destination. Press **E / Space** or click a nearby character/object to interact. Touch controls are available on small screens. Battle menus support keyboard focus and pointer input.
+Start from the title screen: choose **New adventure**, name the lead hero, choose one of six jobs, and adjust skin tone, hair, hairstyle, cloak, and story pronouns. A live preview matches the in-world sprite. The eight-scene prologue introduces the hero, Tavin, Iona, and Soren; it can be skipped or resumed after a reload. **Continue** preserves an existing journey.
+
+Move with **WASD / arrow keys** or click/tap a destination. Hold **Shift** to run. Press **E / Space** or click a nearby character/object to interact. Touch controls are available on small screens. Battle menus support arrow keys, Enter, Escape, and pointer input.
 
 The demo includes:
 
 - Reedbank camp, NPC conversations, a small lantern side quest, free camp recovery, and a functioning supply shop.
-- Merewatch bellworks, six visible encounters, the inspection cache, and the Brass Bailiff rescue boss.
-- Four-hero action planning, spells with tiered charges, Guard, consumables, enemy telegraphs, elemental weaknesses, and EXP/class growth.
+- Merewatch bellworks, six authored encounter formations, the inspection cache, and the Brass Bailiff rescue boss. New games use classic walking encounters; settings also offer visible patrols or ordinary encounters off. Bosses and rare hunts remain available in every mode.
+- Four-hero action planning, spells with tiered charges, Guard, consumables, enemy telegraphs, elemental weaknesses, and EXP/class growth. Repeat commands fills a legal editable plan without automatically committing it. Battle animation speed is adjustable from 1× to 3×.
+- Six functional lead jobs: Warden, Striker, Scout, Mender, Arcanist, and Spellblade. Jobs affect stats, traits, spell access, and equipment; appearance is cosmetic. Tavin, Iona, and Soren retain their story roles.
 - Shared equipment, exclusive unique pieces, and the three-piece Reedwatch collection.
 - A return-to-camp ending and an optional **guaranteed showcase** Silver Reedback hunt afterward. The demo does not pretend this scripted encounter uses the full-world 2% rare-sighting rule.
-- Versioned local saves at stable checkpoints. Reloading during a battle returns to its preceding exploration checkpoint. Storage failures allow session-only play and are labeled in the HUD. Sound is optional; reduced-motion settings are respected.
+- Version-two local saves at stable checkpoints, including the custom profile and intro progress. Original demo saves migrate automatically to the default Warden with visible encounters; no forced restart is required. Reloading during a battle returns to its preceding exploration checkpoint. Storage failures allow session-only play and are labeled in the HUD. Sound is optional; reduced-motion settings are respected.
 
-The demo uses only R01 and its opening spells/items. The complete campaign, later regions, full spell catalog, refurbishment, advanced enemy AI, and the 12-win tracking system remain designs or standalone rule models, not completed game features. The browser simulation is separate from Phaser presentation and text-heavy DOM menus so this baseline can grow.
+The demo uses only R01 and its opening spells/items. See [character creation and gameplay polish](docs/character-creation.md) for details. The complete campaign, later regions, full spell catalog, refurbishment, advanced enemy AI, and the 12-win tracking system remain designs or standalone rule models, not completed game features. The browser simulation is separate from Phaser presentation and text-heavy DOM menus so this baseline can grow. Companion jobs remain fixed; free respec, full party creation, later job promotions, and branching campaign dialogue are not part of this build.
 
 ## Campaign and content
 

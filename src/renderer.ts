@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import type { Direction, Enemy, GameMap, GameState, Hero, MapEntity } from './contracts';
-import { createArt, paintBattle, paintWorld, textureForEntity } from './art';
+import { createArt, ensureLeadArt, paintBattle, paintWorld, textureForEntity } from './art';
+import { getIntroSteps } from './characters';
 
 type Point = { x: number; y: number };
 type ActorView = { image: Phaser.GameObjects.Image; label: Phaser.GameObjects.Text; bar: Phaser.GameObjects.Graphics; baseX: number; baseY: number };
@@ -54,12 +55,14 @@ class WorldScene extends Phaser.Scene {
   private hintLabel!: Phaser.GameObjects.Text;
   private pathDots!: Phaser.GameObjects.Graphics;
   private atmosphere!: Phaser.GameObjects.Graphics;
+  private spotlight!: Phaser.GameObjects.Graphics;
   private keys: Record<string, Phaser.Input.Keyboard.Key> = {};
   private lastMove = 0;
   private path: Point[] = [];
   private pathTarget: string | undefined;
   private cueKey = '';
   private effects: Phaser.GameObjects.Text[] = [];
+  private flashes: Phaser.GameObjects.Graphics[] = [];
   private reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   constructor(private readState: () => GameState, private readMap: () => GameMap,
@@ -72,6 +75,7 @@ class WorldScene extends Phaser.Scene {
     this.background = this.add.image(0, 0, 'tile-g').setOrigin(0);
     this.pathDots = this.add.graphics().setDepth(20);
     this.atmosphere = this.add.graphics().setDepth(200).setBlendMode(Phaser.BlendModes.SCREEN);
+    this.spotlight = this.add.graphics().setDepth(72);
     this.playerHalo = this.add.ellipse(0, 0, 25, 11, 0xe2c783, .23).setDepth(79);
     this.player = this.add.image(0, 0, 'hero-Mara').setOrigin(.5, 1).setDepth(80);
     this.followers = ['Tavin', 'Iona', 'Soren'].map((name, i) => this.add.image(0, 0, `hero-${name}`).setOrigin(.5, 1).setAlpha(.95).setDepth(75 - i));
@@ -79,9 +83,10 @@ class WorldScene extends Phaser.Scene {
     this.hintLabel = this.add.text(480, 546, '', { fontFamily: 'monospace', fontSize: '13px', color: '#f0d8a1', backgroundColor: '#13282eea', padding: { x: 12, y: 7 }, align: 'center' }).setOrigin(.5, .5).setDepth(300);
     const keyboard = this.input.keyboard;
     if (keyboard) {
-      this.keys = keyboard.addKeys('W,A,S,D,UP,DOWN,LEFT,RIGHT,E,SPACE', false) as Record<string, Phaser.Input.Keyboard.Key>;
+      this.keys = keyboard.addKeys('W,A,S,D,UP,DOWN,LEFT,RIGHT,E,SPACE,SHIFT', false) as Record<string, Phaser.Input.Keyboard.Key>;
       keyboard.on('keydown', (event: KeyboardEvent) => {
         if (this.inputBlocked()) return;
+        if (document.activeElement?.matches('button') && (event.key === ' ' || event.key.toLowerCase() === 'e')) return;
         if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(event.key)) event.preventDefault();
         if ((event.key.toLowerCase() === 'e' || event.key === ' ') && !event.repeat) {
           this.path = []; this.pathTarget = undefined; this.onInteract();
@@ -99,7 +104,7 @@ class WorldScene extends Phaser.Scene {
     const state = this.readState();
     if (state.mode !== 'explore' || state.message || state.reward) return true;
     const active = document.activeElement;
-    if (active && active !== this.game.canvas && active.matches('input, textarea, select, button')) return true;
+    if (active && active !== this.game.canvas && active.matches('input, textarea, select, [contenteditable="true"]')) return true;
     return [...document.querySelectorAll<HTMLElement>('[aria-modal="true"]')].some(el => !el.hidden && getComputedStyle(el).display !== 'none');
   }
 
@@ -123,6 +128,7 @@ class WorldScene extends Phaser.Scene {
       this.sprites.clear(); this.labels.clear(); this.clearActors();
       this.cueKey = ''; this.tweens.killAll();
       this.effects.forEach(effect => effect.destroy()); this.effects = [];
+      this.flashes.forEach(effect => effect.destroy()); this.flashes = [];
       if (combat) {
         this.background.setTexture('battle-background');
       } else {
@@ -132,12 +138,14 @@ class WorldScene extends Phaser.Scene {
       }
     }
     this.player.setVisible(!combat); this.playerHalo.setVisible(!combat);
+    this.player.setTexture(ensureLeadArt(this, state.profile, state.player.facing === 'up' && !combat));
     this.followers.forEach((s, i) => s.setVisible(!combat && this.trail.length > i + 1));
     if (combat) this.refreshBattle(state); else this.refreshWorld(state);
   }
 
   private refreshWorld(state: GameState) {
-    this.regionLabel.setText(state.area === 'camp' ? 'REEDBANK  /  THE FIRST WATCH' : 'MEREWATCH  /  THE BELLWORKS');
+    const intro = state.mode === 'intro' ? getIntroSteps(state.profile)[state.introStep] : undefined;
+    this.regionLabel.setText(intro ? `PROLOGUE  /  ${intro.speaker}` : state.area === 'camp' ? 'REEDBANK  /  THE FIRST WATCH' : 'MEREWATCH  /  THE BELLWORKS');
     const map = this.readMap();
     const present = new Set(map.entities.map(e => e.id));
     for (const [id, image] of this.sprites) if (!present.has(id)) {
@@ -180,9 +188,24 @@ class WorldScene extends Phaser.Scene {
         follower.setVisible(this.trail.length > i + 1);
       });
     }
+    this.player.setFlipX(state.player.facing === 'left');
+    this.spotlight.clear();
+    if (intro) {
+      const positions = [{x:14,y:11},{x:13,y:13},{x:15,y:13}];
+      this.followers.forEach((follower,i)=>{
+        const p=this.toScreen(positions[i]);
+        follower.setPosition(p.x,p.y).setScale(.84).setVisible(state.introStep>=i+3);
+      });
+      const index=['Tavin','Iona','Soren'].indexOf(intro.focus);
+      const focus=index>=0?this.toScreen(positions[index]):this.toScreen(state.player);
+      this.spotlight.fillStyle(0xe8c77e,.1).fillEllipse(focus.x,focus.y-8,58,24);
+      this.spotlight.lineStyle(1,0xe8c77e,.5).strokeEllipse(focus.x,focus.y-5,35,14);
+    } else {
+      this.followers.forEach((follower,i)=>follower.setVisible(this.trail.length>i+1));
+    }
     const nearest = map.entities.find(entity => distance(entity, state.player) <= 1);
     this.hintLabel.setText(nearest ? `[E] ${nearest.hint || nearest.name}` : 'WASD / ARROWS to walk · E to interact · click to travel');
-    this.hintLabel.setVisible(!state.message && !state.reward);
+    this.hintLabel.setVisible(state.mode==='explore' && !state.message && !state.reward);
     this.pathDots.clear();
     this.pathDots.fillStyle(0xd6bd7c, .35);
     for (const point of this.path) { const p = this.toScreen(point); this.pathDots.fillRect(p.x - 2, p.y - 12, 4, 3); }
@@ -190,6 +213,7 @@ class WorldScene extends Phaser.Scene {
 
   private refreshBattle(state: GameState) {
     const battle = state.battle!;
+    this.spotlight.clear();
     this.regionLabel.setText(`${battle.kind === 'boss' ? 'BOSS ENCOUNTER' : battle.kind === 'rare' ? 'RARE HUNT ◇' : 'BATTLE'}  /  ROUND ${battle.round}`);
     this.hintLabel.setText(battle.phase === 'resolving' ? 'The round unfolds…' : 'Choose an action for each hero, then commit the round.').setVisible(true);
     this.pathDots.clear();
@@ -198,7 +222,7 @@ class WorldScene extends Phaser.Scene {
     const currentIds = new Set<string>();
     state.heroes.forEach((hero, i) => {
       currentIds.add(hero.id);
-      this.actor(hero.id, hero, `hero-${hero.id}`, heroPositions[i][0], heroPositions[i][1], 2.2, '#cdd8ca', true);
+      this.actor(hero.id, hero, hero.id==='Mara'?ensureLeadArt(this,state.profile):`hero-${hero.id}`, heroPositions[i][0], heroPositions[i][1], 2.2, '#cdd8ca', true);
     });
     battle.enemies.forEach((enemy, i) => {
       currentIds.add(enemy.id);
@@ -206,6 +230,10 @@ class WorldScene extends Phaser.Scene {
       let texture = textureForEntity(enemy.family, enemy.rank === 'boss' ? 'boss' : enemy.rank === 'rare' ? 'rare' : 'enemy');
       if (['ashen', 'crested'].includes(enemy.rank) && this.textures.exists(`${texture}-${enemy.rank}`)) texture += `-${enemy.rank}`;
       this.actor(enemy.id, enemy, texture, pos[0], pos[1], enemy.rank === 'boss' ? 1.38 : enemy.rank === 'rare' ? 2.15 : 1.7, '#ead7b2', false);
+      if (enemy.hp>0 && enemy.intent.startsWith('HEAVY') && battle.phase==='planning') {
+        this.spotlight.fillStyle(0xd7ad64,.12).fillEllipse(pos[0],pos[1]-4,135,35);
+        this.spotlight.lineStyle(2,0xe4c680,.5).strokeEllipse(pos[0],pos[1]-4,135,35);
+      }
     });
     for (const [id, view] of this.actors) if (!currentIds.has(id)) { view.image.destroy(); view.label.destroy(); view.bar.destroy(); this.actors.delete(id); }
     const cue = battle.cue;
@@ -222,12 +250,39 @@ class WorldScene extends Phaser.Scene {
         const text = this.add.text(target.baseX, target.baseY - 90, word, { fontFamily: 'monospace', fontSize: '25px', color, stroke: '#162b30', strokeThickness: 5, fontStyle: 'bold' }).setOrigin(.5).setDepth(400);
         this.effects.push(text);
         this.tweens.add({ targets: text, y: text.y - (this.reducedMotion ? 0 : 34), alpha: 0, delay: 160, duration: 550, onComplete: () => { text.destroy(); this.effects = this.effects.filter(effect => effect !== text); } });
+        this.castEffect(cue.kind,target,actor,battle.log.at(-1)||'');
         if (!this.reducedMotion && cue.kind !== 'guard') {
           target.image.setTint(cue.kind === 'heal' ? 0xb1e4ac : 0xffe1af);
           this.time.delayedCall(140, () => { if (target.image.active) target.image.clearTint(); });
         }
       }
     }
+  }
+
+  private castEffect(kind: 'hit'|'heal'|'guard'|'spell',target:ActorView,actor:ActorView|undefined,line:string) {
+    const g=this.add.graphics().setDepth(240);this.flashes.push(g);
+    const x=target.baseX,y=target.baseY-35;
+    if(kind==='guard') {
+      g.lineStyle(3,0xe7cb8a,.8).strokeEllipse(x,y,48,76);
+      g.lineStyle(1,0xffe4a5,.6).strokeEllipse(x,y,57,85);
+    } else if(kind==='heal') {
+      g.lineStyle(2,0xa9d6a4,.8).strokeEllipse(x,y+25,70,21);
+      for(let i=0;i<5;i++){g.fillStyle(0xbfe4b3,.8).fillRect(x-28+i*13,y-(i%3)*12,3,3);}
+    } else if(kind==='spell') {
+      const lower=line.toLowerCase();
+      if(lower.includes('spark')||lower.includes('storm')) {
+        g.lineStyle(4,0x89c9e2,.65);g.beginPath();g.moveTo(x+17,y-70);g.lineTo(x-9,y-21);g.lineTo(x+11,y-25);g.lineTo(x-13,y+30);g.strokePath();
+        g.lineStyle(1,0xf4f0ce,.95);g.beginPath();g.moveTo(x+17,y-70);g.lineTo(x-9,y-21);g.lineTo(x+11,y-25);g.lineTo(x-13,y+30);g.strokePath();
+      } else if(lower.includes('frost')) {
+        for(let i=0;i<4;i++) { const px=x-27+i*18,py=y+(i%2)*16;g.fillStyle(0xb7dae3,.7).fillTriangle(px,py-28,px-8,py+7,px+8,py+7); }
+      } else {
+        for(let i=0;i<4;i++){const px=x-23+i*15,py=y+(i%2)*11;g.fillStyle(0xeab86d,.65).fillTriangle(px,py-27,px-11,py+18,px+11,py+18);g.fillStyle(0xffdda2,.8).fillRect(px-3,py-5,6,17);}
+      }
+    } else {
+      g.lineStyle(2,0xf0d19b,.75);g.beginPath();g.moveTo(x-19,y+14);g.lineTo(x+21,y-18);g.strokePath();
+      if(actor && !this.reducedMotion && line.includes('heavy'))this.cameras.main.shake(110,.002);
+    }
+    this.tweens.add({targets:g,alpha:0,duration:this.reducedMotion?170:390,onComplete:()=>{g.destroy();this.flashes=this.flashes.filter(f=>f!==g);}});
   }
 
   private actor(id: string, stats: Hero | Enemy, texture: string, x: number, y: number, scale: number, color: string, hero: boolean) {
@@ -241,8 +296,9 @@ class WorldScene extends Phaser.Scene {
       this.actors.set(id, view);
     }
     const alive = stats.hp > 0;
+    if(view.image.texture.key!==texture)view.image.setTexture(texture);
     view.image.setAlpha(alive ? 1 : .24).setFlipX(hero);
-    const name = hero ? (stats as Hero).id : (stats as Enemy).name;
+    const name = hero ? (stats as Hero).name : (stats as Enemy).name;
     const rank = !hero && (stats as Enemy).rank !== 'base' ? ` ${((stats as Enemy).rank === 'rare') ? '◇' : (stats as Enemy).rank === 'boss' ? '◆' : '▲'}` : '';
     view.label.setText(`${name}${rank}${stats.status ? ` · ${stats.status}` : ''}\n${stats.hp} / ${stats.maxHp}`).setAlpha(alive ? 1 : .5);
     view.bar.clear().fillStyle(0x10242a, .95).fillRect(x - 47, y + 49, 94, 7);
@@ -297,11 +353,14 @@ class WorldScene extends Phaser.Scene {
     }
     if (this.visualMode === 'explore') {
       for (const entity of this.readMap().entities) if (entity.kind === 'campfire') this.sprites.get(entity.id)?.setTexture(`fire-${Math.floor(time / 280) % 2}`);
+      const walking=!this.reducedMotion && this.tweens.isTweening(this.player);
+      this.player.setOrigin(.5,walking?1+Math.sin(time*.055)*.025:1);
     }
     if (this.inputBlocked()) { this.path = []; this.pathTarget = undefined; return; }
     const dir = this.keys.W?.isDown || this.keys.UP?.isDown ? 'up' : this.keys.S?.isDown || this.keys.DOWN?.isDown ? 'down'
       : this.keys.A?.isDown || this.keys.LEFT?.isDown ? 'left' : this.keys.D?.isDown || this.keys.RIGHT?.isDown ? 'right' : null;
-    if (time - this.lastMove < 145) return;
+    const cadence=this.keys.SHIFT?.isDown?85:145;
+    if (time - this.lastMove < cadence) return;
     if (dir) { this.path = []; this.pathTarget = undefined; this.lastMove = time; this.onMove(dir); return; }
     if (this.path.length) {
       const point = this.path.shift()!;

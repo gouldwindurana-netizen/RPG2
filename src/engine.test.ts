@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createEngine, MAPS, SAVE_KEY } from './engine';
+import { LEGACY_PROFILE } from './characters';
 import type { DemoEngine, HeroId } from './contracts';
 
 class MemoryStorage implements Storage {
@@ -13,7 +14,8 @@ class MemoryStorage implements Storage {
   setItem(key: string, value: string) { this.data.set(key, value); }
 }
 
-function demo() { const engine = createEngine({ storage: null, roundDelay: 0, seed: 12345 }); engine.dismiss(); return engine; }
+function start(engine: DemoEngine) { engine.beginAdventure(LEGACY_PROFILE); engine.skipIntro(); engine.configure({encounters:'visible'}); return engine; }
+function demo() { const engine = start(createEngine({ storage: null, roundDelay: 0, seed: 12345 })); engine.dismiss(); return engine; }
 function beside(engine: DemoEngine, entityId: string, area: 'camp' | 'works' = 'works') {
   engine.state.area = area;
   const entity = engine.map().entities.find(row => row.id === entityId)!;
@@ -160,7 +162,7 @@ test('reward requires a valid choice, cannot repeat, and unique equipment is exc
 
 test('pending reward and its claimed state roundtrip without duplicate acquisition', () => {
   const storage = new MemoryStorage();
-  let engine = createEngine({ storage, roundDelay: 0 }); engine.dismiss(); beside(engine, 'chest');
+  let engine = start(createEngine({ storage, roundDelay: 0 })); engine.dismiss(); beside(engine, 'chest');
   engine = createEngine({ storage, roundDelay: 0 });
   assert.equal(engine.state.mode, 'victory');
   assert.equal(engine.state.reward!.choices.length, 3);
@@ -173,7 +175,7 @@ test('pending reward and its claimed state roundtrip without duplicate acquisiti
 });
 
 test('mid-battle saving is refused and reload returns the stable pre-battle checkpoint', () => {
-  const storage = new MemoryStorage(); const engine = createEngine({ storage, roundDelay: 0 });
+  const storage = new MemoryStorage(); const engine = start(createEngine({ storage, roundDelay: 0 }));
   engine.dismiss(); beside(engine, 'encounter1');
   assert.equal(engine.save(), false);
   engine.state.inventory.POTION = 0;
