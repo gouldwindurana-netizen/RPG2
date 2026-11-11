@@ -1,50 +1,50 @@
 # The Road Beyond the Bells
 
-An original party RPG set in Avel. **First Watch** is a playable browser demo of the opening expedition, built with Phaser, TypeScript, and Vite. Campaign documents and editable content remain alongside the demo.
+An original four-person party RPG set in Avel, built with Phaser, TypeScript, and Vite. Create a hero, explore a connected world, and follow the campaign from the rescue at Merewatch to the last bell in Veyr.
 
-## Play the demo
+## Play
 
-Requires Node.js 22.12+ (this environment uses Node 24). From `/workspace/RPG2`:
+Requires Node.js 22.12+ (the cloud environment uses Node 24):
 
 ```bash
 npm ci
 npm run dev
 ```
 
-Vite serves the game on port **5173**. In a restricted cloud shell, use `npm ci --cache /tmp/rpg2-npm-cache` if the default npm cache is not writable. Use the existing checkout; a new worktree is unnecessary.
+Vite serves the game on port **5173**. Use `npm ci --cache /tmp/rpg2-npm-cache` if the default cache is not writable. Work in the existing checkout.
 
 ```bash
 npm run build
 ```
 
-The build produces **`dist/index.html`** and a distributable copy at [demo/index.html](demo/index.html): a self-contained HTML game with its JavaScript, styles, data, original pixel artwork, and third-party notices embedded. Download it to play without installing dependencies, or serve it using `npm run preview`. Managed browsers may restrict direct `file://` navigation; serving the file avoids that browser policy.
+The build produces **`dist/index.html`** and [demo/index.html](demo/index.html), a self-contained HTML game with scripts, styles, data, original artwork, and third-party notices embedded. Download it for offline play, or serve it with `npm run preview`. Some managed browsers restrict direct file navigation.
 
-Start from the title screen: choose **New adventure**, name the lead hero, choose one of six jobs, and adjust skin tone, hair, hairstyle, cloak, and story pronouns. A live preview matches the in-world sprite. The eight-scene prologue introduces the hero, Tavin, Iona, and Soren; it can be skipped or resumed after a reload. **Continue** preserves an existing journey.
+Choose **New adventure**, name the lead hero, select one of six jobs, and customize appearance. The eight-scene introduction meets Tavin, Iona, and Soren. **Continue** resumes an existing journey. New creation offers she/her or he/him; compatible older profiles retain their saved identity.
 
-Move with **WASD / arrow keys** or click/tap a destination. Hold **Shift** to run. Press **E / Space** or click a nearby character/object to interact. Touch controls are available on small screens. Battle menus support arrow keys, Enter, Escape, and pointer input.
+Walk with **WASD / arrows**, click a destination, or use the touch pad. Hold **Shift** to run. Press **E / Space** to interact. **Escape** opens the party menu; **M** opens the world map. Menus support keyboard and pointer input.
 
-The demo includes:
+Implemented gameplay includes:
 
-- Reedbank camp, NPC conversations, a small lantern side quest, free camp recovery, and a functioning supply shop.
-- Merewatch bellworks, six authored encounter formations, the inspection cache, and the Brass Bailiff rescue boss. New games use classic walking encounters; settings also offer visible patrols or ordinary encounters off. Bosses and rare hunts remain available in every mode.
-- Four-hero action planning, spells with tiered charges, Guard, consumables, enemy telegraphs, elemental weaknesses, and EXP/class growth. Repeat commands fills a legal editable plan without automatically committing it. Battle animation speed is adjustable from 1× to 3×.
-- Six functional lead jobs: Warden, Striker, Scout, Mender, Arcanist, and Spellblade. Jobs affect stats, traits, spell access, and equipment; appearance is cosmetic. Tavin, Iona, and Soren retain their story roles.
-- Shared equipment, exclusive unique pieces, and the three-piece Reedwatch collection.
-- A return-to-camp ending and an optional **guaranteed showcase** Silver Reedback hunt afterward. The demo does not pretend this scripted encounter uses the full-world 2% rare-sighting rule.
-- Version-two local saves at stable checkpoints, including the custom profile and intro progress. Original demo saves migrate automatically to the default Warden with visible encounters; no forced restart is required. Reloading during a battle returns to its preceding exploration checkpoint. Storage failures allow session-only play and are labeled in the HUD. Sound is optional; reduced-motion settings are respected.
+- A scrolling overworld and ten local maps across six regions, with safe towns, dangerous dungeons, shops, inns, treasure, and story-gated bridges, ferries, and entrances.
+- The original main story through Orren’s rescue, Neri’s release, the shelter trials, regional tower handovers, Veyr’s evacuation preparations, and the Heart Bell. The story concludes without restoring burned memories.
+- Four-person turn planning, Guard, elemental weaknesses, telegraphed attacks, consumables, retreat, repeat commands, and adjustable battle playback. Walking encounters are the default; visible patrols and encounters off are settings.
+- Six lead jobs with real stats, traits, equipment permissions, and spell access. Fixed regional enemies and stronger color variants replace automatic scaling to the party.
+- Eight spell tiers, shared equipment, regional shop upgrades, six three-piece sets, and rare hunts with 2% sightings and a twelve-victory tracking guarantee. The opening Silver Reedback remains a disclosed showcase hunt for the original collection.
+- Blue menu windows for Items / Equipment, Magic, Status, World Map, Journal, and System. Healing and recovery spells can be used outside battle.
+- Version-three local saves, migration from earlier expeditions, safe-shelter recovery, and stable exploration checkpoints. Interrupted battles return to their preceding checkpoint. Save restrictions are labeled; session-only play remains possible.
 
-The demo uses only R01 and its opening spells/items. See [character creation and gameplay polish](docs/character-creation.md) for details. The complete campaign, later regions, full spell catalog, refurbishment, advanced enemy AI, and the 12-win tracking system remain designs or standalone rule models, not completed game features. The browser simulation is separate from Phaser presentation and text-heavy DOM menus so this baseline can grow. Companion jobs remain fixed; free respec, full party creation, later job promotions, and branching campaign dialogue are not part of this build.
+See [the playable campaign](docs/playable-campaign.md) for scope, progression, and limitations, [character creation](docs/character-creation.md), and [the continuing gameplay direction](docs/gameplay-direction.md). The twelve detailed side quests, full refurbishment system, branching dialogue, and advanced combat models in the design documents are not all implemented.
 
-## Campaign and content
+## Campaign and editable content
 
 - [Story and main quests](docs/story.md)
-- [Twelve side quests](docs/side-quests.md)
-- [World map, enemies, and bosses](docs/world-and-bestiary.md)
-- [Leveling, items, regional sets, and rare drops](docs/progression-and-loot.md)
-- [Online balance research](docs/balance-research.md)
+- [Twelve side-quest designs](docs/side-quests.md)
+- [World and bestiary](docs/world-and-bestiary.md)
+- [Progression, equipment, and rare drops](docs/progression-and-loot.md)
+- [Balance research](docs/balance-research.md)
 - [Combat design](docs/combat-design.md)
 
-The JSON files in `data/` are the editable source content. The Python content tools use only the standard library; no Python dependency installation or credentials are required.
+`data/` contains the editable catalog. `src/campaign.ts` defines playable geography, transitions, and story events. `src/engine.ts` owns simulation rules independently of Phaser; rendering and DOM menus present that state. [AGENTS.md](AGENTS.md) records the project direction for future additions.
 
 ## Validate
 
@@ -52,19 +52,10 @@ The JSON files in `data/` are the editable source content. The Python content to
 npm test
 npm run build
 npm run test:browser
-```
-
-The Playwright configuration uses system Chromium at `/usr/bin/chromium` when present, or `CHROMIUM_PATH` if supplied. Outside this cloud image, install a supported Playwright browser with `npx playwright install chromium` if needed. Browser tests cover actual map/DOM input, combat, rewards, persistence, mobile layout, and the self-contained export. Screenshots are written under `test-results/`.
-
-From the existing checkout at `/workspace/RPG2`:
-
-```bash
 python -m unittest discover -s tests -v
 python tools/audit_balance.py
-python tools/audit_balance.py --export /tmp/avel-catalog.json
 ```
 
-The export contains fixed stats for 72 ordinary rank variants, six rares, and ten boss encounters. Three rank definitions per ordinary template are content possibilities, not a claim that 72 distinct sprites or authored encounter maps exist.
+Playwright uses `/usr/bin/chromium` when available, or `CHROMIUM_PATH`. Otherwise install a browser with `npx playwright install chromium`. Tests cover engine progression and save rules, real browser input, combat, menus, mobile layout, and the standalone export. Browser screenshots and traces go under `test-results/`.
 
-The audit checks content references, XP planning budgets, gross baseline gear affordability, and loot math. Python tests exercise progression and collection rules; TypeScript engine tests exercise the actual demo simulation. Browser checks and screenshots verify the playable slice. Later-region combat, broader balance, and human playtesting are still outstanding.
-
+The Python tools are standard-library content models. Their planning budgets and full catalog differ from the condensed browser campaign’s encounter tuning; they are not a browser battle simulator. Automated routes provide regression evidence, while broad job, seed, strategy, and pacing balance still benefits from human playtesting.

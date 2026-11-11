@@ -1,5 +1,5 @@
 export type Direction = 'up' | 'down' | 'left' | 'right';
-export type Area = 'camp' | 'works';
+export type Area = 'camp' | 'works' | 'overworld' | 'dunmere' | 'tollhouse' | 'fen' | 'granary' | 'orchard' | 'crown' | 'veyr' | 'heart';
 export type Slot = 'weapon' | 'body' | 'head' | 'mantle' | 'charm';
 export type HeroId = 'Mara' | 'Tavin' | 'Iona' | 'Soren';
 export type JobId = 'warden' | 'striker' | 'scout' | 'mender' | 'arcanist' | 'spellblade';
@@ -31,18 +31,34 @@ export interface Battle {
   enemies: Enemy[]; round: number; phase: 'planning' | 'resolving';
   plans: Partial<Record<HeroId, PlannedAction>>; log: string[];
   lastPlans?: Partial<Record<HeroId, PlannedAction>>;
+  regionId?: string;
+  rewardXp?: number;
+  rewardGold?: number;
   cue?: { actor: string; target: string; amount: number; kind: 'hit' | 'heal' | 'guard' | 'spell' };
 }
 export interface MapEntity {
   id: string; x: number; y: number; kind: 'npc' | 'enemy' | 'boss' | 'rare' | 'chest' | 'exit' | 'campfire';
   name: string; sprite: string; hint: string;
+  destination?: Area;
 }
 export interface GameMap {
   width: number; height: number; tiles: string[]; entities: MapEntity[];
+  name?: string; regionId?: string; safe?: boolean;
+}
+export interface CampaignProgress {
+  stage: number;
+  switches: string[];
+  openedChests: string[];
+  wildBattles: number;
 }
 export interface GameState {
-  version: 2; mode: 'creation' | 'intro' | 'explore' | 'battle' | 'victory' | 'defeat' | 'ending'; area: Area;
+  version: 3; mode: 'creation' | 'intro' | 'explore' | 'battle' | 'victory' | 'defeat' | 'ending'; area: Area;
   profile: CharacterProfile; introStep: number; settings: GameSettings; encounterSteps: number;
+  campaign: CampaignProgress;
+  safeReturn: { area: Area; x: number; y: number };
+  overworldReturn: { x: number; y: number };
+  messageQueue: { speaker: string; text: string }[];
+  hunts: Record<string, { wins: number; ready: boolean }>;
   player: { x: number; y: number; facing: Direction };
   heroes: Hero[]; inventory: Record<string, number>; gold: number; xp: number;
   flags: { briefed: boolean; bossDefeated: boolean; completed: boolean; sideQuest: boolean; chest: boolean; stamp: boolean };
@@ -51,7 +67,7 @@ export interface GameState {
   reward: { title: string; lines: string[]; source: 'normal' | 'boss' | 'rare' | 'chest'; choices: string[] } | null;
   steps: number; rng: number;
 }
-export interface Spell { id: string; name: string; tier: number; users: HeroId[]; target: 'enemy' | 'ally' | 'allEnemies' | 'allAllies'; description: string; }
+export interface Spell { id: string; name: string; tier: number; users: HeroId[]; target: 'enemy' | 'ally' | 'allEnemies' | 'allAllies'; description: string; effect?: string; power?: number; element?: string; }
 export interface Item { id: string; name: string; kind: string; slot?: Slot; stats?: Record<string, number>; users?: string[]; effect?: string; description?: string; set_id?: string; }
 export interface DemoEngine {
   state: GameState;
@@ -69,6 +85,7 @@ export interface DemoEngine {
   continue(): void;
   equip(hero: HeroId, itemId: string): boolean;
   useItem(itemId: string, hero: HeroId): boolean;
+  castField(heroId: HeroId, spellId: string, targetId: HeroId): boolean;
   buy(itemId: string): boolean;
   beginAdventure(profile: CharacterProfile): boolean;
   advanceIntro(): void;

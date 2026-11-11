@@ -7,7 +7,7 @@ type Point = { x: number; y: number };
 type ActorView = { image: Phaser.GameObjects.Image; label: Phaser.GameObjects.Text; bar: Phaser.GameObjects.Graphics; baseX: number; baseY: number };
 
 const DIRECTIONS: [Direction, number, number][] = [['up', 0, -1], ['right', 1, 0], ['down', 0, 1], ['left', -1, 0]];
-const WALKABLE = new Set(['g', 'd', 's', 'f']);
+const WALKABLE = new Set(['g', 'd', 's', 'f', 'b']);
 const distance = (a: Point, b: Point) => Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
 
 /** The renderer reads state and emits input; it never resolves game rules. */
@@ -32,6 +32,7 @@ export class GameRenderer {
   }
 
   refresh() { this.scene.refreshView(); }
+  viewport() { return this.scene.viewport(); }
   destroy() { this.resizeObserver.disconnect(); this.game.destroy(true); }
 }
 
@@ -43,6 +44,10 @@ class WorldScene extends Phaser.Scene {
   private ox = 0;
   private oy = 18;
   private background!: Phaser.GameObjects.Image;
+  private scenery: Phaser.GameObjects.Image[] = [];
+  private worldWidth = 960;
+  private worldHeight = 576;
+  private cameraArea = '';
   private sprites = new Map<string, Phaser.GameObjects.Image>();
   private labels = new Map<string, Phaser.GameObjects.Text>();
   private actors = new Map<string, ActorView>();
@@ -74,13 +79,13 @@ class WorldScene extends Phaser.Scene {
     createArt(this); paintBattle(this);
     this.background = this.add.image(0, 0, 'tile-g').setOrigin(0);
     this.pathDots = this.add.graphics().setDepth(20);
-    this.atmosphere = this.add.graphics().setDepth(200).setBlendMode(Phaser.BlendModes.SCREEN);
+    this.atmosphere = this.add.graphics().setDepth(200).setScrollFactor(0).setBlendMode(Phaser.BlendModes.SCREEN);
     this.spotlight = this.add.graphics().setDepth(72);
     this.playerHalo = this.add.ellipse(0, 0, 25, 11, 0xe2c783, .23).setDepth(79);
     this.player = this.add.image(0, 0, 'hero-Mara').setOrigin(.5, 1).setDepth(80);
     this.followers = ['Tavin', 'Iona', 'Soren'].map((name, i) => this.add.image(0, 0, `hero-${name}`).setOrigin(.5, 1).setAlpha(.95).setDepth(75 - i));
-    this.regionLabel = this.add.text(24, 20, '', { fontFamily: 'monospace', fontSize: '14px', color: '#e7d5ab', backgroundColor: '#152b30dd', padding: { x: 12, y: 8 } }).setDepth(300);
-    this.hintLabel = this.add.text(480, 546, '', { fontFamily: 'monospace', fontSize: '13px', color: '#f0d8a1', backgroundColor: '#13282eea', padding: { x: 12, y: 7 }, align: 'center' }).setOrigin(.5, .5).setDepth(300);
+    this.regionLabel = this.add.text(24, 20, '', { fontFamily: 'monospace', fontSize: '14px', color: '#eef2ec', backgroundColor: '#162d66ee', padding: { x: 12, y: 8 } }).setDepth(300).setScrollFactor(0);
+    this.hintLabel = this.add.text(480, 546, '', { fontFamily: 'monospace', fontSize: '13px', color: '#f5efd2', backgroundColor: '#10295bea', padding: { x: 12, y: 7 }, align: 'center' }).setOrigin(.5, .5).setDepth(300).setScrollFactor(0);
     const keyboard = this.input.keyboard;
     if (keyboard) {
       this.keys = keyboard.addKeys('W,A,S,D,UP,DOWN,LEFT,RIGHT,E,SPACE,SHIFT', false) as Record<string, Phaser.Input.Keyboard.Key>;
@@ -115,6 +120,12 @@ class WorldScene extends Phaser.Scene {
 
   private toScreen(p: Point) { return { x: this.ox + (p.x + .5) * this.tile, y: this.oy + (p.y + 1) * this.tile - 2 }; }
 
+  viewport() {
+    const camera = this.cameras?.main;
+    return { area: this.area, tile: this.tile, ox: this.ox, oy: this.oy, scrollX: camera?.scrollX || 0,
+      scrollY: camera?.scrollY || 0, zoom: camera?.zoom || 1, width: this.worldWidth, height: this.worldHeight };
+  }
+
   refreshView() {
     if (!this.ready) return;
     const state = this.readState();
@@ -126,15 +137,22 @@ class WorldScene extends Phaser.Scene {
       for (const sprite of this.sprites.values()) sprite.destroy();
       for (const label of this.labels.values()) label.destroy();
       this.sprites.clear(); this.labels.clear(); this.clearActors();
+      this.scenery.forEach(image => image.destroy()); this.scenery = [];
       this.cueKey = ''; this.tweens.killAll();
       this.effects.forEach(effect => effect.destroy()); this.effects = [];
       this.flashes.forEach(effect => effect.destroy()); this.flashes = [];
       if (combat) {
-        this.background.setTexture('battle-background');
+        this.cameras.main.stopFollow().setBounds(0, 0, 960, 576).setZoom(1).setScroll(0, 0);
+        this.cameraArea = '';
+        this.background.setTexture(paintBattle(this, state.battle?.regionId || this.readMap().regionId || state.area));
       } else {
         const world = paintWorld(this, this.readMap(), state.area);
         this.tile = world.tile; this.ox = world.ox; this.oy = world.oy;
+        this.worldWidth = world.width; this.worldHeight = world.height;
+        this.cameras.main.stopFollow().setBounds(0, 0, world.width, world.height).setZoom(1).setScroll(0, 0);
+        this.cameraArea = '';
         this.background.setTexture(world.key);
+        this.scenery = world.scenery.map(prop => this.add.image(prop.x, prop.y, prop.texture).setOrigin(.5, 1).setScale(prop.scale).setDepth(50 + prop.row));
       }
     }
     this.player.setVisible(!combat); this.playerHalo.setVisible(!combat);
@@ -145,8 +163,9 @@ class WorldScene extends Phaser.Scene {
 
   private refreshWorld(state: GameState) {
     const intro = state.mode === 'intro' ? getIntroSteps(state.profile)[state.introStep] : undefined;
-    this.regionLabel.setText(intro ? `PROLOGUE  /  ${intro.speaker}` : state.area === 'camp' ? 'REEDBANK  /  THE FIRST WATCH' : 'MEREWATCH  /  THE BELLWORKS');
     const map = this.readMap();
+    this.regionLabel.setText(intro ? `PROLOGUE  /  ${intro.speaker}` : `${(map.name || state.area).toUpperCase()}${map.safe ? '  /  SANCTUARY' : state.area === 'overworld' ? '  /  THE SIX REACHES' : ''}`);
+    this.game.canvas.setAttribute('aria-label', `${map.name || state.area} exploration map. Move with arrow keys or W A S D, interact with E, hold Shift to walk quickly, or click a location.`);
     const present = new Set(map.entities.map(e => e.id));
     for (const [id, image] of this.sprites) if (!present.has(id)) {
       image.destroy(); this.sprites.delete(id); this.labels.get(id)?.destroy(); this.labels.delete(id);
@@ -155,7 +174,7 @@ class WorldScene extends Phaser.Scene {
       const p = this.toScreen(entity);
       let sprite = this.sprites.get(entity.id);
       if (!sprite) {
-        let texture = textureForEntity(entity.sprite, entity.kind);
+        let texture = textureForEntity(`${entity.sprite} ${entity.name}${entity.kind === 'exit' && state.area === 'overworld' ? ` ${entity.destination || ''}` : ''}`, entity.kind);
         if (entity.name.startsWith('Ashen ') && this.textures.exists(`${texture}-ashen`)) texture += '-ashen';
         if (entity.name.startsWith('Crested ') && this.textures.exists(`${texture}-crested`)) texture += '-crested';
         sprite = this.add.image(p.x, p.y, texture).setOrigin(.5, 1);
@@ -163,11 +182,11 @@ class WorldScene extends Phaser.Scene {
         const suffix = entity.kind === 'rare' ? ' ◇' : entity.kind === 'enemy' ? ' •' : '';
         const label = this.add.text(p.x, p.y - 44, entity.name + suffix,
           { fontFamily: 'monospace', fontSize: '10px', color: entity.kind === 'rare' ? '#f3d88c' : '#e0debf', backgroundColor: '#172a30c9', padding: { x: 4, y: 3 } })
-          .setOrigin(.5, 1).setDepth(110);
+          .setOrigin(['ferry-fen', 'pass-orchard'].includes(entity.id) ? 1 : ['ferry-saltroad', 'pass-fen'].includes(entity.id) ? 0 : .5, 1).setDepth(110);
         this.labels.set(entity.id, label);
       }
       const isBoss = entity.kind === 'boss';
-      const scale = isBoss ? .45 : entity.kind === 'enemy' || entity.kind === 'rare' ? .62 : entity.kind === 'exit' ? .68 : .84;
+      const scale = isBoss ? .45 : entity.kind === 'enemy' || entity.kind === 'rare' ? .62 : entity.kind === 'exit' ? (state.area === 'overworld' ? .5 : .56) : .84;
       sprite.setPosition(p.x, p.y).setScale(scale).setDepth(50 + entity.y);
       this.labels.get(entity.id)?.setPosition(p.x, p.y - (isBoss ? 70 : 44));
       if (entity.kind === 'campfire') sprite.setTexture(`fire-${Math.floor(this.time.now / 280) % 2}`);
@@ -181,12 +200,19 @@ class WorldScene extends Phaser.Scene {
       if (this.reducedMotion || this.trail.length < 2) this.player.setPosition(pos.x, pos.y);
       else this.tweens.add({ targets: this.player, x: pos.x, y: pos.y, duration: 100, ease: 'Linear' });
       this.playerHalo.setPosition(pos.x, pos.y - 2);
+      this.player.setDepth(50 + state.player.y + .5); this.playerHalo.setDepth(49 + state.player.y);
       this.player.setFlipX(state.player.facing === 'left');
       this.followers.forEach((follower, i) => {
         const p = this.toScreen(this.trail[Math.min(i + 1, this.trail.length - 1)]);
-        follower.setPosition(p.x, p.y).setScale(.84).setDepth(47 + p.y / this.tile);
+        follower.setPosition(p.x, p.y).setScale(.84).setDepth(50 + this.trail[Math.min(i + 1, this.trail.length - 1)].y + .4);
         follower.setVisible(this.trail.length > i + 1);
       });
+    }
+    if (this.cameraArea !== state.area) {
+      this.cameraArea = state.area;
+      if (this.worldWidth > 960 || this.worldHeight > 576) {
+        this.cameras.main.centerOn(this.player.x, this.player.y).startFollow(this.player, true, 1, 1);
+      } else this.cameras.main.stopFollow().setScroll(0, 0);
     }
     this.player.setFlipX(state.player.facing === 'left');
     this.spotlight.clear();
@@ -204,7 +230,7 @@ class WorldScene extends Phaser.Scene {
       this.followers.forEach((follower,i)=>follower.setVisible(this.trail.length>i+1));
     }
     const nearest = map.entities.find(entity => distance(entity, state.player) <= 1);
-    this.hintLabel.setText(nearest ? `[E] ${nearest.hint || nearest.name}` : 'WASD / ARROWS to walk · E to interact · click to travel');
+    this.hintLabel.setText(nearest ? `[E] ${nearest.hint || nearest.name}` : 'WASD / ARROWS · E interact · SHIFT quick walk · click to travel');
     this.hintLabel.setVisible(state.mode==='explore' && !state.message && !state.reward);
     this.pathDots.clear();
     this.pathDots.fillStyle(0xd6bd7c, .35);
@@ -218,7 +244,7 @@ class WorldScene extends Phaser.Scene {
     this.hintLabel.setText(battle.phase === 'resolving' ? 'The round unfolds…' : 'Choose an action for each hero, then commit the round.').setVisible(true);
     this.pathDots.clear();
     const heroPositions = [[665, 310], [820, 325], [665, 450], [820, 465]];
-    const enemyPositions = battle.kind === 'boss' || battle.enemies.length === 1 ? [[275, 397]] : [[207, 344], [339, 443], [370, 300], [128, 435]];
+    const enemyPositions = battle.enemies.length === 1 ? [[275, 397]] : [[207, 344], [339, 443], [370, 300], [128, 435]];
     const currentIds = new Set<string>();
     state.heroes.forEach((hero, i) => {
       currentIds.add(hero.id);
@@ -227,9 +253,12 @@ class WorldScene extends Phaser.Scene {
     battle.enemies.forEach((enemy, i) => {
       currentIds.add(enemy.id);
       const pos = enemyPositions[i % enemyPositions.length];
-      let texture = textureForEntity(enemy.family, enemy.rank === 'boss' ? 'boss' : enemy.rank === 'rare' ? 'rare' : 'enemy');
+      let texture = textureForEntity(`${enemy.family} ${enemy.name} ${enemy.id}`, enemy.rank === 'boss' ? 'boss' : enemy.rank === 'rare' ? 'rare' : 'enemy');
+      if (battle.enemies.length > 1 && /choir/i.test(enemy.name)) texture = 'enemy-cantor';
       if (['ashen', 'crested'].includes(enemy.rank) && this.textures.exists(`${texture}-${enemy.rank}`)) texture += `-${enemy.rank}`;
-      this.actor(enemy.id, enemy, texture, pos[0], pos[1], enemy.rank === 'boss' ? 1.38 : enemy.rank === 'rare' ? 2.15 : 1.7, '#ead7b2', false);
+      const image = this.textures.get(texture).getSourceImage();
+      const scale = enemy.rank === 'boss' && battle.enemies.length === 1 ? 1.35 : Math.min(enemy.rank === 'rare' ? 2.15 : 1.7, 145 / image.height);
+      this.actor(enemy.id, enemy, texture, pos[0], pos[1], scale, '#ead7b2', false);
       if (enemy.hp>0 && enemy.intent.startsWith('HEAVY') && battle.phase==='planning') {
         this.spotlight.fillStyle(0xd7ad64,.12).fillEllipse(pos[0],pos[1]-4,135,35);
         this.spotlight.lineStyle(2,0xe4c680,.5).strokeEllipse(pos[0],pos[1]-4,135,35);
@@ -309,7 +338,8 @@ class WorldScene extends Phaser.Scene {
     this.game.canvas.focus({ preventScroll: true });
     if (this.inputBlocked()) return;
     const map = this.readMap(), state = this.readState();
-    const target = { x: Math.floor((pointer.x - this.ox) / this.tile), y: Math.floor((pointer.y - this.oy) / this.tile) };
+    pointer.updateWorldPoint(this.cameras.main);
+    const target = { x: Math.floor((pointer.worldX - this.ox) / this.tile), y: Math.floor((pointer.worldY - this.oy) / this.tile) };
     if (target.x < 0 || target.y < 0 || target.x >= map.width || target.y >= map.height) return;
     const entity = map.entities.find(e => e.x === target.x && e.y === target.y);
     if (entity && distance(entity, state.player) <= 1) { this.onInteract(entity.id); return; }

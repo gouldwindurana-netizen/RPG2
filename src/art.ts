@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
-import type { CharacterProfile } from './contracts';
+import type { CharacterProfile, GameMap } from './contracts';
 import { appearanceKey, COMPANION_PROFILES, paintCharacter } from './appearance';
+import { regionAt } from './campaign';
 
 const palette = {
   ink: '#14232b', shadow: '#0b171d', moss: '#364d43', brass: '#b58c48', light: '#ead2a0',
@@ -177,23 +178,151 @@ export function createArt(scene: Phaser.Scene) {
     box(c, '#e0c67e', 39, 55, 5, 46); box(c, '#e0c67e', 102, 55, 5, 45);
     box(c, '#354844', 60, 110, 29, 9);
   });
-  for (const base of ['enemy-reedback', 'enemy-hound', 'enemy-wisp', 'enemy-sentinel']) {
+  createCampaignArt(scene);
+  for (const base of ['enemy-reedback', 'enemy-hound', 'enemy-wisp', 'enemy-sentinel', 'enemy-cantor', 'enemy-widow', 'enemy-hart']) {
     const image = scene.textures.get(base).getSourceImage() as HTMLCanvasElement;
-    for (const rank of ['ashen', 'crested']) canvas(scene, `${base}-${rank}`, image.width, image.height, c => {
+    for (const rank of ['ashen', 'crested', 'rare']) canvas(scene, `${base}-${rank}`, image.width, image.height, c => {
       c.drawImage(image, 0, 0);
       const pixels = c.getImageData(0, 0, image.width, image.height);
       for (let i = 0; i < pixels.data.length; i += 4) {
         if (!pixels.data[i + 3]) continue;
         const luma = pixels.data[i] * .3 + pixels.data[i + 1] * .59 + pixels.data[i + 2] * .11;
         if (luma < 35) continue; // Preserve the dark outline for contrast.
-        pixels.data[i] = Math.min(255, luma * (rank === 'ashen' ? .86 : 1.12));
-        pixels.data[i + 1] = Math.min(255, luma * (rank === 'ashen' ? 1.02 : .78));
-        pixels.data[i + 2] = Math.min(255, luma * (rank === 'ashen' ? 1.16 : 1.35));
+        pixels.data[i] = Math.min(255, luma * (rank === 'ashen' ? .86 : rank === 'rare' ? 1.2 : 1.12));
+        pixels.data[i + 1] = Math.min(255, luma * (rank === 'ashen' ? 1.02 : rank === 'rare' ? 1.23 : .78));
+        pixels.data[i + 2] = Math.min(255, luma * (rank === 'ashen' ? 1.16 : rank === 'rare' ? 1.12 : 1.35));
       }
       c.putImageData(pixels, 0, 0);
       box(c, rank === 'ashen' ? '#d6dfcf' : '#e9d3a2', Math.floor(image.width * .54), Math.floor(image.height * .36), 3, 10);
       if (rank === 'crested') box(c, '#e9d3a2', Math.floor(image.width * .65), Math.floor(image.height * .36), 3, 10);
+      if (rank === 'rare') {
+        const x = Math.floor(image.width * .55), y = Math.floor(image.height * .24);
+        box(c, '#fff2b8', x - 4, y, 10, 2); box(c, '#fff2b8', x, y - 4, 2, 10);
+      }
     });
+  }
+}
+
+/** All sprites are drawn locally on an integer pixel grid. */
+function createCampaignArt(scene: Phaser.Scene) {
+  canvas(scene, 'enemy-cantor', 72, 88, c => {
+    box(c, '#101e2d88', 7, 78, 57, 6);
+    for (let y = 0; y < 12; y++) box(c, y % 2 ? '#4b567c' : '#59658b', 27 - y, 28 + y * 4, 21 + y * 2, 4);
+    box(c, '#202d48', 23, 15, 29, 30); box(c, '#818cad', 28, 10, 19, 10);
+    box(c, '#152434', 29, 20, 19, 15); box(c, '#e5d4ac', 32, 23, 4, 3); box(c, '#e5d4ac', 42, 23, 4, 3);
+    box(c, '#ac9b72', 34, 39, 5, 35); box(c, '#ccbd8c', 32, 46, 9, 3);
+    box(c, '#344261', 8, 35, 19, 10); box(c, '#75849c', 6, 34, 11, 8);
+    box(c, '#50617c', 50, 32, 13, 13); box(c, '#ccb98b', 60, 15, 3, 54);
+    box(c, '#d4c591', 55, 11, 13, 9); box(c, '#8cb8b8', 59, 9, 5, 7);
+    for (const x of [17, 46]) { box(c, '#96acbc', x, 56, 2, 16); box(c, '#6c8099', x + 3, 62, 2, 14); }
+  });
+  canvas(scene, 'enemy-widow', 96, 64, c => {
+    box(c, '#16263288', 8, 55, 78, 6);
+    for (let i = 0; i < 4; i++) {
+      const y = 18 + i * 9;
+      box(c, '#3a344e', 16 - i * 4, y, 25 + i * 2, 5); box(c, '#88738a', 13 - i * 3, y + 3, 5, 17);
+      box(c, '#3a344e', 58, y, 22 + i * 3, 5); box(c, '#88738a', 77 + i * 3, y + 3, 5, 15);
+    }
+    box(c, '#2c2c43', 32, 10, 40, 35); box(c, '#685571', 36, 6, 32, 32); box(c, '#88718a', 41, 9, 20, 12);
+    box(c, '#ab95a2', 43, 13, 7, 3); box(c, '#44394d', 31, 35, 33, 20);
+    for (const x of [35, 43, 51, 59]) box(c, '#e3c389', x, 39, 3, 4);
+    box(c, '#dfd2b0', 35, 50, 3, 9); box(c, '#dfd2b0', 57, 50, 3, 9);
+    box(c, '#c5a4a3', 49, 22, 5, 8); box(c, '#c5a4a3', 46, 25, 11, 3);
+  });
+  canvas(scene, 'enemy-hart', 104, 108, c => {
+    box(c, '#14262888', 13, 99, 77, 6);
+    for (const x of [35, 70]) { box(c, '#4c453b', x, 65, 7, 36); box(c, '#b09562', x + 1, 71, 3, 25); }
+    box(c, '#473e36', 29, 51, 55, 29); box(c, '#927c51', 33, 48, 45, 27); box(c, '#b49a68', 42, 51, 26, 9);
+    box(c, '#675a3f', 20, 28, 19, 40); box(c, '#af9564', 15, 27, 22, 20); box(c, '#d8b879', 11, 33, 17, 8);
+    box(c, '#202e2c', 17, 32, 3, 3); box(c, '#201f24', 9, 38, 5, 5);
+    for (const [x, sign] of [[24, -1], [32, 1]]) {
+      box(c, '#c2b48c', x, 8, 3, 24); box(c, '#c2b48c', x + sign * 8, 10, 11, 3);
+      box(c, '#d9c9a0', x + sign * 10, 1, 3, 12); box(c, '#d9c9a0', x + sign * 4, 3, 3, 13);
+    }
+    box(c, '#9f8958', 79, 48, 15, 5); box(c, '#e4d09c', 88, 43, 5, 9);
+    for (const [x,y] of [[43,65],[57,61],[69,66]]) box(c, '#dbca91', x, y, 3, 3);
+  });
+  // Boss silhouettes remain recognisable independently of their palette.
+  for (const boss of ['silt', 'hart', 'widow', 'censer', 'choir', 'vale', 'heart', 'colossus', 'toll']) {
+    canvas(scene, `boss-${boss}`, 160, 164, c => {
+      box(c, '#0d1c2c88', 11, 150, 139, 10);
+      if (boss === 'hart' || boss === 'widow') {
+        const source = scene.textures.get(`enemy-${boss}`).getSourceImage() as HTMLCanvasElement;
+        c.drawImage(source, boss === 'hart' ? 1 : 2, boss === 'hart' ? 1 : 45, 156, boss === 'hart' ? 156 : 104);
+        const rand = noise(boss === 'hart' ? 617 : 829);
+        for (let i = 0; i < 27; i++) box(c, boss === 'hart' ? '#d26955' : '#c18c9e', 25 + Math.floor(rand() * 105), 48 + Math.floor(rand() * 70), 3, 6);
+        if (boss === 'hart') { box(c, '#537e67', 41, 4, 5, 20); box(c, '#74916a', 18, 19, 25, 4); }
+        else { for (let i = 0; i < 4; i++) box(c, '#81975f', 19 + i * 34, 79 - i % 2 * 19, 5, 8); }
+      } else if (boss === 'silt') {
+        for (let row = 0; row < 12; row++) box(c, row % 2 ? '#566b57' : '#65775c', 53 - row * 4, 41 + row * 9, 51 + row * 8, 9);
+        for (let i = 0; i < 7; i++) { box(c, '#2c4846', 28 + i * 16, 84 + i % 2 * 17, 9, 27); box(c, '#92a581', 34 + i * 15, 70 + i % 3 * 19, 3, 12); }
+        box(c, '#182d31', 49, 70, 63, 18); box(c, '#e2d29a', 57, 73, 12, 4); box(c, '#e2d29a', 94, 73, 12, 4);
+        box(c, '#bca86a', 39, 25, 81, 10); for (const x of [43, 64, 85, 106]) box(c, '#d5c286', x, 12 + x % 3 * 3, 9, 23);
+      } else if (boss === 'heart') {
+        box(c, '#bca174', 75, 1, 9, 27); box(c, '#e0c896', 67, 9, 25, 7);
+        for (let i = 0; i < 11; i++) box(c, i % 2 ? '#b6a476' : '#c7b486', 52 - i * 3, 29 + i * 9, 55 + i * 6, 9);
+        box(c, '#e7d7a1', 15, 126, 130, 9); box(c, '#4b5360', 29, 135, 101, 8);
+        box(c, '#d4bb85', 76, 136, 9, 17); box(c, '#8dd6d1', 64, 65, 34, 34); box(c, '#e2f6d9', 73, 73, 17, 18);
+        for (const x of [31, 120]) { box(c, '#899fab', x, 25, 4, 59); box(c, '#c8dfce', x - 4, 42, 12, 3); }
+      } else if (boss === 'choir') {
+        const source = scene.textures.get('enemy-cantor').getSourceImage() as HTMLCanvasElement;
+        c.drawImage(source, 2, 34, 79, 111); c.drawImage(source, 77, 34, 79, 111); c.drawImage(source, 36, 4, 93, 142);
+        box(c, '#d8b887', 28, 2, 105, 4); box(c, '#e4d5ab', 47, 9, 69, 2);
+      } else if (boss === 'censer') {
+        for (const x of [39, 111]) { box(c, '#708087', x, 8, 3, 78); for (let y = 10; y < 83; y += 10) box(c, '#b2b9ae', x - 2, y, 7, 3); }
+        box(c, '#4f5c62', 26, 79, 108, 12); box(c, '#b29e6d', 36, 92, 88, 38); box(c, '#d7c48c', 27, 127, 106, 8);
+        for (const x of [42, 64, 87, 109]) box(c, '#263e45', x, 98, 8, 20);
+        box(c, '#9b8e68', 50, 135, 60, 12); box(c, '#e1cb96', 64, 148, 32, 8);
+        for (let i = 0; i < 6; i++) box(c, '#b7d7c28c', 53 + i % 3 * 18, 19 + i * 11, 15, 12);
+      } else {
+        const pale = boss === 'colossus', marshal = boss === 'vale';
+        const metal = pale ? '#b4b9ac' : marshal ? '#909db2' : '#a99261';
+        box(c, '#2f3944', 41, 110, 22, 39); box(c, '#2f3944', 93, 110, 22, 39);
+        box(c, metal, 31, 137, 36, 15); box(c, metal, 89, 137, 36, 15);
+        box(c, '#263447', 28, 47, 99, 69); box(c, metal, 34, 43, 87, 63);
+        box(c, pale ? '#e0d7b3' : '#d0b989', 43, 46, 69, 10); box(c, '#4b5b66', 46, 68, 53, 31);
+        box(c, '#d7c48a', 61, 76, 23, 15); box(c, '#516b76', 46, 12, 66, 29); box(c, metal, 43, 8, 73, 14);
+        box(c, '#1d2e3c', 51, 28, 55, 9); box(c, pale ? '#71c5c7' : '#e9c888', 59, 30, 12, 3); box(c, pale ? '#71c5c7' : '#e9c888', 87, 30, 12, 3);
+        box(c, metal, 12, 50, 23, 50); box(c, metal, 124, 50, 23, 50);
+        if (marshal) { box(c, '#a45e67', 111, 39, 15, 93); box(c, '#d7ddcc', 142, 52, 4, 99); box(c, '#dec795', 135, 105, 17, 5); }
+        else if (pale) { box(c, '#293a46', 6, 8, 9, 130); box(c, '#c9cbb6', 0, 1, 36, 35); }
+        else { box(c, '#b69a62', 3, 92, 7, 50); box(c, '#d0b47a', 0, 85, 31, 16); box(c, '#e3cf97', 124, 94, 29, 3); }
+      }
+    });
+  }
+  for (const type of ['town', 'castle', 'cave', 'dock', 'house', 'inn', 'shop', 'basilica']) {
+    canvas(scene, `site-${type}`, type === 'basilica' ? 128 : 88, type === 'basilica' ? 144 : 92, c => {
+      if (type === 'cave') {
+        for (let i = 0; i < 7; i++) box(c, i % 2 ? '#87918a' : '#6c7b79', 30 - i * 4, 13 + i * 10, 28 + i * 8, 10);
+        box(c, '#1a2935', 29, 48, 30, 35); box(c, '#0e202b', 34, 45, 20, 39); box(c, '#a6a88b', 17, 83, 53, 4); return;
+      }
+      if (type === 'dock') {
+        for (let i = 0; i < 6; i++) box(c, '#b59a70', 13, 26 + i * 9, 63, 7);
+        for (const x of [9, 76]) { box(c, '#4e463e', x, 22, 5, 65); box(c, '#dbcca3', x - 2, 20, 9, 5); }
+        box(c, '#c1b181', 37, 6, 3, 44); box(c, '#dbd6af', 40, 7, 28, 23); return;
+      }
+      const grand = type === 'basilica', castle = type === 'castle';
+      const wall = grand ? '#c5c8b6' : castle ? '#a6ad9d' : '#c2b998';
+      const roof = type === 'shop' ? '#658e91' : type === 'inn' ? '#a5736f' : '#687e91';
+      box(c, '#1d303b77', 3, grand ? 136 : 82, grand ? 122 : 83, 7);
+      box(c, '#455769', grand ? 16 : 10, grand ? 57 : 38, grand ? 96 : 68, grand ? 81 : 46);
+      box(c, wall, grand ? 20 : 13, grand ? 55 : 39, grand ? 88 : 62, grand ? 79 : 42);
+      for (let row = 0; row < (grand ? 11 : 7); row++) box(c, row % 2 ? roof : '#526b7d', grand ? 11 + row * 3 : 4 + row * 5, grand ? 25 + row * 3 : 16 + row * 4, grand ? 105 - row * 6 : 80 - row * 10, grand ? 4 : 5);
+      box(c, '#344758', grand ? 51 : 34, grand ? 105 : 61, grand ? 26 : 20, grand ? 33 : 23); box(c, '#9b895b', grand ? 56 : 38, grand ? 108 : 64, grand ? 16 : 12, grand ? 29 : 19);
+      for (const x of grand ? [28, 87] : [20, 57]) { box(c, '#3b5767', x, grand ? 78 : 49, 11, 14); box(c, '#e4d292', x + 3, grand ? 80 : 51, 5, 8); }
+      box(c, '#ece2bb', grand ? 20 : 13, grand ? 100 : 76, grand ? 88 : 62, 3);
+      if (grand || castle) for (const x of grand ? [4, 99] : [4, 63]) {
+        box(c, '#677b88', x, grand ? 8 : 10, 23, grand ? 126 : 75); box(c, wall, x + 3, grand ? 12 : 13, 17, grand ? 121 : 68);
+        box(c, '#3e5263', x + 8, grand ? 28 : 25, 7, 18); box(c, '#d8c58c', x + 8, grand ? 29 : 26, 6, 10);
+        box(c, '#9cabb0', x - 2, grand ? 7 : 9, 27, 7); box(c, '#d2c595', x + 9, grand ? 0 : 2, 4, 7);
+      }
+      if (type === 'inn' || type === 'shop') { box(c, '#4d4b3b', 74, 48, 11, 3); box(c, '#d8c38b', 78, 50, 9, 13); box(c, type === 'inn' ? '#8a5b58' : '#426e76', 81, 53, 3, 7); }
+      if (type === 'town') { box(c, '#c8bd9b', 0, 59, 25, 24); box(c, '#755f65', 0, 51, 27, 10); }
+    });
+  }
+  for (const [key, tint] of [['tree-fen', '#789b86'], ['tree-orchard', '#c18a9b'], ['tree-pale', '#c7c9ac']] as const) {
+    const source = scene.textures.get('tree').getSourceImage() as HTMLCanvasElement;
+    canvas(scene, key, 52, 66, c => { c.drawImage(source, 0, 0); c.globalCompositeOperation = 'source-atop'; c.fillStyle = `${tint}77`; c.fillRect(0, 0, 52, 52); c.globalCompositeOperation = 'source-over'; });
   }
 }
 
@@ -215,138 +344,155 @@ export function ensureLeadArt(scene: Phaser.Scene, profile: CharacterProfile, ba
 
 export function textureForEntity(sprite: string, kind: string) {
   const key = sprite.toLowerCase();
-  if (kind === 'boss' || /bailiff/.test(key)) return 'enemy-bailiff';
-  if (kind === 'rare' || /silver/.test(key)) return 'enemy-silver';
+  if (kind === 'boss') {
+    if (/colossus/.test(key)) return 'boss-colossus';
+    if (/silt/.test(key)) return 'boss-silt';
+    if (/ashroot|hart/.test(key)) return 'boss-hart';
+    if (/widow/.test(key)) return 'boss-widow';
+    if (/censer/.test(key)) return 'boss-censer';
+    if (/choir/.test(key)) return 'boss-choir';
+    if (/vale|command/.test(key)) return 'boss-vale';
+    if (/heart/.test(key)) return 'boss-heart';
+    if (/toll/.test(key)) return 'boss-toll';
+    return 'enemy-bailiff';
+  }
   if (kind === 'chest') return 'chest';
   if (kind === 'campfire' || /fire/.test(key)) return 'fire-0';
-  if (kind === 'exit' || /door/.test(key)) return 'door';
-  if (/bessa/.test(key)) return 'hero-bessa';
-  if (/merchant|quarter/.test(key)) return 'hero-merchant';
+  if (kind === 'exit') {
+    if (/basilica|heart/.test(key)) return 'site-basilica';
+    if (/works|granary|cave|hollow/.test(key)) return 'site-cave';
+    if (/dock|ferry|fen/.test(key)) return 'site-dock';
+    if (/toll|crown|veyr|castle/.test(key)) return 'site-castle';
+    if (/town|dunmere|camp|reedbank|orchard/.test(key)) return 'site-town';
+    return 'door';
+  }
   if (/lantern/.test(key)) return 'lantern';
-  if (/hound|jackal/.test(key)) return 'enemy-hound';
-  if (/wisp|moth|shade/.test(key)) return 'enemy-wisp';
-  if (/sentinel|mite/.test(key)) return 'enemy-sentinel';
-  return 'enemy-reedback';
+  if (kind === 'npc') return /bessa|sen|iona|neri/.test(key) ? 'hero-bessa' : 'hero-merchant';
+  let texture = /hound|jackal/.test(key) ? 'enemy-hound' : /widow/.test(key) ? 'enemy-widow'
+    : /hart/.test(key) ? 'enemy-hart' : /cantor|choir/.test(key) ? 'enemy-cantor'
+    : /wisp|moth|shade/.test(key) ? 'enemy-wisp' : /sentinel|mite|bellwarden/.test(key) ? 'enemy-sentinel' : 'enemy-reedback';
+  if (kind === 'rare' || /silver|coinveil|moonlace|amberglass|ivory|starless/.test(key)) texture += '-rare';
+  return texture;
 }
 
-export function paintWorld(scene: Phaser.Scene, map: { width: number; height: number; tiles: string[] }, area: string) {
+type Scenery = { x: number; y: number; texture: string; scale: number; row: number };
+
+const AREA_COLORS: Record<string, [string, string, string, string]> = {
+  camp: ['#4d704e', '#75935e', '#a19266', '#315f72'],
+  overworld: ['#5d8258', '#84a36a', '#ad9e74', '#356e8a'],
+  dunmere: ['#6b8b6c', '#9bb28a', '#c2bda4', '#4f7d90'],
+  tollhouse: ['#61766d', '#8b9c86', '#a8a995', '#386d82'],
+  fen: ['#506f61', '#78917a', '#938b65', '#355e6a'],
+  granary: ['#52685c', '#839079', '#9f9c7d', '#304f5d'],
+  orchard: ['#59664d', '#8c8b62', '#a79177', '#505b70'],
+  crown: ['#69796b', '#9dafa0', '#b6b7a0', '#456c83'],
+  veyr: ['#62796c', '#a0b09a', '#c4c8b5', '#526c88'],
+  heart: ['#4b5d63', '#839493', '#afb9ad', '#3d526a'],
+  works: ['#40584b', '#677c64', '#848d7d', '#305866'],
+};
+
+export function paintWorld(scene: Phaser.Scene, map: GameMap, area: string) {
   const key = `world-${area}`;
   if (scene.textures.exists(key)) scene.textures.remove(key);
-  const texture = scene.textures.createCanvas(key, 960, 576)!;
+  // Large maps retain the same readable tile size and move beneath the camera.
+  const tile = 30, width = Math.max(960, map.width * tile), height = Math.max(576, map.height * tile);
+  const ox = Math.floor((width - map.width * tile) / 2), oy = Math.floor((height - map.height * tile) / 2);
+  const texture = scene.textures.createCanvas(key, width, height)!;
   const c = texture.getContext(); c.imageSmoothingEnabled = false;
-  const tile = Math.min(32, Math.floor(960 / map.width), Math.floor(576 / map.height));
-  const ox = Math.floor((960 - map.width * tile) / 2), oy = Math.floor((576 - map.height * tile) / 2);
-  box(c, area === 'camp' ? '#273f3b' : '#202f33', 0, 0, 960, 576);
-  const rand = noise(area === 'camp' ? 104 : 221);
+  const baseColors = AREA_COLORS[area] || AREA_COLORS.camp;
+  const indoor = ['works', 'granary', 'heart', 'tollhouse'].includes(area);
+  const rand = noise([...area].reduce((n, v) => n + v.charCodeAt(0), 193));
+  const scenery: Scenery[] = [];
+  const at = (x: number, y: number) => map.tiles[y]?.[x] || '#';
+  box(c, '#182b3b', 0, 0, width, height);
   for (let y = 0; y < map.height; y++) for (let x = 0; x < map.width; x++) {
-    const raw = map.tiles[y]?.[x] || '#';
-    const char = raw === 'T' ? 'g' : raw;
-    const source = scene.textures.get(`tile-${char in { g: 1, d: 1, s: 1, f: 1, w: 1, t: 1, '#': 1 } ? char : '#'}`).getSourceImage() as HTMLCanvasElement;
-    c.drawImage(source, ox + x * tile, oy + y * tile, tile, tile);
-    if (char === 'w' && rand() > .4) { box(c, '#67827b', ox + x * tile + 5, oy + y * tile + 13, 10, 1); }
-    if (char === 'g' && rand() > .72) {
-      box(c, '#a59961', ox + x * tile + 8, oy + y * tile + 9, 2, 2);
-      box(c, '#6a8052', ox + x * tile + 8, oy + y * tile + 11, 1, 4);
-    }
-    if (char === 'g' && rand() > .94) {
-      const px = ox + x * tile + 17, py = oy + y * tile + 19;
-      box(c, '#879578', px - 1, py + 2, 1, 4);
-      box(c, '#d6bd83', px - 2, py, 3, 2);
-      box(c, '#baa9bc', px + 3, py + 4, 3, 2);
-    }
-    if (area === 'works' && char === '#') {
-      const px = ox + x * tile, py = oy + y * tile;
-      box(c, '#56615a', px + 2, py + 6, tile - 4, 2);
-      box(c, '#243337', px + ((x + y) % 2 ? 9 : 21), py + 8, 2, 13);
-      box(c, '#18292e', px, py + tile - 4, tile, 4);
-      if (map.tiles[y + 1]?.[x] === 'f') box(c, '#12242966', px, py + tile, tile, 6);
-    }
-    if (area === 'works' && char === '#' && y % 4 === 1 && x % 4 === 0) {
-      box(c, '#8d7447', ox + x * tile + 13, oy + y * tile, 6, tile);
-      box(c, '#b69a5e', ox + x * tile + 14, oy + y * tile, 2, tile);
-    }
-  }
-  // Light pools are painted into the scenery, never used as collision objects.
-  const lights = area === 'camp' ? [[12.5, 12.5, 96], [9.5, 8.5, 52], [28.5, 8.5, 48]] : [[8, 4, 56], [16, 8, 72], [27, 3, 100]];
-  for (const [x, y, radius] of lights) {
-    const px = ox + x * tile, py = oy + y * tile;
-    const light = c.createRadialGradient(px, py, 4, px, py, radius);
-    light.addColorStop(0, area === 'camp' ? '#f3b66324' : '#ccb06e18');
-    light.addColorStop(1, '#e6b06500');
-    c.fillStyle = light; c.fillRect(px - radius, py - radius, radius * 2, radius * 2);
-  }
-  // Large scenery is drawn after the ground so tree canopies cross tile edges.
-  for (let y = 0; y < map.height; y++) for (let x = 0; x < map.width; x++) {
-    if (map.tiles[y]?.[x] === 't') {
-      const source = scene.textures.get('tree').getSourceImage() as HTMLCanvasElement;
-      c.drawImage(source, ox + x * tile - 10, oy + y * tile - 32, tile + 20, tile + 34);
-    }
-    if (map.tiles[y]?.[x] === 'w' && (x + y) % 5 === 0) {
-      c.drawImage(scene.textures.get('reeds').getSourceImage() as HTMLCanvasElement, ox + x * tile, oy + y * tile, tile, tile);
-    }
-  }
-  if (area === 'camp') {
-    // Encampment props sit away from the central walking paths.
-    const tents = [[9, 4], [18, 4], [23, 4], [16, 14]];
-    for (const [x, y] of tents) c.drawImage(scene.textures.get('tent').getSourceImage() as HTMLCanvasElement, ox + x * tile, oy + y * tile + 4, tile * 2, tile * 2 - 4);
-    for (const [x, y] of [[8, 8], [20, 10], [26, 13]]) {
-      box(c, '#72583e', ox + x * tile, oy + y * tile + 4, 24, 11);
-      box(c, '#a08152', ox + x * tile, oy + y * tile + 4, 24, 2);
-      box(c, '#c4ab70', ox + x * tile + 5, oy + y * tile + 4, 2, 11);
-    }
-  } else {
-    // Vertical piers and bronze trim give the works a repeated architectural rhythm.
-    for (let x = 2; x < map.width - 1; x += 6) {
-      if (map.tiles[1]?.[x] === '#') {
-        box(c, '#42514b', ox + x * tile + 5, oy + 2, 19, tile * 2);
-        box(c, '#947849', ox + x * tile + 7, oy + 10, 3, tile * 2 - 10);
+    const ch = at(x,y), px = ox+x*tile, py = oy+y*tile;
+    const worldBiome: Record<string, string> = {R01:'camp',R02:'dunmere',R03:'fen',R04:'orchard',R05:'crown',R06:'veyr'};
+    const biome = area === 'overworld' ? worldBiome[regionAt('overworld',x,y)] : area;
+    const [grass, light, stone, water] = area === 'overworld' ? AREA_COLORS[biome] : baseColors;
+    const isWater = ch === 'w';
+    const ground = isWater ? water : ch === 'd' ? '#ab9872' : ch === 's' ? stone : ch === 'f' ? (indoor ? '#69776d' : stone) : ch === '#' ? (indoor ? '#465b5e' : '#6a7c74') : grass;
+    box(c, ground, px, py, tile, tile);
+    if (isWater) {
+      for (let i=0;i<3;i++) box(c, i%2 ? '#a5c3bc50' : '#1d425b66', px+3+Math.floor(rand()*16),py+5+i*9,6+Math.floor(rand()*9),1);
+      // A continuous, outlined shoreline makes coastline and inland paths legible.
+      for (const [dx,dy] of [[0,-1],[1,0],[0,1],[-1,0]]) if (at(x+dx,y+dy) !== 'w' && at(x+dx,y+dy) !== 'b') {
+        box(c,'#273f4e',px+(dx===1?27:0),py+(dy===1?27:0),dx?3:30,dy?3:30);
+        box(c,'#b2b58a',px+(dx===1?29:0),py+(dy===1?29:0),dx?1:30,dy?1:30);
       }
+    } else if (ch === 'b') {
+      box(c,water,px,py,tile,tile);
+      const horizontal = ['w','b'].includes(at(x,y-1)) && ['w','b'].includes(at(x,y+1));
+      box(c,'#403d39',px+(horizontal?0:3),py+(horizontal?3:0),horizontal?30:24,horizontal?24:30);
+      for (let i=0;i<5;i++) box(c, i%2?'#b69e72':'#c2ab7b',px+(horizontal?i*6:6),py+(horizontal?6:i*6),horizontal?5:18,horizontal?18:5);
+      box(c,'#e1c895',px+(horizontal?0:3),py+(horizontal?3:0),horizontal?30:2,horizontal?2:30);
+      box(c,'#6b604b',px+(horizontal?0:25),py+(horizontal?25:0),horizontal?30:2,horizontal?2:30);
+    } else if (ch === 's' || ch === 'f' || ch === '#') {
+      box(c,ch==='#'?'#283f49':'#4a625d',px,py,30,1); box(c,ch==='#'?'#314950':'#8e9e87',px,py,1,30);
+      if ((x+y)%2===0) box(c,ch==='#'?'#7a8b7c':'#d0c7a12a',px+2,py+2,26,2);
+      if (ch === '#') { box(c,'#9ba28c',px,py,30,4); box(c,'#1c323e',px,py+25,30,5); box(c,'#354e55',px+13,py+5,2,20); }
+      else if ((x*3+y)%7===0) box(c,'#445e5b',px+18,py+11,5,1);
+    } else if (ch === '^') {
+      for (let i=0;i<7;i++) box(c,i<3?'#bbc3ad':i%2?'#6d8280':'#84948a',px+13-i*2,py+1+i*4,4+i*4,4);
+      box(c,'#e1dfbd',px+12,py+1,7,5); box(c,'#354e59',px+4,py+26,25,3);
+    } else {
+      for (let i=0;i<5;i++) box(c,i%2?light:'#314f4144',px+Math.floor(rand()*27),py+Math.floor(rand()*27),2,2);
+      if(ch==='d'){ box(c,'#ccb88d',px+7,py+10,4,2); box(c,'#7a7858',px+23,py+20,3,1); }
+      if(ch==='g' && rand()>.84) { box(c, area==='orchard'?'#cba5b3':'#e0d397',px+14,py+11,3,2);box(c,light,px+15,py+13,1,4); }
     }
-    for (const [x, y] of [[7, 4], [15, 8], [26, 3]]) {
-      const px = ox + x * tile, py = oy + y * tile;
-      box(c, '#756343', px + 7, py - 10, 5, 25);
-      box(c, '#be9856', px + 3, py - 3, 13, 4);
-      box(c, '#edc77d', px + 7, py - 1, 5, 8);
-      box(c, '#e9c07944', px + 4, py + 14, 11, 2);
+    if (ch==='t') scenery.push({x:px+15,y:py+30,texture:biome==='orchard'?'tree-orchard':biome==='fen'?'tree-fen':biome==='veyr'?'tree-pale':'tree',scale:area==='overworld'?.61:.84,row:y});
+    if (isWater && area!=='overworld' && (x+y)%5===0) c.drawImage(scene.textures.get('reeds').getSourceImage() as HTMLCanvasElement,px,py,30,30);
+  }
+  // Connected building footprints become one readable piece of town architecture.
+  const visited = new Set<string>();
+  for(let y=0;y<map.height;y++) for(let x=0;x<map.width;x++) if(at(x,y)==='T'&&!visited.has(`${x},${y}`)) {
+    const queue = [{x,y}], cells: {x:number;y:number}[]=[];
+    while(queue.length){const p=queue.shift()!;const id=`${p.x},${p.y}`;if(visited.has(id)||at(p.x,p.y)!=='T')continue;visited.add(id);cells.push(p);for(const [dx,dy]of[[0,-1],[1,0],[0,1],[-1,0]])queue.push({x:p.x+dx,y:p.y+dy});}
+    const minX=Math.min(...cells.map(p=>p.x)),maxX=Math.max(...cells.map(p=>p.x)),minY=Math.min(...cells.map(p=>p.y)),maxY=Math.max(...cells.map(p=>p.y));
+    const w=(maxX-minX+1)*tile,h=(maxY-minY+1)*tile;
+    if(area==='camp') c.drawImage(scene.textures.get('tent').getSourceImage() as HTMLCanvasElement,ox+minX*tile,oy+minY*tile,w,h);
+    else {
+      const basilica=area==='veyr'&&w>=120,textureName=basilica?'site-basilica':(minX+minY)%3===0?'site-inn':(minX+minY)%3===1?'site-shop':'site-house';
+      const image=scene.textures.get(textureName).getSourceImage() as HTMLCanvasElement;
+      c.drawImage(image,ox+minX*tile-3,oy+minY*tile-12,w+6,h+14);
     }
   }
-  // A restrained vignette keeps UI labels and the dusk palette together.
-  const vignette = c.createRadialGradient(480, 270, 140, 480, 270, 540);
-  vignette.addColorStop(0, '#10212700'); vignette.addColorStop(1, '#0c1b2466');
-  c.fillStyle = vignette; c.fillRect(0, 0, 960, 576);
-  texture.refresh(); return { key, tile, ox, oy };
+  if(area==='camp') for(const[x,y]of[[8,8],[20,10],[26,13]]){box(c,'#705a42',ox+x*tile,oy+y*tile+4,24,11);box(c,'#c3a578',ox+x*tile,oy+y*tile+4,24,2);}
+  if(indoor) for(let y=1;y<map.height-1;y+=4)for(let x=2;x<map.width-1;x+=6)if(at(x,y)==='#'){
+    box(c,'#aa976a',ox+x*tile+5,oy+y*tile,4,25);box(c,'#e5ca8d',ox+x*tile+3,oy+y*tile+13,8,5);
+  }
+  if(area==='dunmere'||area==='veyr') {
+    const cx=area==='veyr'?16:15,cy=area==='veyr'?11:9;
+    if(['s','f'].includes(at(cx,cy))) {box(c,'#4f6f7b',ox+cx*tile-10,oy+cy*tile+4,49,17);box(c,'#d9d4b6',ox+cx*tile-8,oy+cy*tile,45,4);box(c,'#a3c6c5',ox+cx*tile-3,oy+cy*tile+6,35,7);}
+  }
+  texture.refresh(); return { key, tile, ox, oy, width, height, scenery };
 }
 
-export function paintBattle(scene: Phaser.Scene) {
-  canvas(scene, 'battle-background', 960, 576, c => {
-    box(c, '#1a2b30', 0, 0, 960, 576);
-    const glow = c.createRadialGradient(320, 165, 20, 320, 165, 370);
-    glow.addColorStop(0, '#8c754944'); glow.addColorStop(1, '#23343b00');
-    c.fillStyle = glow; c.fillRect(0, 0, 960, 350);
-    for (let y = 0; y < 290; y += 32) for (let x = 0; x < 960; x += 64) {
-      box(c, (x + y) % 3 ? '#30413f' : '#344641', x + (y % 64 ? 32 : 0), y, 62, 30);
-      box(c, '#243735', x, y + 30, 64, 2);
+export function paintBattle(scene: Phaser.Scene, region = 'R01') {
+  const key = `battle-${region}`;
+  canvas(scene, key, 960, 576, c => {
+    const marsh=/R03|fen|granary/i.test(region),forest=/R04|orchard/i.test(region),coast=/R02|dunmere|toll/i.test(region),capital=/R06|veyr|heart/i.test(region),crown=/R05|crown/i.test(region);
+    box(c,capital?'#26304e':forest?'#303b44':marsh?'#294c51':coast?'#4b7183':'#324e60',0,0,960,576);
+    const rand=noise(region.length*53+region.charCodeAt(region.length-1));
+    if(marsh||forest||coast) {
+      box(c,coast?'#7399a0':'#697e74',0,148,960,160);
+      for(let i=0;i<17;i++) {
+        const x=i*66-35,h=70+Math.floor(rand()*100);
+        if(coast){box(c,'#a6b4a6',x,200-h/3,47,h);box(c,'#d2cbb0',x+3,198-h/3,39,5);box(c,'#607982',x+11,220-h/3,13,17);}
+        else {box(c,forest?'#3d3541':'#354e4e',x+24,140,13,169);for(let j=0;j<5;j++)box(c,forest?'#66634d':'#486b59',x-j*5,70+j*19,65+j*10,26);}
+      }
+      if(marsh||coast) {box(c,coast?'#4f8190':'#315b60',0,276,960,69);for(let i=0;i<60;i++)box(c,'#b2c8b04a',Math.floor(rand()*960),280+Math.floor(rand()*59),15+Math.floor(rand()*28),1);}
+    } else {
+      for(let y=0;y<295;y+=34)for(let x=0;x<960;x+=68){box(c,capital?'#46516a':'#4d666b',x+(y%68?34:0),y,66,32);box(c,'#263c50',x,y+32,68,2);}
+      for(const x of[28,190,490,796,925]) {box(c,'#233849',x-8,0,40,300);box(c,capital?'#a4b3b7':'#87988b',x,0,23,292);box(c,'#c6b489',x+3,0,3,288);box(c,'#b1b89b',x-5,280,35,15);}
+      if(capital){for(const x of[90,365,637]){box(c,'#1b3049',x,39,68,144);box(c,'#829cba',x+7,46,54,130);box(c,'#c7c0a4',x+29,46,8,130);box(c,'#d2c995',x+8,100,53,6);}}
+      else {box(c,'#b7a06c',305,24,12,42);for(let i=0;i<11;i++)box(c,i%2?'#a59265':'#c0a772',282-i*5,64+i*10,58+i*10,10);box(c,'#d2bc81',226,174,172,11);}
     }
-    for (const x of [40, 175, 500, 820, 925]) {
-      box(c, '#172b30', x - 8, 0, 42, 300); box(c, '#48534a', x, 0, 25, 292);
-      box(c, '#8a784c', x + 3, 0, 4, 288); box(c, '#66705a', x - 5, 281, 35, 16);
-    }
-    // Silent bell behind the combatants.
-    box(c, '#6d6949', 305, 26, 14, 43);
-    for (let y = 0; y < 11; y++) box(c, y % 2 ? '#6f6846' : '#756d49', 282 - y * 5, 65 + y * 10, 58 + y * 10, 10);
-    box(c, '#a58b51', 226, 170, 172, 12); box(c, '#3b4d42', 242, 184, 143, 8);
-    box(c, '#928050', 307, 184, 10, 21);
-    box(c, '#243c3b', 0, 298, 960, 278);
-    for (let y = 302; y < 576; y += 38) for (let x = 0; x < 960; x += 80) {
-      box(c, '#344945', x + (y % 76 ? 40 : 0), y, 78, 36); box(c, '#40514a', x + 1, y + 1, 76, 1);
-    }
-    box(c, '#988653', 0, 297, 960, 4); box(c, '#152d30', 0, 302, 960, 5);
-    for (const x of [88, 540, 875]) {
-      box(c, '#604e37', x, 208, 5, 78); box(c, '#c39b50', x - 5, 214, 16, 12);
-      box(c, '#f3cb79', x - 1, 210, 8, 12);
-    }
-    const shade = c.createLinearGradient(0, 350, 0, 576);
-    shade.addColorStop(0, '#0e202500'); shade.addColorStop(1, '#0b1b2577');
-    c.fillStyle = shade; c.fillRect(0, 350, 960, 226);
+    box(c,forest?'#6a6c50':marsh?'#5e7563':coast?'#aaa58a':capital?'#788698':'#7f8d81',0,340,960,236);
+    for(let y=342;y<576;y+=34)for(let x=0;x<960;x+=67){if(!(marsh||forest))box(c,capital?'#68798b':'#697e77',x+(y%68?33:0),y,65,32);else for(let i=0;i<3;i++)box(c,forest?'#a7946977':'#a0aa7b77',x+Math.floor(rand()*59),y+Math.floor(rand()*29),3,2);}
+    box(c,'#1c3946',0,338,960,3);
+    if(crown)for(const x of[20,460,900]){box(c,'#b5bfa9',x,270,38,66);box(c,'#d9d2ac',x-4,269,46,7);}
+    const shade=c.createLinearGradient(0,370,0,576);shade.addColorStop(0,'#152d3a00');shade.addColorStop(1,'#10233d77');c.fillStyle=shade;c.fillRect(0,370,960,206);
   });
+  return key;
 }

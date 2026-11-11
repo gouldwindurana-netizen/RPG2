@@ -5,7 +5,7 @@ import { resolve } from 'node:path';
 
 const snapshot = (page: Page) => page.evaluate(() => (window as unknown as { __AVEL__: { snapshot(): GameState } }).__AVEL__.snapshot());
 async function dismissMessages(page: Page) {
-  for (let i = 0; i < 5 && await page.locator('[data-command="dismiss"]').count(); i++) {
+  for (let i = 0; i < 20 && await page.locator('[data-command="dismiss"]').count(); i++) {
     await page.locator('[data-command="dismiss"]').click();
   }
 }
@@ -85,7 +85,7 @@ async function finishBattle(page: Page, capture?: string) {
   await dismissMessages(page);
 }
 
-test('expedition plays through camp, spell combat, save/reload, rescue, and ending', async ({ page }) => {
+test('first expedition supports spell combat and saved exploration checkpoints', async ({ page }) => {
   const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
   await newAdventure(page);
   await expect(page.locator('#game-world canvas')).toBeVisible();
@@ -95,38 +95,17 @@ test('expedition plays through camp, spell combat, save/reload, rescue, and endi
   await visit(page,28,8,s=>s.area==='works');
   await dismissMessages(page);
   await page.screenshot({ path:'test-results/works-desktop.png',fullPage:true });
-  const enemies=[[6,13],[6,6],[13,11],[16,4],[25,12],[25,6]];
-  for (let i=0;i<enemies.length;i++) {
-    const [x,y]=enemies[i];
-    await visit(page,x,y,s=>s.mode==='battle');
-    await finishBattle(page,i===0?'test-results/battle-desktop.png':undefined);
-    console.log(`Completed ordinary encounter ${i+1}/6 through UI`);
-    if(i===0){
-      expect((await snapshot(page)).xp).toBe(28);
-      await page.reload();await resume(page);
-      expect((await snapshot(page)).cleared).toContain('encounter1');
-      expect((await snapshot(page)).xp).toBe(28);
-    }
-    // Recovery uses the same visible walk and camp action available to players.
-    await visit(page,2,15,s=>s.area==='camp');
-    await page.locator('[data-command="rest"]').click();await dismissMessages(page);
-    expect((await snapshot(page)).heroes.every(h=>h.hp===h.maxHp)).toBe(true);
-    await visit(page,28,8,s=>s.area==='works');await dismissMessages(page);
-  }
-  await visit(page,16,13,s=>s.mode==='victory');
-  const chest=await snapshot(page);await page.locator(`[data-claim="${chest.reward!.choices[0]}"]`).click();
-  await page.locator('[data-command="continue"]').click();
-  await visit(page,27,3,s=>s.mode==='battle');
-  await finishBattle(page,'test-results/boss-desktop.png');
-  expect((await snapshot(page)).flags.bossDefeated).toBe(true);
-  expect((await snapshot(page)).heroes.every(h=>h.level===5)).toBe(true);
-  await visit(page,2,15,s=>s.area==='camp');await dismissMessages(page);
-  await visit(page,14,9,s=>s.mode==='ending');
-  await expect(page.getByRole('heading',{name:'Ring. Someone will come.'})).toBeVisible();
-  await page.screenshot({path:'test-results/ending-desktop.png',fullPage:true});
-  await page.locator('[data-command="continue"]').click();await dismissMessages(page);
-  expect((await snapshot(page)).flags.completed).toBe(true);
-  expect((await snapshot(page)).rareReady).toBe(true);
+  await visit(page,6,13,s=>s.mode==='battle');
+  await finishBattle(page,'test-results/battle-desktop.png');
+  expect((await snapshot(page)).xp).toBe(28);
+  await page.reload();await resume(page);
+  expect((await snapshot(page)).cleared).toContain('encounter1');
+  expect((await snapshot(page)).xp).toBe(28);
+  expect((await snapshot(page)).campaign.stage).toBe(0);
+  expect((await snapshot(page)).flags.completed).toBe(false);
+  await visit(page,2,15,s=>s.area==='camp');
+  await page.locator('[data-command="rest"]').click();await dismissMessages(page);
+  expect((await snapshot(page)).heroes.every(h=>h.hp===h.maxHp)).toBe(true);
   expect(errors).toEqual([]);
 });
 
@@ -182,6 +161,8 @@ test('custom hero creation introduces the party and persists profile and prologu
   await page.goto('/');
   await page.screenshot({path:'test-results/title-desktop.png',fullPage:true});
   await page.locator('[data-front="new"]').click();
+  await expect(page.locator('[data-custom="pronouns"]')).toHaveCount(2);
+  await expect(page.locator('[data-custom="pronouns"][data-value="they"]')).toHaveCount(0);
   const before=(await snapshot(page)).player;
   await page.locator('#hero-name').fill('Rowan');
   await page.locator('#hero-name').press('ArrowRight');
@@ -288,6 +269,8 @@ test('mobile character creation stays within the viewport',async({page})=>{
   await page.setViewportSize({width:390,height:844});await page.goto('/');
   await page.screenshot({path:'test-results/title-mobile.png',fullPage:true});
   await page.locator('[data-front="new"]').click();
+  await expect(page.locator('[data-custom="pronouns"]')).toHaveCount(2);
+  await expect(page.locator('[data-custom="pronouns"][data-value="they"]')).toHaveCount(0);
   await page.locator('#hero-name').fill('   ');
   await expect(page.locator('[data-front="next"]')).toBeDisabled();
   await page.locator('#hero-name').fill('Nia');
@@ -303,4 +286,66 @@ test('mobile character creation stays within the viewport',async({page})=>{
   await page.locator('[data-front="begin"]').click();
   await expect(page.locator('[data-intro="next"]')).toBeVisible();
   await page.screenshot({path:'test-results/prologue-mobile.png',fullPage:true});
+});
+
+test('classic party menus expose status, field magic, and an observational world map',async({page})=>{
+  await newAdventure(page);
+  await page.locator('#game-world canvas').focus();
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('heading',{name:'Party',exact:true})).toBeVisible();
+  await expect(page.locator('.menu-party-row')).toHaveCount(4);
+  const style=await page.locator('.party-menu-modal').evaluate(element=>{
+    const css=getComputedStyle(element);
+    return {background:css.backgroundImage,border:css.borderTopWidth,color:css.color};
+  });
+  expect(style.background).toContain('gradient');expect(style.border).toBe('3px');expect(style.color).not.toBe('rgb(0, 0, 0)');
+  await page.screenshot({path:'test-results/classic-menu-desktop.png',fullPage:true});
+  await page.locator('.classic-menu-options [data-panel="status"]').click();
+  await expect(page.getByRole('heading',{name:'Status',exact:true})).toBeVisible();
+  await expect(page.locator('.status-stats')).toContainText('Next level');
+  await expect(page.locator('.charge-table > div')).toHaveCount(8);
+  await page.keyboard.press('Escape');
+  await page.locator('.classic-menu-options [data-panel="magic"]').click();
+  await page.locator('[data-pack-hero="Iona"]').click();
+  const before=await snapshot(page);
+  await page.locator('[data-field-spell="mend"]').click();
+  await expect(page.locator('[data-field-target]')).toHaveCount(4);
+  await page.locator('[data-field-target="Mara"]').click();
+  expect((await snapshot(page)).heroes[2].charges).toEqual(before.heroes[2].charges);
+  await page.locator('[data-close]').click();
+  await page.locator('#game-world canvas').focus();await page.keyboard.press('m');
+  await expect(page.getByRole('img',{name:'World map of Avel with the party marked by a white diamond'})).toBeVisible();
+  await expect(page.locator('.atlas-places > div')).toHaveCount(6);
+  expect((await snapshot(page)).player).toEqual(before.player);
+  await page.screenshot({path:'test-results/world-map-desktop.png',fullPage:true});
+  await page.setViewportSize({width:390,height:844});
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+  await page.screenshot({path:'test-results/world-map-mobile.png',fullPage:true});
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('heading',{name:'Party',exact:true})).toBeVisible();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+  await page.screenshot({path:'test-results/classic-menu-mobile.png',fullPage:true});
+});
+
+test('an earlier saved character migrates without losing identity or supplies',async({page})=>{
+  await newAdventure(page,{name:'Ember',pronouns:'he',job:'scout'});
+  const original=await snapshot(page);
+  const legacy=JSON.parse(JSON.stringify(original));
+  legacy.version=2;
+  for(const field of ['campaign','safeReturn','overworldReturn','messageQueue','hunts'])delete legacy[field];
+  // This fixture changes only the storage schema; HP, EXP and items come from play.
+  await page.evaluate(save=>localStorage.setItem('avel-demo-v1',JSON.stringify(save)),legacy);
+  await page.reload();await resume(page);
+  const loaded=await snapshot(page);
+  expect(loaded.version).toBe(3);expect(loaded.profile).toEqual(original.profile);
+  expect(loaded.heroes).toEqual(original.heroes);expect(loaded.inventory).toEqual(original.inventory);
+  expect(loaded.campaign.stage).toBe(0);expect(loaded.xp).toBe(original.xp);
+  // Opening and canceling creation must keep the migrated journey available.
+  await page.locator('[data-panel="help"]').first().click();
+  await page.locator('[data-front="title"]').click();
+  await page.locator('[data-front="new"]').click();
+  await page.locator('#hero-name').fill('Unconfirmed');
+  await page.locator('[data-front="cancel"]').first().click();
+  await page.locator('[data-front="continue"]').click();
+  expect((await snapshot(page)).profile.name).toBe('Ember');
 });

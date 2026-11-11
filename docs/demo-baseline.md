@@ -1,4 +1,6 @@
-# First Watch — playable baseline
+# First Watch — original opening baseline
+
+Historical record of the two-map opening build. The current implementation has expanded beyond this slice; see [the playable campaign](playable-campaign.md) for current features and limits.
 
 The opening expedition is playable. Begin at the title screen, create and name a lead hero, and meet the party in the eight-scene prologue. At Reedbank, speak to Bessa, enter Merewatch, fight the authored encounter formations, choose equipment from the inspection cache, defeat the Brass Bailiff, and bring Orren back to Bessa. The campfire restores the party and the quartermaster sells supplies. Completing the short lantern task grants one extra Potion.
 

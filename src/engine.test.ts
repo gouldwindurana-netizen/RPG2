@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createEngine, MAPS, SAVE_KEY } from './engine';
+import { TRANSITIONS } from './campaign';
 import { LEGACY_PROFILE } from './characters';
 import type { DemoEngine, HeroId } from './contracts';
 
@@ -17,6 +18,7 @@ class MemoryStorage implements Storage {
 function start(engine: DemoEngine) { engine.beginAdventure(LEGACY_PROFILE); engine.skipIntro(); engine.configure({encounters:'visible'}); return engine; }
 function demo() { const engine = start(createEngine({ storage: null, roundDelay: 0, seed: 12345 })); engine.dismiss(); return engine; }
 function beside(engine: DemoEngine, entityId: string, area: 'camp' | 'works' = 'works') {
+  while(engine.state.message)engine.dismiss();
   engine.state.area = area;
   const entity = engine.map().entities.find(row => row.id === entityId)!;
   assert.ok(entity, `Entity ${entityId} exists`);
@@ -44,17 +46,18 @@ test('starts with four distinct equipped heroes, limited caster charges, and sup
   assert.equal(engine.state.inventory.R01_COMMON_HEAD, 4);
 });
 
-test('both maps have consistent dimensions and every entity has a reachable interaction tile', () => {
+test('all maps have consistent dimensions and every entity has a reachable interaction tile', () => {
   for (const [area, map] of Object.entries(MAPS)) {
     assert.equal(map.tiles.length, map.height);
     assert.ok(map.tiles.every(row => row.length === map.width));
-    const start = area === 'camp' ? [11, 10] : [3, 15];
+    const start = area === 'camp' ? [11,10] : area==='works'?[3,15]:area==='overworld'?[8,33]:[3,14];
     const visited = new Set<string>(); const queue = [start];
     while (queue.length) {
       const [x, y] = queue.shift()!; const key = `${x},${y}`;
-      if (visited.has(key) || !'gdsf'.includes(map.tiles[y]?.[x] ?? '!')) continue;
+      if (visited.has(key) || !'gdsfb'.includes(map.tiles[y]?.[x] ?? '!')) continue;
       if (map.entities.some(e => e.x === x && e.y === y && e.kind !== 'exit')) continue;
       visited.add(key);
+      for(const e of map.entities)if(e.kind==='exit'&&Math.abs(e.x-x)+Math.abs(e.y-y)<=1&&TRANSITIONS[e.id]?.area===area)queue.push([TRANSITIONS[e.id].x,TRANSITIONS[e.id].y]);
       queue.push([x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]);
     }
     for (const e of map.entities) assert.ok([[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dy]) => visited.has(`${e.x + dx},${e.y + dy}`)), `${area}/${e.id} reachable`);
@@ -201,12 +204,12 @@ test('defeat returns safely to camp without awarding a win', async () => {
   engine.continue(); assert.equal(engine.state.area, 'camp'); assert.ok(engine.state.heroes.every(h => h.hp === h.maxHp));
 });
 
-test('boss rescue, camp ending, and optional demo hunt complete all three set sources', async () => {
+test('boss rescue opens the next chapter and optional hunt completes all three regional set sources', async () => {
   const engine = demo(); beside(engine, 'chest'); engine.claim('R01_SET_HEAD'); engine.continue();
   await easyVictory(engine, 'bailiff'); engine.claim('R01_SET_MANTLE'); engine.continue(); engine.dismiss();
-  beside(engine, 'bessa', 'camp'); assert.equal(engine.state.mode, 'ending');
-  assert.equal(engine.state.flags.completed, true); assert.equal(engine.state.rareReady, true);
-  engine.continue(); engine.dismiss();
+  beside(engine, 'bessa', 'camp'); assert.equal(engine.state.mode, 'explore');
+  assert.equal(engine.state.campaign.stage,2);assert.equal(engine.state.flags.completed,false);assert.equal(engine.state.rareReady,true);
+  while(engine.state.message)engine.dismiss();
   await easyVictory(engine, 'silver', 'camp'); engine.claim('R01_SET_CHARM'); engine.continue();
   assert.equal(engine.state.setAcquired.length, 3); assert.equal(engine.state.rareReady, false);
   assert.equal(engine.map().entities.some(e => e.id === 'silver'), false);

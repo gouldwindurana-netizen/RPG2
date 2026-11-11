@@ -11,7 +11,7 @@ function setup(job:JobId='warden',storage:Storage|null=null) {
   const engine=createEngine({storage,roundDelay:0,seed:12345});
   engine.beginAdventure({...DEFAULT_PROFILE,name:'Lyra',job});engine.skipIntro();engine.configure({encounters:'visible'});return engine;
 }
-function beside(engine:DemoEngine,id:string){engine.dismiss();engine.state.area='works';const entity=engine.map().entities.find(e=>e.id===id)!;assert.ok(entity);engine.state.player={x:entity.x-1,y:entity.y,facing:'right'};engine.interact(id);}
+function beside(engine:DemoEngine,id:string){while(engine.state.message)engine.dismiss();engine.dismiss();engine.state.area='works';const entity=engine.map().entities.find(e=>e.id===id)!;assert.ok(entity);engine.state.player={x:entity.x-1,y:entity.y,facing:'right'};engine.interact(id);}
 
 test('profile validation accepts bounded Unicode names and rejects markup, bad enums, and empty input',()=>{
   assert.equal(normalizeProfile({...DEFAULT_PROFILE,name:'  Éli O’Neil  '})?.name,'Éli O’Neil');
@@ -51,7 +51,7 @@ test('legacy saves retain expedition progress, equipment and wounded resources',
   delete legacy.profile;delete legacy.settings;delete legacy.encounterSteps;delete legacy.introStep;
   for(const hero of legacy.heroes){delete hero.name;delete hero.job;}
   storage.setItem(SAVE_KEY,JSON.stringify(legacy));const migrated=createEngine({storage});
-  assert.equal(migrated.state.version,2);assert.equal(migrated.state.mode,'explore');assert.equal(migrated.state.xp,52);assert.equal(migrated.state.gold,125);assert.deepEqual(migrated.state.cleared,['encounter1']);assert.equal(migrated.state.heroes[0].hp,42);assert.equal(migrated.state.profile.name,'Mara');assert.equal(migrated.state.heroes[0].job,'warden');assert.equal(migrated.state.settings.encounters,'visible');
+  assert.equal(migrated.state.version,3);assert.equal(migrated.state.mode,'explore');assert.equal(migrated.state.xp,52);assert.equal(migrated.state.gold,125);assert.deepEqual(migrated.state.cleared,['encounter1']);assert.equal(migrated.state.heroes[0].hp,42);assert.equal(migrated.state.profile.name,'Mara');assert.equal(migrated.state.heroes[0].job,'warden');assert.equal(migrated.state.settings.encounters,'visible');
 });
 
 test('corrupt profile/settings cannot enter the save boundary',()=>{

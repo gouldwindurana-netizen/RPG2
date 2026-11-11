@@ -1,5 +1,7 @@
 # Your first traveler
 
+Current campaign: [implemented gameplay and scope](playable-campaign.md). New creation offers she/her and he/him; older saved profiles remain compatible. The opening expedition now continues into the connected world.
+
 First Watch now opens with a title screen and a three-step character creator. Continue resumes a saved expedition or an unfinished introduction. New adventure does not replace an existing save until the player confirms Begin the journey on the final screen.
 
 ## Identity and appearance
@@ -34,7 +36,7 @@ The larger story outline still uses its default Warden, Mara. The playable openi
 ## Gameplay polish
 
 - Classic walking encounters are the new-game default. In the bellworks, safe movement accumulates toward the next authored formation. Camp and recovery remain safe, and encounters do not run on a real-time clock.
-- Settings can show the original visible patrols or turn ordinary encounters off. Bosses, treasure, and the post-demo hunt remain available. Switching modes clears partial walking pressure.
+- Settings can show the original visible patrols or turn ordinary encounters off. Bosses, treasure, and the opening showcase hunt remain available. Switching modes clears partial walking pressure.
 - Hold Shift to run. Map clicks still find a walkable route and interact from an adjacent tile.
 - Battle planning remains turn based. Speed settings change playback only, from 1× through 3×; the game always waits for commands.
 - Repeat last commands replaces the current partial plan, rechecks charges and shared item reservations, and uses a safe attack fallback when an action is no longer legal. It never commits the round automatically.

@@ -1,10 +1,10 @@
 # Original RPG combat brief
 
-Status: campaign design baseline. The opening Reedbank expedition is playable; see [First Watch](demo-baseline.md) for the implemented slice.
+Status: campaign design baseline. See [the playable campaign](playable-campaign.md) for the current six-region implementation and its limits.
 
 Story proposal: [The Road Beyond the Bells](story.md), built around this party and the first expedition.
 
-Expanded content: [Avel's world and bestiary](world-and-bestiary.md), [progression and equipment rules](progression-and-loot.md), and [online balance research](balance-research.md). These specify fixed regional levels, stronger named recolors, and optional regional equipment collections. They do not enlarge the first playable into the full campaign.
+Expanded content: [Avel's world and bestiary](world-and-bestiary.md), [progression and equipment rules](progression-and-loot.md), and [online balance research](balance-research.md). These specify fixed regional levels, stronger named recolors, and optional regional equipment collections. The browser campaign adapts these designs with explicit condensed encounter tuning.
 
 ## Direction
 
@@ -120,4 +120,4 @@ Use original locations, enemy designs, portraits, spell effects, music, and inte
 - Keyboard and pointer play both complete an ordinary battle and the boss fight.
 - A full short expedition demonstrates that elemental choices, healing timing, and conservation matter.
 
-This document records campaign requirements. The [First Watch baseline](demo-baseline.md) identifies the playable slice and its validation; the later campaign remains to be implemented and tested.
+This document records campaign requirements. The [playable campaign](playable-campaign.md) identifies implemented systems and validation separately from remaining design requirements.
