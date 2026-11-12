@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "tsc --noEmit && vite build && node tools/package-demo.mjs",
+    "build": "node tools/package-current-game.mjs",
     "preview": "vite preview --host 0.0.0.0",
     "test": "tsx --test src/*.test.ts",
     "test:browser": "playwright test"
