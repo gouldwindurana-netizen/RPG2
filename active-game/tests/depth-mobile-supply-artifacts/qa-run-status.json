@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "date": "2026-11-17",
+  "html_sha256": "57484856a698facf70e6ef98bf41731588f6f89658af88a3365c19c61f7cc2bb",
+  "passed": 1,
+  "failed": 0,
+  "elapsed_report": "19.2s",
+  "unique_additional_checks": 0,
+  "visual_review": "Mobile supply reserves, conditions, HP, spell charges and route guidance inspected and readable."
+}

@@ -1,7 +1,12 @@
 import { test, expect, type Page } from '@playwright/test';
-import type { GameState, HeroId, CharacterProfile } from '../src/contracts';
+import type { GameState, GameMap, HeroId, CharacterProfile } from '../src/contracts';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+
+const currentMap=(page:Page)=>page.evaluate(()=>(window as unknown as {__AVEL__:{map():GameMap}}).__AVEL__.map());
+type Viewport = {area:string;tile:number;ox:number;oy:number;scrollX:number;scrollY:number;zoom:number;transitioning?:boolean};
+const viewport=(page:Page)=>page.evaluate(()=>(window as unknown as {__AVEL__:{viewport():Viewport}}).__AVEL__.viewport());
+async function ready(page:Page){await expect.poll(async()=>!(await viewport(page)).transitioning).toBe(true);}
 
 const snapshot = (page: Page) => page.evaluate(() => (window as unknown as { __AVEL__: { snapshot(): GameState } }).__AVEL__.snapshot());
 async function dismissMessages(page: Page) {
@@ -38,17 +43,22 @@ async function newAdventure(page: Page, options:Partial<CharacterProfile>&{skip?
   }
 }
 async function tile(page: Page, x: number, y: number) {
-  const canvas = page.locator('#game-world canvas');
-  const box = await canvas.boundingBox();
-  if (!box) throw new Error('Game canvas is not visible');
-  await page.mouse.click(box.x + (x + .5) * 30 / 960 * box.width,
-    box.y + (18 + (y + 1) * 30 - 2) / 576 * box.height);
+  await ready(page);
+  const canvas=page.locator('#game-world canvas'),box=await canvas.boundingBox(),view=await viewport(page);
+  if(!box)throw new Error('Game canvas is not visible');
+  await page.mouse.click(box.x+(view.ox+(x+.5)*view.tile-view.scrollX)*view.zoom/960*box.width,
+    box.y+(view.oy+(y+1)*view.tile-2-view.scrollY)*view.zoom/576*box.height);
 }
 async function visit(page: Page, x: number, y: number, done: (state: GameState) => boolean) {
-  await dismissMessages(page);
-  await tile(page, x, y);
-  await expect.poll(async () => done(await snapshot(page)), { timeout: 15_000 }).toBe(true);
+  await dismissMessages(page);await tile(page,x,y);
+  await expect.poll(async()=>done(await snapshot(page)),{timeout:20_000}).toBe(true);await ready(page);
 }
+async function visitEntity(page:Page,id:string,done:(state:GameState)=>boolean){
+  const area=(await snapshot(page)).area,entity=(await currentMap(page)).entities.find(e=>e.id===id);
+  if(!entity)throw Error(`Missing ${area}/${id}`);
+  await visit(page,entity.x,entity.y,done);
+}
+async function campRest(page:Page){await visitEntity(page,'fire',s=>!!s.message);await dismissMessages(page);}
 async function plan(page: Page, hero: HeroId, type: 'attack' | 'guard' | 'spell' | 'item', target?: string, spell?: string) {
   await page.locator(`[data-hero="${hero}"]`).click();
   if (type === 'guard') { await page.locator('[data-command="guard"]').click(); return; }
@@ -104,7 +114,7 @@ test('first expedition supports spell combat and saved exploration checkpoints',
   expect((await snapshot(page)).campaign.stage).toBe(0);
   expect((await snapshot(page)).flags.completed).toBe(false);
   await visit(page,2,15,s=>s.area==='camp');
-  await page.locator('[data-command="rest"]').click();await dismissMessages(page);
+  await campRest(page);
   expect((await snapshot(page)).heroes.every(h=>h.hp===h.maxHp)).toBe(true);
   expect(errors).toEqual([]);
 });
@@ -125,12 +135,14 @@ test('mobile is playable and menus remain within viewport', async ({page})=>{
 
 test('shop purchases work and single-ally healing opens target selection', async ({page})=>{
   await newAdventure(page);
-  await visit(page,16,12,s=>s.message?.speaker==='Quartermaster');
+  await visitEntity(page,'door-camp-shop',s=>s.area==='camp-shop');
+  await visitEntity(page,'merchant',s=>s.message?.speaker==='Quartermaster');
   const supplies=(await snapshot(page)).inventory.POTION;
   await page.locator('[data-buy="POTION"]').click();
   expect((await snapshot(page)).inventory.POTION).toBe(supplies+1);
   expect((await snapshot(page)).gold).toBe(30);
   await dismissMessages(page);
+  await visitEntity(page,'leave-camp-shop',s=>s.area==='camp');
   await visit(page,14,9,s=>s.flags.briefed);await dismissMessages(page);
   await visit(page,28,8,s=>s.area==='works');await dismissMessages(page);
   await visit(page,6,13,s=>s.mode==='battle');
@@ -314,6 +326,8 @@ test('classic party menus expose status, field magic, and an observational world
   expect((await snapshot(page)).heroes[2].charges).toEqual(before.heroes[2].charges);
   await page.locator('[data-close]').click();
   await page.locator('#game-world canvas').focus();await page.keyboard.press('m');
+  await expect(page.locator('.area-atlas')).toBeVisible();
+  await page.locator('.map-tabs [data-panel="worldmap"]').click();
   await expect(page.getByRole('img',{name:'World map of Avel with the party marked by a white diamond'})).toBeVisible();
   await expect(page.locator('.atlas-places > div')).toHaveCount(6);
   expect((await snapshot(page)).player).toEqual(before.player);

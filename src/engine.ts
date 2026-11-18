@@ -48,6 +48,11 @@ export function shopOffers(state: GameState): {itemId:string;price:number}[] {
   return [...Object.entries(SHOP_PRICES).map(([itemId,price])=>({itemId,price})), ...eligible.map(item=>({itemId:item.id,price:Math.round((item.slot==='weapon'||item.slot==='body'?80:35)*Number(item.id.slice(1,3))**1.6)}))];
 }
 
+export function restPrice(state: GameState): number {
+  const home = MAPS[state.area]?.parent ?? state.area;
+  return home === 'camp' ? 0 : Math.min(120, Number(regionAt(state.area,state.player.x,state.player.y).slice(1)) * 10);
+}
+
 function campMap(): GameMap {
   const tiles = Array.from({ length: 18 }, (_, y) => Array.from({ length: 32 }, (_, x) => {
     if (x === 0 || y === 0 || x === 31 || y === 17) return 't';
@@ -125,7 +130,7 @@ function deriveHero(id: HeroId, level: number, equipment: Record<Slot, string>, 
 function freshState(seed: number, profile: CharacterProfile = DEFAULT_PROFILE): GameState {
   const inventory: Record<string, number> = {...progression.starting_loadout.supplies};
   for(const id of HERO_IDS) for(const item of Object.values(starterEquipment(id, profile))) inventory[item] = (inventory[item] ?? 0) + 1;
-  return {version:3, campaign:{stage:0,switches:[],openedChests:[],wildBattles:0},safeReturn:{area:'camp',x:11,y:10},overworldReturn:{x:8,y:32},messageQueue:[],hunts:Object.fromEntries(REGIONS.map(id=>[id,{wins:0,ready:false}])), mode:'creation', profile:{...profile}, introStep:0, settings:{battleSpeed:1,encounters:'classic'},encounterSteps:0, area:'camp', player:{x:11,y:10,facing:'right'},
+  return {version:3, campaign:{stage:0,switches:[],openedChests:[],wildBattles:0},safeReturn:{area:'camp',x:11,y:10},overworldReturn:{x:8,y:33},messageQueue:[],hunts:Object.fromEntries(REGIONS.map(id=>[id,{wins:0,ready:false}])), mode:'creation', profile:{...profile}, introStep:0, settings:{battleSpeed:1,encounters:'classic'},encounterSteps:0, area:'camp', player:{x:11,y:10,facing:'right'},
     heroes:HERO_IDS.map(id=>deriveHero(id,1,starterEquipment(id,profile),profile)),inventory,gold:60,xp:0,
     flags:{briefed:false,bossDefeated:false,completed:false,sideQuest:false,chest:false,stamp:false},
     cleared:[],tracks:0,rareReady:false,setAcquired:[],battle:null,reward:null,steps:0,message:null,rng:seed >>> 0 || 7321};
@@ -269,6 +274,36 @@ export function createEngine(options: { storage?: Storage | null; roundDelay?: n
     })};
   }
 
+  function arrival(area:Area, preferred:{x:number;y:number}, facing:Direction):{x:number;y:number} {
+    const source=MAPS[area],delta={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]}[facing];
+    const open=(x:number,y:number)=>x>=0&&y>=0&&x<source.width&&y<source.height&&PASSABLE.includes(source.tiles[y][x])&&!source.entities.some(e=>e.x===x&&e.y===y);
+    if(open(preferred.x,preferred.y))return {x:preferred.x,y:preferred.y};
+    const offsets=[delta,[0,1],[1,0],[-1,0],[0,-1]];
+    for(const [dx,dy]of offsets)if(open(preferred.x+dx,preferred.y+dy))return {x:preferred.x+dx,y:preferred.y+dy};
+    // Older checkpoints can sit on a newly added door. Find nearby open floor
+    // without ever spawning on a second transition or a blocking actor.
+    for(let radius=2;radius<Math.max(source.width,source.height);radius++)for(let dy=-radius;dy<=radius;dy++)for(let dx=-radius;dx<=radius;dx++)if(Math.abs(dx)+Math.abs(dy)===radius&&open(preferred.x+dx,preferred.y+dy))return {x:preferred.x+dx,y:preferred.y+dy};
+    throw new Error(`No arrival floor in ${area}`);
+  }
+
+  function travel(entity:MapEntity, approach:{x:number;y:number}, countStep=false):boolean {
+    if((entity.id==='toWorks'||entity.id==='enter-works')&&!state.flags.briefed){say(state.profile.name,'We should speak to Bessa before entering the bellworks.');return false;}
+    const transition=TRANSITIONS[entity.id];if(!transition)return false;
+    if(transition.minStage!==undefined&&state.campaign.stage<transition.minStage||transition.requiredSwitch&&!state.campaign.switches.includes(transition.requiredSwitch)){say(entity.name,transition.blockedText??'We need to finish the work here before taking this road.');return false;}
+    const from=state.area,to=transition.area;
+    const fromParent=MAPS[from].parent??from,toParent=MAPS[to].parent??to;
+    if(from==='overworld'&&to!=='overworld')state.overworldReturn=arrival('overworld',approach,state.player.facing);
+    else if(from!=='overworld'&&to!=='overworld'&&fromParent!==toParent){const outside=TRANSITIONS['world-'+toParent];if(outside)state.overworldReturn=arrival('overworld',outside,'down');}
+    const savedOutside=state.overworldReturn;
+    const outsideOnDoor=MAPS.overworld.entities.some(e=>e.kind==='exit'&&e.x===savedOutside.x&&e.y===savedOutside.y);
+    const requested=to==='overworld'&&from!=='overworld'&&!outsideOnDoor?savedOutside:transition;
+    const facing=transition.facing??(to==='overworld'?state.player.facing:requested.x<=3?'right':requested.x>=MAPS[to].width-4?'left':'up');
+    const destination=arrival(to,requested,facing);
+    state.area=to;state.player={...destination,facing};state.encounterSteps=0;if(countStep)state.steps++;
+    if(isSafeLocation(to,destination.x,destination.y))state.safeReturn={area:to,...destination};
+    emit();engine.save();return true;
+  }
+
   function updateHeroes() {
     const level = levelFromXp(state.xp);
     state.heroes = state.heroes.map(old => {
@@ -380,6 +415,8 @@ export function createEngine(options: { storage?: Storage | null; roundDelay?: n
       const current = map();
       if (y < 0 || y >= current.height || x < 0 || x >= current.width || !PASSABLE.includes(current.tiles[y][x])) return;
       if (current.entities.some(entity => entity.x === x && entity.y === y && entity.kind !== 'exit')) return;
+      const doorway=current.entities.find(entity=>entity.x===x&&entity.y===y&&entity.kind==='exit');
+      if(doorway){travel(doorway,state.player,true);return;}
       state.player.x=x;state.player.y=y;state.steps++;
       if(!isSafeLocation(state.area,x,y)&&state.settings.encounters==='classic') {
         const nearSafeInteraction=current.entities.some(entity=>entity.kind!=='enemy'&&Math.abs(entity.x-x)+Math.abs(entity.y-y)<=2);
@@ -401,17 +438,9 @@ export function createEngine(options: { storage?: Storage | null; roundDelay?: n
       const entity = entityId ? near.find(row => row.id === entityId) : near[0];
       if (!entity) return;
       if(entity.kind==='exit'){
-        if(entity.id==='toWorks'&&!state.flags.briefed){say(state.profile.name,'We should speak to Bessa before entering the bellworks.');return;}
-        const transition=TRANSITIONS[entity.id]??(entity.id==='toWorks'?{area:'works' as Area,x:3,y:15}:entity.id==='toCamp'?{area:'camp' as Area,x:27,y:8}:null);
-        if(!transition)return;
-        if(transition.minStage!==undefined&&state.campaign.stage<transition.minStage||transition.requiredSwitch&&!state.campaign.switches.includes(transition.requiredSwitch)){say(entity.name,transition.blockedText??'We need to finish the work here before taking this road.');return;}
-        if(state.area==='overworld'&&transition.area!=='overworld')state.overworldReturn={x:state.player.x,y:state.player.y};
-        else if(state.area!=='overworld'&&transition.area!=='overworld'){const outside=TRANSITIONS['world-'+transition.area];if(outside)state.overworldReturn={x:outside.x,y:outside.y};}
-        const returnPosition=transition.area==='overworld'&&state.area!=='overworld'?state.overworldReturn:null;
-        state.area=transition.area;state.player={x:returnPosition?.x??transition.x,y:returnPosition?.y??transition.y,facing:'down'};state.encounterSteps=0;
-        if(isSafeLocation(state.area,state.player.x,state.player.y))state.safeReturn={area:state.area,x:state.player.x,y:state.player.y};
-        emit();engine.save();
-      }else if(entity.kind==='campfire'||entity.id.startsWith('inn-'))engine.rest();
+        travel(entity,state.player);
+      }else if(entity.id.startsWith('inn-'))say('Innkeeper',`${restPrice(state)?`A room and supper cost ${restPrice(state)} gold for the whole party.`:'The shelter has set aside beds and supper for your party.'} Rest restores everyone’s HP, spell charges, and conditions. Would you like to stay?`);
+      else if(entity.kind==='campfire')engine.rest();
       else if(entity.id==='merchant'||entity.id.startsWith('shop-'))say('Quartermaster',`Supplies and equipment for ${AREA_INFO[state.area].name} are available in the shop. Equipment stocks follow this region’s fixed danger level. Rest at a safe shelter to restore spell charges.`);
       else if(entity.id==='lantern'){
         if(!state.flags.sideQuest){state.flags.sideQuest=true;state.inventory.POTION=Math.min(99,(state.inventory.POTION??0)+1);say('Keep a Light for Me','You mend the lantern handles and hang Rill’s painted sign. Bessa sets aside a Field Potion. “Ring. Someone will come.”');}
@@ -442,7 +471,7 @@ export function createEngine(options: { storage?: Storage | null; roundDelay?: n
     },
     rest() {
       if(state.mode!=='explore'||!isSafeLocation(state.area,state.player.x,state.player.y)||state.reward)return;
-      const cost=state.area==='camp'?0:Math.min(120,Number(currentRegion().slice(1))*10);
+      const cost=restPrice(state);
       if(state.gold<cost){say('Shelter Keeper',`A full rest costs ${cost} gold. Field supplies can help until then.`);return;}
       state.gold-=cost;state.safeReturn={area:state.area,x:state.player.x,y:state.player.y};
       for(const hero of state.heroes){hero.hp=hero.maxHp;hero.status=null;hero.charges=[...hero.maxCharges];}

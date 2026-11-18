@@ -1,0 +1,125 @@
+{
+  "baseline_file": "engagement-baseline.html",
+  "baseline_sha256": "7ea381bba54c2d5feb260ed2f0a3dd1034d9287d9da85a4ccf305c53bf778895",
+  "working_file": "The_Road_Beyond_the_Bells.html",
+  "working_sha256": "b75e5b8b788b10ce0869ba07d2a78c0b8ebfcc91f0ef975d255d112f0ba2b0a6",
+  "working_bytes": 1622456,
+  "modules": [
+    "engagement_engine",
+    "engagement_camp",
+    "engagement_ui",
+    "engagement_render"
+  ],
+  "module_sha256": {
+    "engagement_engine": "ee39e02ca314b060f20cc5f9630c7b0edfc8dddab4f667c4ae7811d3969b8cd7",
+    "engagement_camp": "bca83df0c98889517882d8f8b1ab23d9ddc52e89132dddddc3032222ff502f7b",
+    "engagement_ui": "a96d7969c3fd0f270fc506ad322991bcbd3cd7cb6d610569d98726594c0beb77",
+    "engagement_render": "ac50c3e258840749fd30d8a54236efe813a821b0f5aabbf928bc1d20869d53ce"
+  },
+  "changes": [
+    "regional commissions catalog and six local boards without new world destinations",
+    "new expeditions start with empty commission and bestiary records",
+    "optional validated version-three commission data preserves older journeys",
+    "record defeated catalog enemies and post-acceptance ordinary kills once on victory",
+    "victory reports newly ready commissions without paying their rewards automatically",
+    "physical board interaction opens the local commission service",
+    "board-only accept and whole-reward claim with saved once-only payouts",
+    "six original shelter conversations with chapter and safe-location availability",
+    "new journeys start with an empty camp conversation history",
+    "optional camp history imports without resetting older saves",
+    "listen or replay at a safe shelter without rewards healing or story mutations",
+    "optional wayfarer journal helpers for commissions discovered enemies and camp tales",
+    "party menu exposes the optional wayfarer journal",
+    "local board opens commissions through the existing dialogue flow",
+    "wayfarer journal uses the normal modal and focus boundaries",
+    "journal tabs and local commission actions preserve engine authority",
+    "Escape leaves the notice board through the ordinary dialogue dismissal",
+    "notice boards provide a top close button for touch players",
+    "board close button dismisses its message without altering other panels",
+    "responsive classic journal windows keep secondary goals off the playfield",
+    "draw original parchment notice board for town commissions",
+    "town boards use their own original scenery texture",
+    "area maps distinguish notice boards from ordinary people",
+    "map legend explains the notice board landmark"
+  ],
+  "features": [
+    "Regional optional commissions",
+    "Discovered bestiary",
+    "Shelter conversations",
+    "Town notice boards"
+  ],
+  "preserved": [
+    "Uploaded difficulty modes, equipment buffs, identities and spell growth",
+    "Saved EXP, gold, learned spells, equipment copies and story outcomes",
+    "33 dungeon floors, ten world destinations and slower earnings",
+    "Original art, offline packaging and third-party notices"
+  ],
+  "published": false,
+  "pushed": false,
+  "status": "complete",
+  "completed_date": "2026-11-18",
+  "last_verified_date": "2026-11-18",
+  "validation": {
+    "engine_ui_renderer": {
+      "passed": 285,
+      "failed": 0,
+      "tested_sha256": "b75e5b8b788b10ce0869ba07d2a78c0b8ebfcc91f0ef975d255d112f0ba2b0a6",
+      "command": "node --test tests/*core.test.cjs tests/*renderer.test.cjs",
+      "log": "tests/engagement-validation/core-results.txt"
+    },
+    "browser": {
+      "unique_checks_passed": 6,
+      "six_case_run": {
+        "date": "2026-11-17",
+        "status": "passed",
+        "passed": 6,
+        "failed": 0,
+        "game_sha256": "db2cf5bdecd3333a40c279ead59618fad5db8766a1c93bacad71765099ccb3da",
+        "scope": [
+          "Actual walking to board, acceptance, focus, Escape and reload",
+          "Actual battle victory, accepted kill progress, discovered affinities and reload",
+          "Survey delivery, exact once-only reward and reload",
+          "390px journal tabs, regional goals and chapter locks",
+          "Custom-hero four-line shelter dialogue, replay and resource preservation",
+          "Later board gates and remote read-only controls"
+        ],
+        "page_errors": [],
+        "limits": "Declared progression fixtures isolate later states; not a full campaign playthrough."
+      },
+      "final_close_recheck": {
+        "date": "2026-11-18",
+        "status": "passed",
+        "passed": 1,
+        "failed": 0,
+        "game_sha256": "b75e5b8b788b10ce0869ba07d2a78c0b8ebfcc91f0ef975d255d112f0ba2b0a6",
+        "scope": "390px full journal flow plus visible top board close button and actual dismissal",
+        "duration_seconds": 5.3,
+        "page_errors": [],
+        "visual_review": "Root inspected mobile board close button and camp-tale menu: readable, no horizontal clipping."
+      },
+      "final_difference": "Only the notice-board header close button and its click handler changed after the six-case run; all285 checks and the affected mobile flow passed on final bytes.",
+      "artifacts": [
+        "tests/engagement-final-browser-artifacts",
+        "tests/engagement-close-browser-artifacts"
+      ]
+    },
+    "review": {
+      "result": "Two independent read-only reviews found no material blockers.",
+      "evidence": "Preserved merged difficulty/catalog/spells/progression, prior-save fields and four worn charm copies; whole commission payouts; no camp resource grants; six board routes and clear NPC spacing.",
+      "qodo": "CLI unavailable",
+      "advisor": "Installed launcher unavailable"
+    },
+    "limits": [
+      "Later-state fixtures do not represent a complete campaign playthrough.",
+      "Whole-campaign Hard/Hell tuning still needs longer player playtesting."
+    ]
+  },
+  "delivery": {
+    "active": "The_Road_Beyond_the_Bells.html",
+    "demo": "/workspace/RPG2/demo/index.html",
+    "export": "/workspace/RPG2/dist/index.html",
+    "packaged_with": "npm run build in /workspace/RPG2",
+    "byte_identical": true,
+    "dev_preview_serves_exact_bytes": true
+  }
+}

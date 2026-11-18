@@ -1,0 +1,11 @@
+
+Running 4 tests using 1 worker
+
+(node:37228) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/jobs-browser.spec.mjs:121:1 › Warden starts with a real martial skill and spends MP only when its round resolves (5.9s)
+  ✓  2 tests/jobs-browser.spec.mjs:137:1 › Skill Shop teaches an unlocked martial technique once without refilling MP and saves it (4.5s)
+  ✓  3 tests/jobs-browser.spec.mjs:238:1 › shared battle MP tea uses a normal item action and restores only the chosen depleted ally (5.6s)
+  ✓  4 tests/jobs-browser.spec.mjs:300:1 › 390px inventory shows current HP and capped recovery previews before and after supplies (6.2s)
+
+  4 passed (23.6s)

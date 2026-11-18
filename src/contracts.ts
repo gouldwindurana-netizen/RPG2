@@ -1,5 +1,7 @@
 export type Direction = 'up' | 'down' | 'left' | 'right';
-export type Area = 'camp' | 'works' | 'overworld' | 'dunmere' | 'tollhouse' | 'fen' | 'granary' | 'orchard' | 'crown' | 'veyr' | 'heart';
+export type SettlementArea = 'camp' | 'dunmere' | 'fen' | 'orchard' | 'crown' | 'veyr';
+export type InteriorArea = `${SettlementArea}-${'shop' | 'inn'}`;
+export type Area = 'camp' | 'works' | 'overworld' | 'dunmere' | 'tollhouse' | 'fen' | 'granary' | 'orchard' | 'crown' | 'veyr' | 'heart' | InteriorArea;
 export type Slot = 'weapon' | 'body' | 'head' | 'mantle' | 'charm';
 export type HeroId = 'Mara' | 'Tavin' | 'Iona' | 'Soren';
 export type JobId = 'warden' | 'striker' | 'scout' | 'mender' | 'arcanist' | 'spellblade';
@@ -44,6 +46,9 @@ export interface MapEntity {
 export interface GameMap {
   width: number; height: number; tiles: string[]; entities: MapEntity[];
   name?: string; regionId?: string; safe?: boolean;
+  kind?: 'world' | 'town' | 'dungeon' | 'interior';
+  service?: 'shop' | 'inn';
+  parent?: SettlementArea;
 }
 export interface CampaignProgress {
   stage: number;

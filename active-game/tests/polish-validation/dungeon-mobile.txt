@@ -1,0 +1,10 @@
+
+Running 3 tests using 1 worker
+
+(node:31039) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/depth-browser.spec.mjs:294:1 › stairs descend and return physically, and a new interior floor survives reload without recovery (1.1m)
+  ✓  2 tests/depth-browser.spec.mjs:319:1 › a deep-floor route lever opens a persistent return shortcut instead of restoring supplies (1.4m)
+  ✓  3 tests/depth-browser.spec.mjs:397:1 › 390px battle and dungeon planning fit the viewport and restore exploration controls after victory (35.3s)
+
+  3 passed (3.2m)

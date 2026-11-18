@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-18",
+  "status": "passed",
+  "game_sha256": "02a85539062c4440a1b465c8136829b45869268f4efe54f24e6672faad8d1a27",
+  "game_bytes": 1667379,
+  "command": "/workspace/RPG2/node_modules/.bin/playwright test -c tests/jobs-playwright.config.mjs --output=tests/jobs-final-browser-artifacts",
+  "passed": 10,
+  "failed": 0,
+  "unique_checks": 10,
+  "elapsed_seconds": 49.5,
+  "page_errors": [],
+  "log": "/tmp/jobs-final-browser.txt",
+  "checks": [
+    "Martial starter skill uses MP only when the round resolves and records practice.",
+    "Skill Shop learns a level-unlocked physical technique once, charges gold, preserves MP and reloads.",
+    "All companions support creator job choices and safe job changes without resource refill, lost skill history or lost worn copies.",
+    "Insufficient MP blocks actions; silence blocks magic while permitting physical techniques.",
+    "A genuine archived version-three charge save migrates to MP while preserving progress, inventory, worn copies, difficulty and practice.",
+    "390px Jobs, skills and preparation panels have readable layouts and no horizontal overflow.",
+    "Field MP tea caps to maximum, cannot be wasted and normal shelter rest restores resources.",
+    "Battle MP tea is a normal shared-inventory item action affecting only the selected depleted ally.",
+    "Weapon shop compares the selected traveler, filters compatible slot gear, supports quantities and Buy Max keyboard focus, and preserves four separately worn charm copies after reload.",
+    "390px inventory shows current HP/MP, capped recovery gain and unused healing, updates after use, prevents no-effect use and saves results."
+  ],
+  "visual_review": [
+    "390px selected-hero weapon comparison shows selected job, worn item, offered ATK/MAG, quantity buttons and usable-only state without clipping.",
+    "390px Party Jobs choices and preview render within a scrollable modal with a visible close control; long skills catalog is collapsed.",
+    "390px battle skills render a physical technique with MP cost and four current HP/MP party cards without horizontal overflow.",
+    "Desktop Skill Shop visibly lists physical techniques with MP costs, known/locked states and prices.",
+    "Mobile inventory recipient, current HP/MP, supplies and disabled no-effect actions fit the modal."
+  ],
+  "notes": [
+    "Executed before the subsequent battle-cue feedback-only fix. The later four-case smoke receipt records final-hash coverage.",
+    "Earlier provisional Skill Shop rendering failure was fixed before this run. A previous silence fixture accidentally inherited two MP; it was corrected to declare three MP before testing the three-MP physical technique.",
+    "Declared local save fixtures establish level, area, resources and old-format save state; purchases, item use, skill learning, battle targeting, job changes and reloads use actual player UI.",
+    "No hidden runtime mutation method was used. window.__AVEL__ is used only for readonly snapshots/map state.",
+    "This is bounded feature and save-compatibility QA, not a full campaign or earned-economy playthrough."
+  ]
+}

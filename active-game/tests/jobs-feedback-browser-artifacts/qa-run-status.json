@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-18",
+  "status": "passed",
+  "game_sha256": "6730da96cc37ffec25719ec854953981eac42ba2b1a3e20cab22a27e413f5885",
+  "game_bytes": 1667813,
+  "command": "/workspace/RPG2/node_modules/.bin/playwright test -c tests/jobs-playwright.config.mjs --grep 'Warden starts|Skill Shop|shared battle MP tea|390px inventory' --output=tests/jobs-feedback-browser-artifacts",
+  "passed": 4,
+  "failed": 0,
+  "unique_checks": 4,
+  "elapsed_seconds": 23.6,
+  "page_errors": [],
+  "log": "/tmp/jobs-feedback-browser.txt",
+  "checks": [
+    "Martial starter skill uses MP only when the round resolves and records practice.",
+    "Skill Shop learns a level-unlocked physical technique once, charges gold, preserves MP and reloads.",
+    "Battle MP tea is a normal shared-inventory item action affecting only the selected depleted ally.",
+    "390px inventory shows current HP/MP, capped recovery gain and unused healing, updates after use, prevents no-effect use and saves results."
+  ],
+  "visual_review": [
+    "Battle cue screenshot visibly shows blue +20 MP above the recovered ally. Readonly cue metadata reports kind heal/resource mp/amount20 matching actual MP gain.",
+    "Pre-use 390px inventory screenshot shows43/100HP and2/12MP, potion preview to100/100 with+57 and3 healing unused.",
+    "After-use 390px inventory screenshot shows100/100HP and12/12MP with full-recovery Use disabled and transient toast fully faded.",
+    "Skill Shop and sidebar maximum-MP displays were directly checked against the same snapshot; both match20 for the level-five Warden fixture."
+  ],
+  "notes": [
+    "These four executions repeat existing checks from the ten-case full run; combined unique feature-check count remains ten.",
+    "The only product change since the full ten-case run was corrected battle feedback metadata/labels for HP, MP and cures.",
+    "Battle cue and mobile potion-preview captures were added to existing cases for this run; no game UI hooks or runtime mutation API were added.",
+    "Fixture and campaign-coverage limits are the same as the ten-case full-run receipt."
+  ]
+}

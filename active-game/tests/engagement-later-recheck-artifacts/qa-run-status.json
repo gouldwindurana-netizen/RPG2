@@ -1,0 +1,11 @@
+{
+  "date": "2026-11-17",
+  "game_sha256": "c44ab897a42ea5c4379569235b42c78b273ff5e6d89b7681115483f030758cad",
+  "page_errors": [],
+  "limits": "Position and progression fixtures isolate UI/save behavior; not a whole-campaign playthrough.",
+  "status": "passed",
+  "passed": 1,
+  "failed": 0,
+  "command": "playwright test -c tests/engagement-playwright.config.mjs --grep later boards",
+  "correction": "Fixture uses verified walkable safe northern board neighbor (12,6), isolating E from nearby Orchard keeper."
+}

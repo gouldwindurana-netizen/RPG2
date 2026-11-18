@@ -1,0 +1,83 @@
+/* Travel keeps the world foremost; combat retains its full command windows. */
+.field-gold{display:none}
+.field-view .masthead{height:56px;min-height:56px}
+.field-view .edition{display:none}
+.field-view .game-shell{max-width:1180px;padding-top:14px}
+.field-view .chapter-heading{display:none}
+.field-view .play-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:9px}
+.field-view .canvas-shell{aspect-ratio:5/3}
+.field-view .field-gold{display:inline-block;white-space:nowrap;font-size:11px;color:#ffebad;margin-left:6px}
+.field-view .party-sidebar{padding:5px 8px;border-width:2px}
+.field-view .section-label,.field-view .party-note{display:none}
+.field-view #party{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.field-view .hero-card{padding:6px 7px;min-height:41px;border:0;border-right:1px solid #7b94ce;background:transparent;gap:0}
+.field-view .hero-card:last-child{border-right:0}
+.field-view .hero-card .portrait,.field-view .hero-role,.field-view .plan-label{display:none}
+.field-view .hero-detail{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:10px}
+.field-view .hero-name{font-size:14px;gap:7px;justify-content:flex-start;white-space:nowrap}
+.field-view .hero-name .hero-level{font-size:9px}
+.field-view .hero-numbers{margin:0;font-size:11px;grid-column:2;grid-row:1;gap:7px}
+.field-view .hero-numbers i{font-size:9px}
+.field-view .hp-track{height:3px;grid-column:1/-1;grid-row:2;margin-top:5px}
+.field-view .action-panel{margin-top:9px;min-height:0;border-width:2px}
+.travel-actions{display:flex;align-items:center;justify-content:space-between;gap:22px;padding:12px 16px}
+.travel-objective{min-width:0;flex:1}
+.travel-objective .eyebrow{font-size:9px;display:block;margin-bottom:3px}
+.travel-objective>strong{font-size:15px;font-weight:normal;color:#fff}
+.travel-objective>p{font-size:11px;line-height:1.6;color:#c6d7fa;margin:5px 0 0;max-width:680px}
+.travel-buttons{display:flex;align-items:stretch;gap:7px;flex:0 0 auto}
+.travel-buttons>.primary{min-width:190px;max-width:280px;text-align:left}
+.travel-buttons>.subtle-button{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.field-view .stage-foot{height:26px}
+.field-view .page-foot{min-height:34px}
+.map-tabs,.shop-filters{display:flex;gap:8px;margin:0 0 16px}
+.map-tabs button,.shop-filters button{padding:9px 13px;font-size:12px;min-height:37px}
+.map-tabs button[aria-pressed=true],.shop-filters button[aria-pressed=true]{background:#3458ad;border-color:#fff;box-shadow:inset 3px 0 #fff}
+.area-map-summary{display:flex;justify-content:space-between;gap:15px;margin:14px 0;font-size:13px}
+.area-map-summary>span{color:#c6d9fc;font-size:12px}
+.area-atlas{max-height:44dvh;image-rendering:pixelated}
+.area-destinations{display:grid;grid-template-columns:1fr 1fr;gap:9px 23px;margin-top:13px}
+.area-destinations>div{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid #617db8;padding-bottom:7px;font-size:11px}
+.area-destinations small{color:#aec8ef;white-space:nowrap}
+.treasure-key{color:#ffe3a0}
+.shop-modal{width:min(100%,810px)}
+.shop-wallet{display:flex;justify-content:space-between;align-items:center;font-size:14px;padding:11px 14px;margin-bottom:16px;background:#0a205d;border:1px solid #839dd2}
+.shop-wallet>strong{color:#ffe3a0;font-weight:normal}
+.shop-wallet>span{font-size:11px;color:#c1d4f9}
+.shop-modal .shop-filters{margin-bottom:13px}
+.shop-modal .hero-tabs{padding-bottom:11px}
+.shop-comparison{font-size:11px!important;margin:12px 0 4px}
+.shop-modal .shop-list{max-height:37dvh;padding-right:9px}
+.shop-purchase{display:flex;gap:14px;align-items:center;flex-shrink:0}
+.shop-purchase>strong{font-size:12px;min-width:44px;text-align:right;color:#ffe3a0}
+.stat-up{color:#b6f0d5}.stat-down{color:#ffb7bd}
+.shop-equipment-note{font-size:10px!important;color:#bdcff1;margin:13px 0 0;line-height:1.6!important}
+.inn-services{display:flex;gap:21px;align-items:center;margin-top:21px;background:#0e255f;border:1px solid #7a96d0;padding:14px 19px}
+.inn-services>span{font-size:38px;color:#d7e8ff}
+.inn-services p{margin:0;font-size:13px;color:#cbdcff}
+.inn-services strong{display:block;color:#ffe6ac;font-weight:normal;margin-top:7px;font-size:15px}
+@media(max-width:1000px){
+ .field-view .hero-name{font-size:12px}.field-view .hero-numbers{font-size:10px}.field-view .charge-dots{display:none}
+ .travel-actions{gap:14px;padding:12px}.travel-buttons>.primary{min-width:170px;max-width:230px}.travel-buttons>.subtle-button{gap:8px;font-size:10px}.travel-objective>p{font-size:10px}
+}
+@media(max-width:760px){
+ .field-view .masthead{height:auto;min-height:67px;padding:10px 12px;gap:8px}
+ .field-view .masthead .wordmark>svg{height:25px;width:21px}.field-view .wordmark>span{font-size:12px}.field-view .wordmark small{font-size:7px}
+ .field-view .tools{gap:4px}.field-view .tools button{font-size:10px;min-height:32px;padding:6px 7px}
+ .field-view .tools #battle-speed{display:none}.field-view .tools .help-button{width:28px}
+ .field-view .game-shell{padding:10px 9px 0}.field-view .play-layout{gap:8px}
+ .field-view .scene-topline{font-size:10px;padding:0 8px;gap:6px;height:34px}.field-view .scene-topline #scene-state{font-size:7px;letter-spacing:0}.field-view .field-gold{font-size:9px;margin-left:0}
+ .field-view .stage-foot{height:24px;font-size:6px}.field-view .stage-foot .stage-foot-right{font-size:6px}
+ .field-view .party-sidebar{padding:5px 3px}.field-view #party{gap:0}.field-view .hero-card{padding:4px 5px;min-height:57px;border-radius:0}
+ .field-view .hero-detail{display:flex;flex-direction:column;align-items:stretch;gap:4px}.field-view .hero-name{display:flex;justify-content:space-between;flex-wrap:nowrap;font-size:11px;gap:3px}.field-view .hero-name .hero-level{font-size:7px}
+ .field-view .hero-numbers{font-size:10px;display:block;white-space:nowrap}.field-view .hero-numbers i{font-size:7px}.field-view .hp-track{margin:0;height:3px}
+ .travel-actions{flex-direction:column;align-items:stretch;gap:10px;padding:12px}
+ .travel-objective .eyebrow{font-size:8px}.travel-objective>strong{font-size:15px}.travel-objective>p{font-size:11px;line-height:1.6;margin-top:5px}
+ .travel-buttons{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px}.travel-buttons>.primary{min-width:0;max-width:none;min-height:42px;font-size:11px}.travel-buttons>.subtle-button{font-size:10px;padding:8px 11px;gap:7px}
+ .field-view .page-foot{min-height:32px}.map-tabs,.shop-filters{gap:6px}.map-tabs button,.shop-filters button{font-size:11px;padding:9px 10px;flex:1;min-height:38px}
+ .area-map-summary{flex-direction:column;gap:7px;font-size:13px}.area-map-summary>span{font-size:11px}.area-atlas{max-height:38dvh}.area-destinations{grid-template-columns:1fr;gap:9px}.area-destinations>div{font-size:11px}
+ .atlas-legend{flex-wrap:wrap;gap:8px 13px;font-size:10px}
+ .shop-modal .modal-heading{margin-bottom:14px}.shop-modal .hero-tabs button{font-size:10px;padding:8px 6px}.shop-modal .shop-list{max-height:35dvh}
+ .shop-wallet{font-size:13px;padding:10px}.shop-wallet>span{font-size:10px}.shop-comparison{font-size:10px!important}.shop-row{gap:7px;padding:11px 0}.shop-row strong{font-size:12px}.shop-row small{font-size:10px;line-height:1.65}.shop-purchase{flex-direction:column;gap:7px;align-items:flex-end}.shop-purchase>strong{font-size:12px}.shop-purchase .small-button{min-height:36px;padding:8px 12px}.shop-equipment-note{font-size:10px!important}
+ .inn-services{padding:12px;gap:13px}.inn-services p{font-size:12px}.inn-services strong{font-size:14px}.inn-services>span{font-size:30px}.dialogue-modal .modal-footer{flex-wrap:wrap}.dialogue-modal .modal-footer>.primary{min-width:160px}
+}

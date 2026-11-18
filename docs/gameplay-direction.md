@@ -4,7 +4,9 @@ The game is an original four-person party RPG. New features should support one c
 
 **Town → overworld travel → encounters and discoveries → dungeon → story outcome → new route → town.**
 
-The overworld is a place to walk and explore, not a list of level-selection buttons. Town entrances, bridges, passes, and ferry routes make geography useful. Story progress can open a route, while optional paths offer treasure and harder enemies. The map menu provides orientation without teleporting the party.
+The overworld is a place to walk and explore, not a list of level-selection buttons. Walk onto entrances and exits to travel, keep return tiles clear, and prevent an encounter roll or held input from interrupting the crossing. Town entrances, bridges, passes, and ferry routes make geography useful. Story progress can open a route, while optional paths offer treasure and harder enemies. The map menu provides orientation without teleporting the party.
+
+Marked doors lead into safe shop and inn rooms. Quote lodging costs before taking payment, and preserve the outdoor return position across indoor visits. Local maps show exits and treasure counts.
 
 Towns protect ordinary movement from encounters and provide conversations, equipment, supplies, and recovery. Wilderness and dungeons use their own enemy tables and fixed regional strength. Revisiting an earlier road should show how the party has grown. New colors and names identify stronger variants; gaining a level does not silently recolor old enemies.
 

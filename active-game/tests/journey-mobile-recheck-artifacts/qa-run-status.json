@@ -1,0 +1,15 @@
+{
+  "date": "2026-11-18",
+  "status": "passed",
+  "game_sha256": "218bee8425ed5a139b697f3e0072068530d187dc03e9fee57f2ee338c212247a",
+  "page_errors": [],
+  "limits": "Declared save fixtures isolate discovered history, conditions and later floors; this is not a full campaign playthrough.",
+  "unique_checks": 1,
+  "passed": 1,
+  "failed": 0,
+  "duration_seconds": 8.9,
+  "command": "/workspace/RPG2/node_modules/.bin/playwright test -c tests/journey-playwright.config.mjs --grep \"390px tracking\" --output=tests/journey-mobile-recheck-artifacts",
+  "scope": "Existing mobile case strengthened with actual viewport bounds and screenshot; wait for transient toast before exploration screenshot.",
+  "visual_review": "Inspected actual390x844 viewport capture: complete tactics dialog and close button fit. Tracked objective remains readable once transient toast fades.",
+  "note": "This repeats one of the six unique cases; do not add it to the unique check count."
+}

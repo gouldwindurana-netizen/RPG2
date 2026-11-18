@@ -1,0 +1,13 @@
+
+Running 6 tests using 1 worker
+
+(node:9569) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/journey-browser.spec.mjs:170:1 › battle tactics use discovered exact-rank notes without changing the planned round (4.2s)
+  ✓  2 tests/journey-browser.spec.mjs:194:1 › battle supplies show shared reservations and reject invalid curative and revive targets (3.9s)
+  ✓  3 tests/journey-browser.spec.mjs:221:1 › an accepted commission can be tracked, restored, opened from exploration and untracked (4.2s)
+  ✓  4 tests/journey-browser.spec.mjs:237:1 › delivering tracked evidence clears the pin and pays only the existing board reward once (4.9s)
+  ✓  5 tests/journey-browser.spec.mjs:257:1 › 390px tracking and tactics fit without covering combat with the exploration goal (3.8s)
+  ✓  6 tests/journey-browser.spec.mjs:269:1 › current-floor notes follow actual record, cache and lift discoveries and survive reload (15.1s)
+
+  6 passed (37.6s)

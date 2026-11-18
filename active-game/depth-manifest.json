@@ -1,0 +1,148 @@
+{
+  "baseline_file": "depth-baseline.html",
+  "baseline_sha256": "735a067db6344d66df0e5911a12585fb8a211368d946f604bd8250a17b345293",
+  "working_file": "The_Road_Beyond_the_Bells.html",
+  "working_sha256": "57484856a698facf70e6ef98bf41731588f6f89658af88a3365c19c61f7cc2bb",
+  "working_bytes": 1585608,
+  "modules": [
+    "depth_dungeons",
+    "depth_economy",
+    "depth_battle",
+    "depth_ui"
+  ],
+  "changes": [
+    "six progressively longer dungeon expeditions preserve exterior sites",
+    "readable dungeon evidence and persistent route wheels",
+    "persistent cross-locks and return lifts filter actual blocking entities",
+    "briefing requirement applies throughout the opening bellworks",
+    "record floor discovery without refreshing resources",
+    "one-time field supplies use the existing chest save ledger",
+    "deeper fixed regional groups unlock by floor rather than party level",
+    "declare future reward pacing without migrating saved EXP or gold",
+    "reduce each new regular enemy contribution once",
+    "reduce authored boss and rare budgets before allocating among voices",
+    "document slower future earnings and unchanged saved progress",
+    "count-specific enemy formations and vertical party cells",
+    "select encounter-location battle scenery on entry",
+    "restore exploration scenery after battle",
+    "readonly encounter backdrop telemetry",
+    "keep side-view scenery through planning and battle results",
+    "four stable heroes in a shallow right-hand column",
+    "align enemy feet and reserve bounded labels",
+    "keep battle scenery still while exploration ambience moves",
+    "inherit dungeon exploration palettes and indoor walls without sharing floor textures",
+    "use root-specific scenery silhouettes on deeper floor maps",
+    "retain regional orchard details on new floor geometry",
+    "retain canonical exterior world map behind map tabs",
+    "locate deep dungeon floors at their single exterior world site",
+    "area map and expedition preparation helpers",
+    "journal shows actual supplies charges and dungeon route guidance",
+    "open local and world maps from the existing Map menu",
+    "map tabs switch views without moving the party",
+    "party menu exposes area and world maps",
+    "map control names both useful views",
+    "update keyboard map help",
+    "keep dungeon floor progress visible during exploration",
+    "responsive maps and compact preparation notes"
+  ],
+  "preserved": [
+    "Uploaded equipment/status customization and copy accounting",
+    "Existing saved EXP, gold, learned spells, and story outcomes",
+    "Ten canonical exterior destinations and physical world crossings",
+    "Three town services and quantity purchases",
+    "Existing original art, save key, and third-party notices"
+  ],
+  "completion_date": "2026-11-17",
+  "source_module_sha256": {
+    "depth_dungeons": "05669f077547340917b3e8da6cbf881d534953453aa419ff719e74a14cbb3807",
+    "depth_economy": "9ae1e8a8eb926f5a97bed684c2c45f7ead7936d46e1c22c508bd5394be451dca",
+    "depth_battle": "c2a60c76c8f0ed91c83c934c47a1ebfb0791b4310a9dc7986f551a27a3a11966",
+    "depth_ui": "56c8cd0f284a15de1b4f50bcd54b0ceee4859494d44fd2063c8827e4e8dde2e4"
+  },
+  "features": {
+    "dungeon_floor_totals": {
+      "works": 3,
+      "tollhouse": 4,
+      "granary": 5,
+      "orchard": 6,
+      "crown": 7,
+      "heart": 8
+    },
+    "total_dungeon_floors": 33,
+    "new_interior_maps": 27,
+    "new_story_records": 27,
+    "new_once_only_supply_caches": 27,
+    "exterior_destinations": 10,
+    "battle_ground_y": 124,
+    "future_reward_factors": {
+      "normal": {
+        "xp": 0.5,
+        "gold": 0.65
+      },
+      "boss_and_rare": {
+        "xp": 0.65,
+        "gold": 0.75
+      }
+    },
+    "existing_progress": "Preserved earned EXP/gold, learned spells, equipment copies, old positions and completed bosses."
+  },
+  "validation": {
+    "javascript_syntax": "Passed before writing the assembled game and during packaging.",
+    "engine_render_ui": {
+      "passed": 216,
+      "failed": 0,
+      "command": "node --test tests/*core.test.cjs tests/*renderer.test.cjs"
+    },
+    "final_browser_unique_checks": {
+      "passed": 33,
+      "failed": 0,
+      "depth": 17,
+      "equipment": 7,
+      "travel": 9
+    },
+    "browser_artifacts": [
+      "tests/depth-final-browser-artifacts",
+      "tests/depth-regression-artifacts",
+      "tests/depth-final-travel-artifacts",
+      "tests/depth-mobile-supply-artifacts"
+    ],
+    "superseded_runs": [
+      {
+        "scope": "Initial battle-art browser candidate",
+        "passed": 11,
+        "interrupted": 1,
+        "not_run": 5,
+        "reason": "Stopped to correct visible actor feet above the scenery floor. Final art suite17/17 passed."
+      },
+      {
+        "scope": "Initial legacy equipment/travel run",
+        "passed": 14,
+        "failed": 2,
+        "reason": "Stale fixed-path held-key helper and old one-exit expectation. Test-only dynamic replanning and same-root-stairs assertions applied; travel9/9 recheck passed. Equipment7/7 already passed."
+      }
+    ],
+    "visual_review": "Final desktop1/3/8 formations, mixed/large groups, terrain/dungeon scenes, deep map and390px battle/map inspected. Actor grounding and control obstruction resolved.",
+    "independent_review": "No remaining blocking finding; exact replay and output equality, late-save resources/completed bosses, valid landings and ordered lock/retreat checks verified.",
+    "research": "Pinned source research distinguishes historical slot evidence from unverified exact modern coordinates. Original assets and layouts used; private research remains outside repository.",
+    "balance_evidence": "Actual fresh Warden three-floor expedition:321 walking steps,11 battles, physical retreat/recovery/shopping/lift return, all four alive atlevel4 with193EXP and464gold. No coordinates/resources injected. Prepared probes cover all6jobs and an earned R02 training/shopping route; later formations use declared fixtures.",
+    "balance_limits": "The sampled first dungeon needed no curatives. Later low-level rare groups, full dungeon attrition and complete campaign balance still need broader human playtesting.",
+    "external_services": "Qodo CLI and installed Advisor launchers unavailable; no result from either claimed.",
+    "standalone": "HTML is self-contained; browser regression serves unchanged bytes with secondary requests blocked. Direct file navigation was not claimed.",
+    "mobile_supply_recheck": {
+      "passed": 1,
+      "failed": 0,
+      "unique_additional_checks": 0,
+      "elapsed_report": "19.2s",
+      "artifacts": "tests/depth-mobile-supply-artifacts",
+      "visual_review": "Scrolled390px preparation panel inspected: supply quantities, HP, poison condition, remaining charges and return guidance are readable."
+    }
+  },
+  "delivery": {
+    "active_game": "/workspace/active-game/The_Road_Beyond_the_Bells.html",
+    "demo": "/workspace/RPG2/demo/index.html",
+    "build": "/workspace/RPG2/dist/index.html",
+    "copies_identical": true,
+    "pushed_or_published": false
+  },
+  "last_verified_date": "2026-11-17"
+}

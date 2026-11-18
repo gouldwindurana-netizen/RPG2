@@ -1,0 +1,9 @@
+{
+  "status": "superseded_partial",
+  "html_sha256": "ff495a3acafea5b1334d28a715063978e0f736f54052a31e82813170ebd38b5c",
+  "passed": 11,
+  "interrupted": 1,
+  "did_not_run": 5,
+  "reason": "Root requested controlled interruption for confirmed visual grounding issue: lead hero and top small row stood above the backdrop floor line. Art fix required before final QA.",
+  "test_harness_followup": "Interrupted terrain test also exposed impossible overworld forest-step fixture; inspecting actual terrain availability before final rerun."
+}

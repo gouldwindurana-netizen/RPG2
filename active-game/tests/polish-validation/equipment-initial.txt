@@ -1,0 +1,53 @@
+
+Running 7 tests using 1 worker
+
+(node:31032) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/equipment-browser.spec.mjs:99:1 › Optimize all equips four purchased charms, including magic-defense-only upgrades (29.8s)
+  ✘  2 tests/equipment-browser.spec.mjs:113:1 › manual equipment uses owned copies across all five slots and preserves jobs and saves (59.5s)
+(node:31957) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  3 tests/equipment-browser.spec.mjs:155:1 › Optimize all fills all five slots for each compatible job without consuming extra copies (36.8s)
+  ✓  4 tests/equipment-browser.spec.mjs:172:1 › shop quantity controls buy 1, 5, 10 and Max, respect 99 cap, and restore one sold copy (23.5s)
+  ✓  5 tests/equipment-browser.spec.mjs:193:1 › focused one-copy stock fixture cannot equip or sell copies already worn (16.8s)
+  ✓  6 tests/equipment-browser.spec.mjs:216:1 › 390px mobile equipment menu and shop stay within viewport (15.6s)
+  ✓  7 tests/equipment-browser.spec.mjs:236:1 › standalone HTML boots and starts a playable game with network access blocked (5.5s)
+
+
+  1) tests/equipment-browser.spec.mjs:113:1 › manual equipment uses owned copies across all five slots and preserves jobs and saves 
+
+    Test timeout of 45000ms exceeded.
+
+    Error: locator.click: Test timeout of 45000ms exceeded.
+    Call log:
+      - waiting for locator('[data-eq-slot="mantle"]')
+        - locator resolved to <button class="eq-slot" data-eq-slot="mantle">…</button>
+
+
+      75 | async function equip(page, hero, slot, item) {
+      76 |   await page.locator(`[data-pack-hero="${hero}"]`).click();
+    > 77 |   await page.locator(`[data-eq-slot="${slot}"]`).click();
+         |                                                  ^
+      78 |   await expect(page.locator(`[data-equip="${item}"]`)).toBeEnabled();
+      79 |   await page.locator(`[data-equip="${item}"]`).click();
+      80 |   expect((await snapshot(page)).heroes.find(h => h.id === hero).equipment[slot]).toBe(item);
+        at equip (/workspace/active-game/tests/equipment-browser.spec.mjs:77:50)
+        at /workspace/active-game/tests/equipment-browser.spec.mjs:119:31
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/polish-equipment-artifacts/equipment-browser-manual-e-8c44d-nd-preserves-jobs-and-saves/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: tests/polish-equipment-artifacts/equipment-browser-manual-e-8c44d-nd-preserves-jobs-and-saves/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/polish-equipment-artifacts/equipment-browser-manual-e-8c44d-nd-preserves-jobs-and-saves/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/polish-equipment-artifacts/equipment-browser-manual-e-8c44d-nd-preserves-jobs-and-saves/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/equipment-browser.spec.mjs:113:1 › manual equipment uses owned copies across all five slots and preserves jobs and saves 
+  6 passed (3.5m)

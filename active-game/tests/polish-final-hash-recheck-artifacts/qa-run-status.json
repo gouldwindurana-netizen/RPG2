@@ -1,0 +1,17 @@
+{
+  "date": "2026-11-17",
+  "status": "passed",
+  "unique_checks": 2,
+  "passed": 2,
+  "failed": 0,
+  "game_sha256": "7ea381bba54c2d5feb260ed2f0a3dd1034d9287d9da85a4ccf305c53bf778895",
+  "command": "/workspace/RPG2/node_modules/.bin/playwright test -c tests/polish-playwright.config.mjs -g 'creator Hard|purchased Lumen' --output=tests/polish-final-hash-recheck-artifacts",
+  "scope": [
+    "390px creator Hard choice and Gear difficulty cycle toHell preserved throughreload; no horizontaloverflow",
+    "Lumen bought at actualMagicShop, cast in actualbattle, practiceincrement1, victorythenreload preserveslearningandpractice"
+  ],
+  "page_errors": [],
+  "visual_review": "390px Geardifficulty and desktop Lumenpractice screenshots inspected; text and controls readable within bounds.",
+  "relationship": "These2checks repeat scenarios from the8-check4def76c run after the final unrelated high-mastery revivalHPclamp. Do not count them as2additional unique checks.",
+  "limits": "Not a fullcampaignplaythrough."
+}

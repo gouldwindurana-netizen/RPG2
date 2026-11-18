@@ -1,0 +1,8 @@
+
+Running 1 test using 1 worker
+
+(node:10095) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/journey-browser.spec.mjs:257:1 › 390px tracking and tactics fit without covering combat with the exploration goal (7.5s)
+
+  1 passed (8.9s)

@@ -1,0 +1,25 @@
+{
+  "status": "passed",
+  "html_sha256": "57484856a698facf70e6ef98bf41731588f6f89658af88a3365c19c61f7cc2bb",
+  "html_bytes": 1585608,
+  "suite": "depth-browser.spec.mjs",
+  "passed": 17,
+  "failed": 0,
+  "elapsed_report": "4.5m",
+  "visual_review": [
+    "1/3/8enemy playfields: actors grounded, separated sprites/labels/bars",
+    "Mixed8 full page: readable large+small layout",
+    "Actual marsh exterior: distinct horizon/foreground",
+    "Desktop Heart floor8 local map: marked stairs, shortcut, routes readable",
+    "390px nine-enemy battle: unobstructed, controls hidden through result and restored",
+    "390px local map: readable labels and no horizontal overflow"
+  ],
+  "coverage_limits": "Later floors and formations use labeled save fixtures and real input, not a full campaign playthrough. Existing saved-resource regression is also covered by separate core tests.",
+  "final_regressions": {
+    "equipment_passed": 7,
+    "travel_passed": 9,
+    "mobile_supply_recheck_passed": 1,
+    "unique_total_with_depth": 33,
+    "final_html_sha256": "57484856a698facf70e6ef98bf41731588f6f89658af88a3365c19c61f7cc2bb"
+  }
+}

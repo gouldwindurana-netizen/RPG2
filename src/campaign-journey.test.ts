@@ -28,7 +28,9 @@ test('a fresh party walks all six regions and completes the campaign using earne
   function walkToEntity(id:string) {
     assert.equal(engine.state.mode,'explore',`walk to ${id}`);
     assert.equal(engine.state.message,null,`no dialogue blocks ${id}`);
-    const map=engine.map(), entity=map.entities.find(e=>e.id===id);
+    let map=engine.map(), entity=map.entities.find(e=>e.id===id);
+    if(!entity&&map.parent){const parent=map.parent;exit(`leave-${parent}-${map.service}`,parent);return walkToEntity(id);}
+    if(!entity&&(id.startsWith('shop-')||id.startsWith('inn-'))){const parent=engine.state.area,service=id.startsWith('shop-')?'shop':'inn';exit(`door-${parent}-${service}`,`${parent}-${service}` as Area);return walkToEntity(id);}
     assert.ok(entity,`${engine.state.area}/${id} exists`);
     const dirs:[Direction,number,number][]=[['right',1,0],['left',-1,0],['down',0,1],['up',0,-1]];
     const start=engine.state.player;
@@ -42,7 +44,7 @@ test('a fresh party walks all six regions and completes the campaign using earne
       if(Math.abs(node.x-entity.x)+Math.abs(node.y-entity.y)<=1){path=node.path;break;}
       for(const [direction,dx,dy]of dirs){
         const x=node.x+dx,y=node.y+dy;
-        if(!'gdsfb'.includes(map.tiles[y]?.[x]??'!')||map.entities.some(e=>e.x===x&&e.y===y&&e.kind!=='exit'))continue;
+        if(!'gdsfb'.includes(map.tiles[y]?.[x]??'!')||map.entities.some(e=>e.x===x&&e.y===y))continue;
         queue.push({x,y,path:[...node.path,direction]});
       }
     }
@@ -67,7 +69,7 @@ test('a fresh party walks all six regions and completes the campaign using earne
   }
   function rest(id:string) {
     walkToEntity(id);engine.interact(id);
-    assert.ok(engine.state.message,`${id} provides an actual recovery conversation`);dismissAll();
+    assert.ok(engine.state.message,`${id} provides an actual recovery conversation`);if(engine.state.message?.speaker==='Innkeeper')engine.rest();dismissAll();
     assert.ok(engine.state.heroes.every(h=>h.hp===h.maxHp&&h.status===null),'ordinary lodging restores the party');
     assert.ok(engine.state.heroes.every(h=>h.charges.every((n,i)=>n===h.maxCharges[i])),'lodging restores all charge tiers');
   }
@@ -75,7 +77,7 @@ test('a fresh party walks all six regions and completes the campaign using earne
     for(const id of engine.state.setAcquired)engine.equip('Mara',id);
   }
   function shopUpgrades() {
-    const region=Number(engine.state.area==='camp'?1:engine.state.area==='dunmere'?2:engine.state.area==='fen'?3:engine.state.area==='orchard'?4:engine.state.area==='crown'?5:6);
+    const region=Number(engine.map().regionId!.slice(1));
     const offers=shopOffers(engine.state);
     assert.ok(offers.length,'regional service exposes supplies and equipment');
     // Buy each current-region weapon/body as the normal battle budget permits.
@@ -160,7 +162,7 @@ test('a fresh party walks all six regions and completes the campaign using earne
   function gateBlocked(id:string) { const before={area:engine.state.area,x:engine.state.player.x,y:engine.state.player.y};interact(id);assert.ok(engine.state.message,`${id} explains its closed gate`);assert.equal(engine.state.area,before.area);dismissAll(); }
 
   // Opening: all six authored fights, real walking back for each free recovery.
-  gateBlocked('world-camp');speak('bessa');speak('lantern');
+  exit('world-camp','overworld');gateBlocked('road-dunmere');exit('enter-camp','camp');speak('bessa');speak('lantern');
   for(let i=1;i<=6;i++){
     exit('toWorks','works');
     if(i===1)claimCache('chest');

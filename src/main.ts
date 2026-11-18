@@ -1,14 +1,16 @@
 import './style.css';
 import './new-game.css';
 import './classic-ui.css';
-import { createEngine, getItem, ITEMS, SPELLS, canCast, isEquipmentAllowed, shopOffers } from './engine';
+import './exploration-ui.css';
+import { createEngine, getItem, ITEMS, SPELLS, canCast, isEquipmentAllowed, restPrice } from './engine';
 import { DEFAULT_PROFILE, getIntroSteps, normalizeProfile, jobFor } from './characters';
 import { portraitSvg, companionPortraitSvg } from './appearance';
 import { titleScreen, creatorScreen, type CreationStep } from './new-game';
 import { GameRenderer } from './renderer';
 import type { CharacterProfile, Direction, HeroId, PlannedAction, Spell } from './contracts';
-import { AREA_INFO, getObjective, isSafeLocation, QUEST_TITLES, regionAt } from './campaign';
-import { journal, magicMenu, mainMenu, setDescription, statusMenu, worldMap } from './menus';
+import { AREA_INFO, getObjective, isSafeLocation, locationKind, QUEST_TITLES, regionAt } from './campaign';
+import { areaMap, journal, magicMenu, mainMenu, mapTabs, setDescription, shopMenu, statusMenu, worldMap, type ShopFilter } from './menus';
+import world from '../data/world.json';
 
 const bell = '<svg viewBox="0 0 32 36" fill="none" aria-hidden="true"><path d="M9 25V13a7 7 0 0 1 14 0v12l4 4H5l4-4Z" stroke="currentColor" stroke-width="2"/><path d="M13 32h6M16 2v3M16 11v9" stroke="currentColor" stroke-width="2"/></svg>';
 const app = document.querySelector<HTMLDivElement>('#app')!;
@@ -16,13 +18,13 @@ app.innerHTML = `
   <header class="masthead">
     <a class="wordmark" href="#" aria-label="The Road Beyond the Bells">${bell}<span><small>THE ROAD</small>BEYOND THE BELLS</span></a>
     <div class="edition"><span class="status-dot"></span> AVEL <span class="edition-divider">/</span> A PARTY RPG</div>
-    <nav class="tools" aria-label="Game menus"><button data-panel="menu" class="main-menu-button">Menu</button><button data-panel="worldmap" title="World map (M)">Map</button><button data-panel="guide" title="Field journal">Journal</button><button data-panel="inventory" title="Items and equipment" id="pack-button">Items <span id="pack-count"></span></button><button id="battle-speed" class="speed-control" title="Battle speed">1× speed</button><button id="sound-button" aria-label="Enable sound" title="Enable sound">Sound off</button><button data-panel="help" class="help-button" aria-label="Controls and settings">?</button></nav>
+    <nav class="tools" aria-label="Game menus"><button data-panel="menu" class="main-menu-button">Menu</button><button data-panel="localmap" title="Area map (M)">Map</button><button data-panel="guide" title="Field journal">Journal</button><button data-panel="inventory" title="Items and equipment" id="pack-button">Items <span id="pack-count"></span></button><button id="battle-speed" class="speed-control" title="Battle speed">1× speed</button><button id="sound-button" aria-label="Enable sound" title="Enable sound">Sound off</button><button data-panel="help" class="help-button" aria-label="Controls and settings">?</button></nav>
   </header>
   <main class="game-shell">
     <div class="chapter-heading"><div><span class="eyebrow" id="quest-label">THE SILENT WATCH</span><h1 id="chapter-title">A bell without a voice.</h1></div><div class="journey-status"><span id="level-label">LEVEL 1</span><span class="gold-symbol">◇</span><strong id="gold-label">0</strong><span class="muted">gold</span></div></div>
     <div class="play-layout">
       <section class="stage-wrap" aria-label="Game world">
-        <div class="scene-topline"><span class="location-pin">⌁</span><span id="location-name">Reedbank</span><span id="scene-state">THE LAST LIGHT OF DAY</span></div>
+        <div class="scene-topline"><span class="location-pin">⌁</span><span id="location-name">Reedbank</span><span id="scene-state">THE LAST LIGHT OF DAY</span><span id="field-gold" class="field-gold"></span></div>
         <div class="canvas-shell"><div id="game-world" aria-label="Pixel art world. Move with arrow keys or WASD. Click a destination to walk." role="application" tabindex="0"></div><div id="world-tip" class="world-tip"></div><div class="touch-pad" aria-label="Movement"><button data-move="up" aria-label="Move up">↑</button><div><button data-move="left" aria-label="Move left">←</button><button data-move="down" aria-label="Move down">↓</button><button data-move="right" aria-label="Move right">→</button></div></div></div>
         <div class="stage-foot"><span><i class="legend-dot player-dot"></i> YOUR PARTY</span><span><i class="legend-dot amber-dot"></i> INTERACTION</span><span class="stage-foot-right">CLICK TO WALK <b>·</b> <kbd>E</kbd> INTERACT</span></div>
       </section>
@@ -36,8 +38,10 @@ const engine = createEngine({ roundDelay: 270 });
 const $ = (id: string) => document.getElementById(id)!;
 const esc = (value: unknown) => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!));
 let selected: HeroId = 'Mara';
-let panel: 'menu' | 'worldmap' | 'status' | 'magic' | 'inventory' | 'guide' | 'help' | 'restart' | null = null;
+let panel: 'menu' | 'localmap' | 'worldmap' | 'status' | 'magic' | 'inventory' | 'guide' | 'help' | 'restart' | null = null;
 let fieldSpell: string | null = null;
+let shopFilter: ShopFilter = 'all';
+let previousShopArea = '';
 let menu: 'commands' | 'spells' | 'items' = 'commands';
 let pending: { type: 'attack' | 'spell' | 'item'; spell?: Spell; itemId?: string; ally: boolean } | null = null;
 let sound = false;
@@ -146,7 +150,7 @@ function renderActions() {
     const [title, text] = objective();
     const near = engine.map().entities.filter(e => Math.abs(e.x - s.player.x) + Math.abs(e.y - s.player.y) <= 1);
     const target = near.find(e => e.kind !== 'campfire') ?? near[0];
-    $('action-panel').innerHTML = `<div class="exploration-panel"><div class="quest-emblem">${bell}</div><div class="objective"><span class="eyebrow">${s.flags.completed ? 'EXPEDITION COMPLETE' : 'YOUR OBJECTIVE'}</span><h2>${title}</h2><p>${text}</p></div><div class="exploration-buttons"><button class="primary" data-command="interact" data-testid="interact">${target ? esc(target.hint || target.name) : 'Look around'} <kbd>E</kbd></button><button class="subtle-button" data-command="rest" ${!isSafeLocation(s.area,s.player.x,s.player.y)||s.mode!=='explore' ? 'disabled' : ''}>${s.area==='camp'?'Rest at campfire':`Rest · ${Math.min(120,Number(regionAt(s.area,s.player.x,s.player.y).slice(1))*10)} gold`}</button><small>${s.campaign.wildBattles} road encounters <b>·</b> ${s.steps} steps</small></div></div>`;
+    $('action-panel').innerHTML = `<div class="travel-actions"><div class="travel-objective"><span class="eyebrow">${s.flags.completed?'THE ROAD AHEAD':locationKind(s.area).toUpperCase()}</span><strong>${esc(title)}</strong><p>${esc(text)}</p></div><div class="travel-buttons"><button class="primary" data-command="interact" data-testid="interact">${target ? esc(target.hint || target.name) : 'Look around'} <kbd>E</kbd></button><button class="subtle-button" data-panel="localmap">Area map <kbd>M</kbd></button></div></div>`;
   }
 }
 
@@ -159,7 +163,11 @@ function renderModal() {
   let html = '', key = '';
   if (s.message) {
     key = 'message:' + s.message.text;
-    html = modal(esc(s.message.speaker), 'A VOICE ON THE ROAD', `<p class="dialogue-text">${esc(s.message.text)}</p>${s.message.speaker==='Quartermaster' ? `<div class="shop-list"><h3>Supplies · ${s.gold} gold available</h3>${shopOffers(s).map(item=>`<div class="inventory-row"><span><strong>${esc(getItem(item.itemId)?.name??item.itemId)}</strong><small>${item.price} gold · carrying ${s.inventory[item.itemId]??0}/99</small></span><button class="small-button" data-buy="${item.itemId}" ${s.gold<item.price||(s.inventory[item.itemId]??0)>=99?'disabled':''}>Buy</button></div>`).join('')}</div>` : ''}`, '<button class="primary" data-command="dismiss" autofocus>Continue <span>↵</span></button>', 'dialogue-modal');
+    const isShop=s.message.speaker==='Quartermaster', isInn=s.message.speaker==='Innkeeper';
+    if(isShop&&previousShopArea!==s.area){previousShopArea=s.area;shopFilter='all';}
+    const content=isShop?shopMenu(s,selected,shopFilter):`<p class="dialogue-text">${esc(s.message.text)}</p>${isInn?`<div class="inn-services"><span>✧</span><p>Restore every traveler’s HP, spell charges, and conditions.<br><strong>${restPrice(s)===0?'Free shelter':`${restPrice(s)} gold for the party`}</strong></p></div>`:''}`;
+    const footer=isInn?`<button class="subtle-button" data-command="dismiss">Not now</button><button class="primary" data-command="rest" ${s.gold<restPrice(s)?'disabled':''}>${restPrice(s)===0?'Stay the night':`Rest · ${restPrice(s)} gold`}</button>`:`<button class="primary" data-command="dismiss" autofocus>${isShop?'Finish shopping':'Continue'} <span>↵</span></button>`;
+    html=modal(esc(isShop?'Outfitters':s.message.speaker),isShop?'EQUIPMENT & SUPPLIES':isInn?'A SAFE PLACE TO REST':'A VOICE ON THE ROAD',content,footer,isShop?'shop-modal':'dialogue-modal');
   } else if (s.reward) {
     key = 'reward:' + s.reward.title + s.reward.choices.join();
     html = modal(esc(s.reward.title), s.reward.source==='normal'?'VICTORY':'SOMETHING WORTH CARRYING', `<div class="reward-mark">✦</div><div class="reward-lines">${s.reward.lines.map(l=>`<p>${esc(l)}</p>`).join('')}</div>${s.reward.choices.length ? `<p class="muted">Choose an unowned regional set piece. Equip it from Items / Equipment.</p><div class="reward-choices">${s.reward.choices.map(id=>`<button data-claim="${esc(id)}"><span class="item-symbol">◇</span><strong>${esc(getItem(id)?.name ?? id)}</strong><small>${esc(Object.entries(getItem(id)?.stats ?? {}).map(([k,v])=>`+${v} ${k}`).join(' · '))}</small></button>`).join('')}</div>` : ''}`, s.reward.choices.length ? '' : '<button class="primary" data-command="continue">Continue the journey →</button>');
@@ -175,8 +183,10 @@ function renderModal() {
     html = modal('What we carry', 'SHARED PACK · EQUIPMENT & SUPPLIES', `<div class="hero-tabs">${s.heroes.map(h=>`<button class="${selected===h.id?'active':''}" data-pack-hero="${h.id}">${portrait(h.id,24)}${esc(h.name)}</button>`).join('')}</div><div class="loadout"><strong>${esc(heroName(selected))}</strong><span>ATK ${hero.attack} · DEF ${hero.defense} · MAGIC ${hero.magic}</span><small>${esc(jobFor(hero.job).trait)}</small><small>${esc(setDescription(s,selected))}</small></div><div class="pack-grid"><section><h3>Equipment</h3>${equipment.map(item=>{const worn=hero.equipment[item.slot!]==item.id;const other=s.heroes.find(h=>h.id!==selected&&Object.values(h.equipment).includes(item.id));return `<div class="inventory-row"><span><strong>${esc(item.name)}</strong><small>${esc(item.slot)} · ${esc(Object.entries(item.stats??{}).map(([k,v])=>`+${v} ${k}`).join(' · '))}${other&&item.set_id?` · worn by ${esc(other.name)}`:''}</small></span><button class="small-button" data-equip="${esc(item.id)}" ${worn?'disabled':''}>${worn?'Worn':'Equip'}</button></div>`}).join('')}</section><section><h3>Supplies</h3>${Object.entries(s.inventory).filter(([id,n])=>n>0&&getItem(id)?.kind==='consumable').map(([id,n])=>`<div class="inventory-row"><span><strong>${esc(getItem(id)?.name??id)} <i>×${n}</i></strong><small>${esc(getItem(id)?.effect??'')}</small></span>${usable.includes(id)?`<button class="small-button" data-use="${esc(id)}">Use</button>`:''}</div>`).join('') || '<p class="muted">The pack is empty.</p>'}</section></div><p class="pack-hint">Equipment is shared. Unique set pieces can be worn by only one traveler. Supplies are used on the selected traveler.</p>`);
   } else if (panel === 'menu') {
     key='menu';html=modal('Party', 'THE ROAD BEYOND THE BELLS', mainMenu(s,(id,size)=>portrait(id,size)), '', 'party-menu-modal');
+  } else if (panel === 'localmap') {
+    key='localmap';html=modal(AREA_INFO[s.area].name, 'AREA MAP', areaMap(s,engine.map()), '', 'atlas-modal');
   } else if (panel === 'worldmap') {
-    key='worldmap';html=modal('The Roads of Avel', 'WORLD MAP', worldMap(s), '', 'atlas-modal');
+    key='worldmap';html=modal('The Roads of Avel', 'WORLD MAP', mapTabs('worldmap')+worldMap(s), '', 'atlas-modal');
   } else if (panel === 'status') {
     key='status:'+selected;html=modal('Status', 'TRAVELERS', statusMenu(s,selected,(id,size)=>portrait(id,size)));
   } else if (panel === 'magic') {
@@ -184,7 +194,7 @@ function renderModal() {
   } else if (panel === 'guide') {
     key='guide';html=modal('Notes from the road', 'FIELD JOURNAL', journal(s));
   } else if (panel === 'help') {
-    key = 'help'; html = modal('A few things for the road', 'CONTROLS & SETTINGS', `<div class="game-settings"><section><h3>Battle speed</h3><div class="segmented">${([1,2,3] as const).map(speed=>`<button data-speed="${speed}" aria-pressed="${s.settings.battleSpeed===speed}" class="${s.settings.battleSpeed===speed?'chosen':''}">${speed}×</button>`).join('')}</div><p>Faster action playback. Planning always waits for you.</p></section><section><h3>Encounters</h3><div class="segmented">${(['classic','visible','off'] as const).map(mode=>`<button data-encounters="${mode}" ${s.mode==='battle'?'disabled':''} aria-pressed="${s.settings.encounters===mode}" class="${s.settings.encounters===mode?'chosen':''}">${mode==='classic'?'Walking':mode==='visible'?'Visible':'Off'}</button>`).join('')}</div><p>Walking triggers regional battles on roads and in dungeons. Towns are safe. Visible shows patrols. Off leaves bosses and hunts available.</p></section></div><div class="controls-list"><p><kbd>W A S D</kbd><span>or arrow keys to walk</span></p><p><kbd>E</kbd><span>or Space to interact with something nearby</span></p><p><kbd>SHIFT</kbd><span>hold while walking to run</span></p><p><kbd>CLICK</kbd><span>a destination to walk; a person or creature to approach</span></p><p><kbd>ARROWS</kbd><span>move between battle commands; Enter selects</span></p><p><kbd>M</kbd><span>open the world map on the road</span></p><p><kbd>ESC</kbd><span>open the party menu, or go back</span></p></div><p>On touch screens, use the direction pad or tap the map. During battles, select a traveler, choose an action and target, then resolve the round.</p><p>The game saves stable progress on this device. An interrupted battle resumes from the last exploration checkpoint. Your browser may restrict saving in a downloaded file; the game remains playable.</p><p class="muted">Original procedural pixel art. Reduced-motion preferences are respected. No external assets or account required.</p><div class="menu-return"><button class="subtle-button" data-front="title">Return to title</button><button class="danger-button" data-panel="restart">Create a new hero</button></div>`);
+    key = 'help'; html = modal('A few things for the road', 'CONTROLS & SETTINGS', `<div class="game-settings"><section><h3>Battle speed</h3><div class="segmented">${([1,2,3] as const).map(speed=>`<button data-speed="${speed}" aria-pressed="${s.settings.battleSpeed===speed}" class="${s.settings.battleSpeed===speed?'chosen':''}">${speed}×</button>`).join('')}</div><p>Faster action playback. Planning always waits for you.</p></section><section><h3>Encounters</h3><div class="segmented">${(['classic','visible','off'] as const).map(mode=>`<button data-encounters="${mode}" ${s.mode==='battle'?'disabled':''} aria-pressed="${s.settings.encounters===mode}" class="${s.settings.encounters===mode?'chosen':''}">${mode==='classic'?'Walking':mode==='visible'?'Visible':'Off'}</button>`).join('')}</div><p>Walking triggers regional battles on roads and in dungeons. Towns are safe. Visible shows patrols. Off leaves bosses and hunts available.</p></section></div><div class="controls-list"><p><kbd>W A S D</kbd><span>or arrow keys to walk</span></p><p><kbd>E</kbd><span>or Space to speak, inspect, or use a service</span></p><p><kbd>SHIFT</kbd><span>hold while walking to run</span></p><p><kbd>CLICK</kbd><span>a destination to walk; a person or creature to approach</span></p><p><kbd>ARROWS</kbd><span>move between battle commands; Enter selects</span></p><p><kbd>M</kbd><span>open the area map (the world map is one tab away)</span></p><p><kbd>ESC</kbd><span>open the party menu, or go back</span></p></div><p>Walk onto towns, doorways, and road exits to travel. Shops and inns have marked entrances. On touch screens, use the direction pad or tap a destination. During battles, select a traveler, choose an action and target, then resolve the round.</p><p>The game saves stable progress on this device. An interrupted battle resumes from the last exploration checkpoint. Your browser may restrict saving in a downloaded file; the game remains playable.</p><p class="muted">Original procedural pixel art. Reduced-motion preferences are respected. No external assets or account required.</p><div class="menu-return"><button class="subtle-button" data-front="title">Return to title</button><button class="danger-button" data-panel="restart">Create a new hero</button></div>`);
   } else if (panel === 'restart') {
     key = 'restart'; html = modal('Begin again?', 'NEW EXPEDITION', '<p>Create a new lead hero? Your current journey remains available until you confirm Begin the journey on the final creation screen.</p>', '<button class="subtle-button" data-panel="help">Keep playing</button><button class="danger-button" data-command="restart">Create a hero →</button>');
   }
@@ -192,11 +202,11 @@ function renderModal() {
   const active=document.activeElement instanceof HTMLButtonElement&&root.contains(document.activeElement)?document.activeElement:null;
   const activeData=active?Object.entries(active.dataset):[];
   root.innerHTML = html;
-  if(key===modalKey&&activeData.length){const replacement=Array.from(root.querySelectorAll<HTMLButtonElement>('button')).find(button=>!button.disabled&&activeData.every(([name,value])=>button.dataset[name]===value));requestAnimationFrame(()=>replacement?.focus({preventScroll:true}));}
+  if(key===modalKey&&activeData.length){const replacement=Array.from(root.querySelectorAll<HTMLButtonElement>('button')).find(button=>!button.disabled&&activeData.every(([name,value])=>button.dataset[name]===value));requestAnimationFrame(()=>(replacement??root.querySelector<HTMLElement>('[autofocus],button:not([disabled])'))?.focus({preventScroll:true}));}
   const blocked=!!html;document.querySelector<HTMLElement>('.game-shell')!.inert=blocked;document.querySelector<HTMLElement>('.masthead')!.inert=blocked;
   if (key !== modalKey) {
     modalKey = key;
-    if (html) requestAnimationFrame(()=>root.querySelector<HTMLElement>('button:not([disabled]), [tabindex="-1"]')?.focus({preventScroll:true}));
+    if (html) requestAnimationFrame(()=>(root.querySelector<HTMLElement>('.classic-menu-options button:not([disabled])')??root.querySelector<HTMLElement>('[autofocus]')??root.querySelector<HTMLElement>('button:not([disabled]), [tabindex="-1"]'))?.focus({preventScroll:true}));
     else returnFocus?.focus({preventScroll:true});
   }
 }
@@ -215,16 +225,19 @@ function render() {
   if(newPlanning){selected=s.heroes.find(h=>h.hp>0&&h.status!=='sleep')?.id??'Mara';pending=null;menu='commands';}
   previousBattlePhase=s.mode==='battle'?s.battle?.phase:undefined;
   document.body.classList.toggle('in-battle',s.mode==='battle');
+  document.body.classList.toggle('field-view',!s.battle);
   $('battle-speed').textContent=`${s.settings.battleSpeed}× speed`;
   if (previousMode !== s.mode) { menu = 'commands'; pending = null; if(s.mode==='battle') { panel=null;selected=s.heroes.find(h=>h.hp>0)?.id??'Mara';chime([196,246.94]); } if(s.mode==='victory')chime([293.66,369.99,440]); previousMode=s.mode; }
   $('level-label').textContent = `LEVEL ${s.heroes[0].level}`;
   $('gold-label').textContent = String(s.gold);
   $('pack-count').textContent = String(s.inventory.POTION??0);
   const region=regionAt(s.area,s.player.x,s.player.y);
+  const regionBand=world.regions.find(r=>r.id===region)!;
   $('location-name').textContent=AREA_INFO[s.area].name;
+  $('field-gold').textContent=`${s.gold.toLocaleString()} G`;
   $('quest-label').textContent=`QUEST ${Math.min(s.campaign.stage+1,10)} / 10 · ${isSafeLocation(s.area,s.player.x,s.player.y)?'SAFE SHELTER':region}`;
   $('chapter-title').textContent=QUEST_TITLES[Math.min(s.campaign.stage,10)];
-  $('scene-state').textContent = s.mode==='battle'?'ENCOUNTER · '+(s.battle?.kind==='boss'?'BOSS':'ROUND '+s.battle?.round):isSafeLocation(s.area,s.player.x,s.player.y)?'SAFE · NO ENCOUNTERS':`REGION ${region.slice(1)} · EXPLORE AVEL`;
+  $('scene-state').textContent = s.mode==='battle'?'ENCOUNTER · '+(s.battle?.kind==='boss'?'BOSS':'ROUND '+s.battle?.round):isSafeLocation(s.area,s.player.x,s.player.y)?'SAFE · NO ENCOUNTERS':`${locationKind(s.area)==='world'?'OVERWORLD':locationKind(s.area)==='town'?'OUTSKIRTS':'DUNGEON'} · LV ${locationKind(s.area)==='world'?`${regionBand.level_min}–${regionBand.level_max}`:AREA_INFO[s.area].recommended.join('–')}`;
   $('world-tip').textContent = s.mode==='battle' ? '' : objective()[0];
   $('world-tip').hidden = true; // The canvas owns the contextual interaction hint.
   if (['intro','explore','victory','ending'].includes(s.mode)) persistenceAvailable = engine.save();
@@ -245,7 +258,7 @@ function commit(action: PlannedAction) {
 async function command(action: string) {
   switch(action) {
     case 'dismiss': engine.dismiss(); break;
-    case 'interact': engine.interact(); break;
+    case 'interact': if(!renderer?.viewport().transitioning)engine.interact(); break;
     case 'rest': engine.rest(); chime(); break;
     case 'continue': engine.continue(); break;
     case 'back': pending=null;menu='commands';render();focusBattleCommand();break;
@@ -286,8 +299,9 @@ document.addEventListener('click', async event => {
     if(button.id==='battle-speed'){engine.configure({battleSpeed:(engine.state.settings.battleSpeed%3+1) as 1|2|3});return;}
     if(button.dataset.panel) { setPanel(button.dataset.panel as typeof panel);return; }
     if(button.hasAttribute('data-close')) { panel=null;renderModal();return; }
-    if(button.dataset.move) { if(!frontView&&engine.state.mode==='explore'&&!$('modal-root').firstElementChild)engine.move(button.dataset.move as Direction);return; }
+    if(button.dataset.move) { if(!frontView&&engine.state.mode==='explore'&&!$('modal-root').firstElementChild&&!renderer?.viewport().transitioning)engine.move(button.dataset.move as Direction);return; }
     if(button.dataset.hero) { selected=button.dataset.hero as HeroId;if(engine.state.mode==='battle'){pending=null;menu='commands';render();focusBattleCommand();}else setPanel('inventory');return; }
+    if(button.dataset.shopFilter){shopFilter=button.dataset.shopFilter as ShopFilter;renderModal();return;}
     if(button.dataset.packHero) { selected=button.dataset.packHero as HeroId;fieldSpell=null;renderModal();return; }
     if(button.dataset.statusHero) {selected=button.dataset.statusHero as HeroId;setPanel('status');return;}
     if(button.hasAttribute('data-field-back')){fieldSpell=null;renderModal();return;}
@@ -342,7 +356,7 @@ document.addEventListener('keydown', event => {
 
   if(event.key==='Escape'&&frontView==='creator'){frontView='title';renderFront();event.preventDefault();return;}
   if(event.key==='Escape'&&panel&&!engine.state.message&&!engine.state.reward){if(fieldSpell){fieldSpell=null;renderModal();}else{setPanel(panel==='menu'?null:'menu');}event.preventDefault();return;}
-  if(!dialog&&!frontView&&engine.state.mode==='explore'&&(event.key==='Escape'||event.key.toLowerCase()==='m')){setPanel(event.key==='Escape'?'menu':'worldmap');event.preventDefault();return;}
+  if(!dialog&&!frontView&&engine.state.mode==='explore'&&(event.key==='Escape'||event.key.toLowerCase()==='m')){setPanel(event.key==='Escape'?'menu':'localmap');event.preventDefault();return;}
   if(dialog&&['ArrowUp','ArrowDown'].includes(event.key)&&!(document.activeElement instanceof HTMLInputElement)){const buttons=Array.from(dialog.querySelectorAll<HTMLButtonElement>('button:not([disabled])'));if(buttons.length){const index=buttons.indexOf(document.activeElement as HTMLButtonElement);buttons[(index+(event.key==='ArrowUp'?-1:1)+buttons.length)%buttons.length].focus({preventScroll:false});event.preventDefault();return;}}
   if(dialog&&event.key==='Tab'){
     const buttons=Array.from(dialog.querySelectorAll<HTMLElement>('button:not([disabled]), input:not([disabled]), [tabindex="0"]'));
@@ -360,6 +374,6 @@ renderer = new GameRenderer($('game-world'),()=>engine.state,()=>engine.map(),d=
 engine.subscribe(render);
 render();
 // Read-only snapshots support regression tests without providing cheat controls.
-Object.defineProperty(window,'__AVEL__',{value:{snapshot:()=>structuredClone(engine.state),viewport:()=>renderer?.viewport()},writable:false});
+Object.defineProperty(window,'__AVEL__',{value:{snapshot:()=>structuredClone(engine.state),viewport:()=>renderer?.viewport(),map:()=>structuredClone(engine.map())},writable:false});
 window.addEventListener('beforeunload',()=>engine.save());
 window.addEventListener('pagehide',()=>engine.save());

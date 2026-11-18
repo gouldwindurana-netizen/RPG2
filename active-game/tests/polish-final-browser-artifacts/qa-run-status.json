@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-17",
+  "status": "passed",
+  "unique_checks": 8,
+  "passed": 8,
+  "failed": 0,
+  "game_sha256": "4def76c92498b1cc6fd692ea3eeb8f2e87366b03dcd65784658ac9fbe9a64489",
+  "command": "/workspace/RPG2/node_modules/.bin/playwright test -c tests/polish-playwright.config.mjs --output=tests/polish-final-browser-artifacts",
+  "scope": [
+    "390px keyboard target navigation first/ninth enemy",
+    "Quick and Clear plan keyboard focus",
+    "390px learned spell keyboard scrolling",
+    "No-effect medicine disabled and resources preserved",
+    "Explicit Spark Tea tier and reload",
+    "Custom hero shop comparisons and MDEF status",
+    "Creator Hard and Gear Hell difficulty persistence",
+    "Lumen purchase, actual battle practice, victory and reload"
+  ],
+  "page_errors": [],
+  "visual_review": "Target/spell focus, field supplies, tea tier controls, shop stat tradeoffs, MDEF status, Gear difficulty, and Lumen practice screenshots inspected; no clipping found in these fixtures.",
+  "limits": "Fixtures isolate UI and saved-game behavior; this is not a complete campaign playthrough.",
+  "supersedes": "Initial polish browser run passed5 and failed1 due nonexistent item ID in test fixture; corrected QUEST_FIELD_SATCHEL recheck passed."
+}

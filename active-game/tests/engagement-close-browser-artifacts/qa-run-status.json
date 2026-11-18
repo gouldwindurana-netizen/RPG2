@@ -1,0 +1,11 @@
+{
+  "date": "2026-11-18",
+  "status": "passed",
+  "passed": 1,
+  "failed": 0,
+  "game_sha256": "b75e5b8b788b10ce0869ba07d2a78c0b8ebfcc91f0ef975d255d112f0ba2b0a6",
+  "scope": "390px full journal flow plus visible top board close button and actual dismissal",
+  "duration_seconds": 5.3,
+  "page_errors": [],
+  "visual_review": "Root inspected mobile board close button and camp-tale menu: readable, no horizontal clipping."
+}

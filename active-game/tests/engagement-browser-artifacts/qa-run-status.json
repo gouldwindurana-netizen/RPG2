@@ -1,0 +1,12 @@
+{
+  "date": "2026-11-17",
+  "game_sha256": "c44ab897a42ea5c4379569235b42c78b273ff5e6d89b7681115483f030758cad",
+  "page_errors": [],
+  "limits": "Position and progression fixtures isolate UI/save behavior; not a whole-campaign playthrough.",
+  "status": "five_passed_one_harness_failure",
+  "passed": 5,
+  "failed": 1,
+  "failure_reason": "Later-board fixture stood south of board equidistant from Orchard keeper; default E selected the older keeper. Corrected to unique north board approach, unchanged game passed in separate recheck.",
+  "command": "playwright test -c tests/engagement-playwright.config.mjs",
+  "visual_review": "Inspected town parchment board, real earned bestiary, 390px board and camp cards, custom hero dialogue; readable without horizontal clipping."
+}

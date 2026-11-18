@@ -1,0 +1,9 @@
+{
+  "date": "2026-11-17",
+  "status": "infrastructure-failed-before-game",
+  "checks_reaching_game": 0,
+  "attempted_checks": 2,
+  "reason": "Dev server on127.0.0.1:5173 stopped; page.goto ERR_CONNECTION_REFUSED. Secondary sessionStorage error was from Chromium error document.",
+  "recovery": "Restarted existing npm run dev; confirmed HTTP200 and exact finalHTMLhash. Rechecking same2cases in polish-final-hash-recheck-artifacts.",
+  "game_sha256": "7ea381bba54c2d5feb260ed2f0a3dd1034d9287d9da85a4ccf305c53bf778895"
+}

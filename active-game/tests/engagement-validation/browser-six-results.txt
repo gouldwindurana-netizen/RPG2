@@ -1,0 +1,13 @@
+
+Running 6 tests using 1 worker
+
+(node:41549) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/engagement-browser.spec.mjs:148:1 › a new hero walks to the notice board and accepts saved optional work without spending resources (12.3s)
+  ✓  2 tests/engagement-browser.spec.mjs:167:1 › a real victory advances accepted patrol work and records discovered enemy affinities (11.9s)
+  ✓  3 tests/engagement-browser.spec.mjs:189:1 › previously copied records earn exactly one board delivery and keep its reward after reload (13.7s)
+  ✓  4 tests/engagement-browser.spec.mjs:213:1 › 390px journal tabs and region goals fit while shelter conversations respect chapter gates (15.9s)
+  ✓  5 tests/engagement-browser.spec.mjs:231:1 › a shelter conversation uses the custom hero and saves heard history without healing or rewards (15.5s)
+  ✓  6 tests/engagement-browser.spec.mjs:251:1 › later boards keep story gates and claims stay unavailable in remote journal views (8.7s)
+
+  6 passed (1.3m)

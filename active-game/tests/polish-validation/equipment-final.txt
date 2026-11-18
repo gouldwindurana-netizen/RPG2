@@ -1,0 +1,8 @@
+
+Running 1 test using 1 worker
+
+(node:33153) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/equipment-browser.spec.mjs:113:1 › manual equipment uses owned copies across all five slots and preserves jobs and saves (34.7s)
+
+  1 passed (37.3s)

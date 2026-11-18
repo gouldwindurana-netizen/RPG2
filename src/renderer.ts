@@ -58,6 +58,10 @@ class WorldScene extends Phaser.Scene {
   private lastPlayer = '';
   private regionLabel!: Phaser.GameObjects.Text;
   private hintLabel!: Phaser.GameObjects.Text;
+  private arrivalLabel!: Phaser.GameObjects.Text;
+  private transitionUntil = 0;
+  private awaitMovementRelease = false;
+  private heldMovement = new Set<string>();
   private pathDots!: Phaser.GameObjects.Graphics;
   private atmosphere!: Phaser.GameObjects.Graphics;
   private spotlight!: Phaser.GameObjects.Graphics;
@@ -86,10 +90,12 @@ class WorldScene extends Phaser.Scene {
     this.followers = ['Tavin', 'Iona', 'Soren'].map((name, i) => this.add.image(0, 0, `hero-${name}`).setOrigin(.5, 1).setAlpha(.95).setDepth(75 - i));
     this.regionLabel = this.add.text(24, 20, '', { fontFamily: 'monospace', fontSize: '14px', color: '#eef2ec', backgroundColor: '#162d66ee', padding: { x: 12, y: 8 } }).setDepth(300).setScrollFactor(0);
     this.hintLabel = this.add.text(480, 546, '', { fontFamily: 'monospace', fontSize: '13px', color: '#f5efd2', backgroundColor: '#10295bea', padding: { x: 12, y: 7 }, align: 'center' }).setOrigin(.5, .5).setDepth(300).setScrollFactor(0);
+    this.arrivalLabel = this.add.text(480, 88, '', { fontFamily: 'monospace', fontSize: '21px', color: '#ffffff', backgroundColor: '#0b2059ee', padding: { x: 24, y: 13 }, align: 'center', lineSpacing: 8 }).setOrigin(.5, 0).setDepth(450).setScrollFactor(0).setAlpha(0);
     const keyboard = this.input.keyboard;
     if (keyboard) {
       this.keys = keyboard.addKeys('W,A,S,D,UP,DOWN,LEFT,RIGHT,E,SPACE,SHIFT', false) as Record<string, Phaser.Input.Keyboard.Key>;
       keyboard.on('keydown', (event: KeyboardEvent) => {
+        if (/^(w|a|s|d|arrowup|arrowdown|arrowleft|arrowright)$/i.test(event.key)) this.heldMovement.add(event.key.toLowerCase());
         if (this.inputBlocked()) return;
         if (document.activeElement?.matches('button') && (event.key === ' ' || event.key.toLowerCase() === 'e')) return;
         if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(event.key)) event.preventDefault();
@@ -97,8 +103,15 @@ class WorldScene extends Phaser.Scene {
           this.path = []; this.pathTarget = undefined; this.onInteract();
         }
       });
+      keyboard.on('keyup', (event: KeyboardEvent) => {
+        this.heldMovement.delete(event.key.toLowerCase());
+        if (!this.heldMovement.size) this.awaitMovementRelease = false;
+      });
     }
     this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => this.clickWorld(pointer));
+    this.game.events.on(Phaser.Core.Events.BLUR, () => {
+      this.heldMovement.clear(); this.awaitMovementRelease = false; this.input.keyboard?.resetKeys();
+    });
     this.game.canvas.tabIndex = 0;
     this.game.canvas.setAttribute('aria-label', 'Reedbank exploration map. Move with arrow keys or W A S D, interact with E, or click a location.');
     this.ready = true;
@@ -107,6 +120,7 @@ class WorldScene extends Phaser.Scene {
 
   private inputBlocked() {
     const state = this.readState();
+    if (this.time.now < this.transitionUntil || this.awaitMovementRelease) return true;
     if (state.mode !== 'explore' || state.message || state.reward) return true;
     const active = document.activeElement;
     if (active && active !== this.game.canvas && active.matches('input, textarea, select, [contenteditable="true"]')) return true;
@@ -123,7 +137,8 @@ class WorldScene extends Phaser.Scene {
   viewport() {
     const camera = this.cameras?.main;
     return { area: this.area, tile: this.tile, ox: this.ox, oy: this.oy, scrollX: camera?.scrollX || 0,
-      scrollY: camera?.scrollY || 0, zoom: camera?.zoom || 1, width: this.worldWidth, height: this.worldHeight };
+      scrollY: camera?.scrollY || 0, zoom: camera?.zoom || 1, width: this.worldWidth, height: this.worldHeight,
+      transitioning: (this.time?.now ?? 0) < this.transitionUntil || this.awaitMovementRelease };
   }
 
   refreshView() {
@@ -131,6 +146,7 @@ class WorldScene extends Phaser.Scene {
     const state = this.readState();
     const combat = Boolean(state.battle) && ['battle', 'victory', 'defeat'].includes(state.mode);
     const mode = combat ? 'battle' : 'explore';
+    const arrived = this.area !== '' && this.area !== state.area && !combat;
     if (mode !== this.visualMode || (!combat && state.area !== this.area)) {
       this.visualMode = mode; this.area = state.area;
       this.path = []; this.pathTarget = undefined; this.lastPlayer = ''; this.trail = [];
@@ -139,6 +155,7 @@ class WorldScene extends Phaser.Scene {
       this.sprites.clear(); this.labels.clear(); this.clearActors();
       this.scenery.forEach(image => image.destroy()); this.scenery = [];
       this.cueKey = ''; this.tweens.killAll();
+      if (combat) this.arrivalLabel.setAlpha(0);
       this.effects.forEach(effect => effect.destroy()); this.effects = [];
       this.flashes.forEach(effect => effect.destroy()); this.flashes = [];
       if (combat) {
@@ -159,12 +176,24 @@ class WorldScene extends Phaser.Scene {
     this.player.setTexture(ensureLeadArt(this, state.profile, state.player.facing === 'up' && !combat));
     this.followers.forEach((s, i) => s.setVisible(!combat && this.trail.length > i + 1));
     if (combat) this.refreshBattle(state); else this.refreshWorld(state);
+    if (arrived) this.showArrival(this.readMap());
+  }
+
+  private showArrival(map: GameMap) {
+    this.path = []; this.pathTarget = undefined;
+    this.transitionUntil = this.time.now + (this.reducedMotion ? 80 : 210);
+    this.awaitMovementRelease = this.heldMovement.size > 0;
+    this.input.keyboard?.resetKeys();
+    const detail = map.kind === 'interior' ? (map.service === 'inn' ? 'REST & RECOVER' : 'EQUIPMENT & SUPPLIES') : map.safe ? 'SAFE TOWN' : map.kind === 'world' ? 'THE ROADS ARE OPEN' : 'WATCH YOUR STEP';
+    this.arrivalLabel.setText(`${map.name ?? 'Avel'}\n${detail}`).setAlpha(1);
+    this.tweens.add({ targets: this.arrivalLabel, alpha: 0, delay: this.reducedMotion ? 650 : 850, duration: this.reducedMotion ? 0 : 260 });
+    if (!this.reducedMotion) this.cameras.main.fadeIn(190, 6, 14, 36);
   }
 
   private refreshWorld(state: GameState) {
     const intro = state.mode === 'intro' ? getIntroSteps(state.profile)[state.introStep] : undefined;
     const map = this.readMap();
-    this.regionLabel.setText(intro ? `PROLOGUE  /  ${intro.speaker}` : `${(map.name || state.area).toUpperCase()}${map.safe ? '  /  SANCTUARY' : state.area === 'overworld' ? '  /  THE SIX REACHES' : ''}`);
+    this.regionLabel.setText(intro ? `PROLOGUE  /  ${intro.speaker}` : `${(map.name || state.area).toUpperCase()}${map.service === 'inn' ? '  /  INN' : map.service === 'shop' ? '  /  SHOP' : map.safe ? '  /  SANCTUARY' : state.area === 'overworld' ? '  /  THE SIX REACHES' : ''}`);
     this.game.canvas.setAttribute('aria-label', `${map.name || state.area} exploration map. Move with arrow keys or W A S D, interact with E, hold Shift to walk quickly, or click a location.`);
     const present = new Set(map.entities.map(e => e.id));
     for (const [id, image] of this.sprites) if (!present.has(id)) {
@@ -175,6 +204,15 @@ class WorldScene extends Phaser.Scene {
       let sprite = this.sprites.get(entity.id);
       if (!sprite) {
         let texture = textureForEntity(`${entity.sprite} ${entity.name}${entity.kind === 'exit' && state.area === 'overworld' ? ` ${entity.destination || ''}` : ''}`, entity.kind);
+        if (map.kind === 'interior' && entity.kind === 'exit') texture = 'door';
+        if (state.area === 'overworld' && entity.kind === 'exit') {
+          if (entity.id.startsWith('ferry-')) texture = 'site-dock';
+          else if (entity.id.startsWith('pass-') || ['road-crown','road-orchard'].includes(entity.id)) texture = 'site-pass';
+          else if (entity.id.startsWith('gate-')) texture = 'site-gate';
+          else if (entity.id.startsWith('road-')) texture = 'site-bridge';
+          else if (['camp','dunmere','fen','orchard'].includes(entity.destination ?? '')) texture = 'site-town';
+        }
+        if (map.kind === 'town' && entity.kind === 'exit' && entity.id.startsWith('world-')) texture = 'site-gate';
         if (entity.name.startsWith('Ashen ') && this.textures.exists(`${texture}-ashen`)) texture += '-ashen';
         if (entity.name.startsWith('Crested ') && this.textures.exists(`${texture}-crested`)) texture += '-crested';
         sprite = this.add.image(p.x, p.y, texture).setOrigin(.5, 1);
@@ -186,9 +224,11 @@ class WorldScene extends Phaser.Scene {
         this.labels.set(entity.id, label);
       }
       const isBoss = entity.kind === 'boss';
-      const scale = isBoss ? .45 : entity.kind === 'enemy' || entity.kind === 'rare' ? .62 : entity.kind === 'exit' ? (state.area === 'overworld' ? .5 : .56) : .84;
+      const serviceDoor = entity.kind === 'exit' && entity.id.startsWith('door-');
+      const scale = isBoss ? .45 : entity.kind === 'enemy' || entity.kind === 'rare' ? .62 : serviceDoor ? .9 : entity.kind === 'exit' ? (state.area === 'overworld' ? .5 : map.kind === 'interior' ? .45 : .56) : .84;
       sprite.setPosition(p.x, p.y).setScale(scale).setDepth(50 + entity.y);
       this.labels.get(entity.id)?.setPosition(p.x, p.y - (isBoss ? 70 : 44));
+      this.labels.get(entity.id)?.setVisible(!(map.kind === 'interior' && entity.kind === 'exit') && (state.area !== 'overworld' || distance(entity, state.player) <= 7));
       if (entity.kind === 'campfire') sprite.setTexture(`fire-${Math.floor(this.time.now / 280) % 2}`);
     }
     const playerKey = `${state.player.x},${state.player.y}`;
@@ -230,7 +270,7 @@ class WorldScene extends Phaser.Scene {
       this.followers.forEach((follower,i)=>follower.setVisible(this.trail.length>i+1));
     }
     const nearest = map.entities.find(entity => distance(entity, state.player) <= 1);
-    this.hintLabel.setText(nearest ? `[E] ${nearest.hint || nearest.name}` : 'WASD / ARROWS · E interact · SHIFT quick walk · click to travel');
+    this.hintLabel.setText(nearest ? nearest.kind === 'exit' ? map.kind === 'interior' ? 'Walk through the south doorway to return outside' : `Walk onto the entrance · ${nearest.name}` : `[E] ${nearest.hint || nearest.name}` : map.kind === 'interior' ? 'E talk · Walk through the south doorway to leave' : 'WASD / ARROWS · E talk · SHIFT run · click to walk');
     this.hintLabel.setVisible(state.mode==='explore' && !state.message && !state.reward);
     this.pathDots.clear();
     this.pathDots.fillStyle(0xd6bd7c, .35);
@@ -342,11 +382,12 @@ class WorldScene extends Phaser.Scene {
     const target = { x: Math.floor((pointer.worldX - this.ox) / this.tile), y: Math.floor((pointer.worldY - this.oy) / this.tile) };
     if (target.x < 0 || target.y < 0 || target.x >= map.width || target.y >= map.height) return;
     const entity = map.entities.find(e => e.x === target.x && e.y === target.y);
-    if (entity && distance(entity, state.player) <= 1) { this.onInteract(entity.id); return; }
-    const candidates = entity ? DIRECTIONS.map(([, x, y]) => ({ x: target.x + x, y: target.y + y })) : [target];
+    if (entity && entity.kind !== 'exit' && distance(entity, state.player) <= 1) { this.onInteract(entity.id); return; }
+    if (entity?.kind === 'exit' && distance(entity, state.player) === 0) { this.onInteract(entity.id); return; }
+    const candidates = entity && entity.kind !== 'exit' ? DIRECTIONS.map(([, x, y]) => ({ x: target.x + x, y: target.y + y })) : [target];
     const route = this.route(state.player, candidates, map);
     this.path = route || [];
-    this.pathTarget = route ? entity?.id : undefined;
+    this.pathTarget = route && entity?.kind !== 'exit' ? entity?.id : undefined;
     this.refreshView();
   }
 
@@ -360,7 +401,7 @@ class WorldScene extends Phaser.Scene {
       for (const [, dx, dy] of DIRECTIONS) {
         const next = { x: point.x + dx, y: point.y + dy };
         if (previous.has(key(next)) || !WALKABLE.has(map.tiles[next.y]?.[next.x])) continue;
-        if (map.entities.some(e => e.x === next.x && e.y === next.y)) continue;
+        if (map.entities.some(e => e.x === next.x && e.y === next.y && !(e.kind === 'exit' && goalsSet.has(key(next))))) continue;
         previous.set(key(next), point); queue.push(next);
       }
     }
@@ -374,7 +415,7 @@ class WorldScene extends Phaser.Scene {
     if (!this.ready) return;
     const state = this.readState();
     this.atmosphere.clear();
-    if (!this.reducedMotion) {
+    if (!this.reducedMotion && this.readMap().kind !== 'interior') {
       this.atmosphere.fillStyle(0xc7d6b7, .035);
       for (let i = 0; i < 4; i++) {
         const x = ((time * .008 + i * 276) % 1260) - 150;

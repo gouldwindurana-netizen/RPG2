@@ -1,7 +1,8 @@
 import { test, expect, type Page } from '@playwright/test';
-import type { GameState, HeroId } from '../src/contracts';
+import type { GameState, GameMap, HeroId } from '../src/contracts';
 
-type Viewport = { area:string; tile:number; ox:number; oy:number; scrollX:number; scrollY:number; zoom:number; width:number; height:number };
+const currentMap=(page:Page)=>page.evaluate(()=>(window as unknown as {__AVEL__:{map():GameMap}}).__AVEL__.map());
+type Viewport = { area:string; tile:number; ox:number; oy:number; scrollX:number; scrollY:number; zoom:number; width:number; height:number; transitioning?:boolean };
 const snapshot = (page:Page) => page.evaluate(() => (window as unknown as {__AVEL__:{snapshot():GameState}}).__AVEL__.snapshot());
 const viewport = (page:Page) => page.evaluate(() => (window as unknown as {__AVEL__:{viewport():Viewport}}).__AVEL__.viewport());
 
@@ -15,7 +16,9 @@ async function configure(page:Page,encounters:'classic'|'visible'|'off') {
   await page.locator('[data-speed="3"]').click();
   await page.locator('[data-close]').click();
 }
+async function ready(page:Page){await expect.poll(async()=>!(await viewport(page)).transitioning).toBe(true);}
 async function clickTile(page:Page,x:number,y:number) {
+  await ready(page);
   const box=await page.locator('#game-world canvas').boundingBox();
   if(!box)throw Error('The playfield is not visible');
   const view=await viewport(page);
@@ -30,8 +33,9 @@ async function clickTile(page:Page,x:number,y:number) {
 async function visit(page:Page,x:number,y:number,done:(s:GameState)=>boolean) {
   await dismiss(page);
   await clickTile(page,x,y);
-  await expect.poll(async()=>done(await snapshot(page)),{timeout:20_000}).toBe(true);
+  await expect.poll(async()=>done(await snapshot(page)),{timeout:20_000}).toBe(true);await ready(page);
 }
+async function visitEntity(page:Page,id:string,done:(s:GameState)=>boolean){const s=await snapshot(page),entity=(await currentMap(page)).entities.find(e=>e.id===id);if(!entity)throw Error(`Missing ${s.area}/${id}`);await visit(page,entity.x,entity.y,done);}
 const at=(x:number,y:number)=>(s:GameState)=>s.player.x===x&&s.player.y===y;
 async function plan(page:Page,hero:HeroId,type:'attack'|'guard'|'spell'|'item',target?:string,id?:string) {
   await page.locator(`[data-hero="${hero}"]`).click();
@@ -72,16 +76,25 @@ async function battle(page:Page,capture?:string) {
   await collect(page);
 }
 async function rest(page:Page) {
-  await page.locator('[data-command="rest"]').click();
+  const area=(await snapshot(page)).area;
+  if(area==='camp')await visitEntity(page,'fire',s=>!!s.message);
+  else {
+    await visitEntity(page,`door-${area}-inn`,s=>s.area===`${area}-inn`);
+    const service=(await currentMap(page)).entities.find(e=>e.id.startsWith('inn-'))!;
+    await visit(page,service.x,service.y,s=>s.message?.speaker==='Innkeeper');
+    await page.locator('[data-command="rest"]').click();
+  }
   await dismiss(page);
   expect((await snapshot(page)).heroes.every(h=>h.hp===h.maxHp&&h.charges.every((n,i)=>n===h.maxCharges[i]))).toBe(true);
+  if(area!=='camp')await visitEntity(page,`leave-${area}-inn`,s=>s.area===area);
 }
 async function enterTown(page:Page) {
   await visit(page,8,21,at(8,21));
   await visit(page,8,20,s=>s.area==='dunmere');
 }
 async function buyEquipment(page:Page) {
-  await visit(page,10,12,s=>s.message?.speaker==='Quartermaster');
+  await visitEntity(page,'door-dunmere-shop',s=>s.area==='dunmere-shop');
+  await visitEntity(page,'shop-R02',s=>s.message?.speaker==='Quartermaster');
   const priorities=['R02_MARA_WEAPON','R02_TAVIN_WEAPON','R02_SOREN_WEAPON','R02_IONA_BODY','R02_SOREN_BODY','R02_MARA_BODY','R02_TAVIN_BODY','R02_IONA_WEAPON'];
   const bought:string[]=[];
   for(const id of priorities) {
@@ -90,6 +103,7 @@ async function buyEquipment(page:Page) {
     if(await button.count()&&await button.isEnabled()&&(await snapshot(page)).gold>265){await button.click();bought.push(id);}
   }
   await dismiss(page);
+  await visitEntity(page,'leave-dunmere-shop',s=>s.area==='dunmere');
   if(!bought.length)return;
   await page.locator('#pack-button').click();
   for(const id of bought) {
@@ -113,10 +127,6 @@ test('a continuous road journey rescues Orren and Neri and opens the Alder Fen f
   await page.locator('[data-front="begin"]').click();
   await page.locator('[data-intro="skip"]').click();
   await configure(page,'visible');
-  await visit(page,28,14,s=>Boolean(s.message));
-  expect((await snapshot(page)).area).toBe('camp');
-  await expect(page.locator('.dialogue-text')).toContainText('Orren');
-  await dismiss(page);
   await visit(page,14,9,s=>s.flags.briefed);await dismiss(page);
   await visit(page,28,8,s=>s.area==='works');
   for(const [x,y] of [[6,13],[6,6],[13,11],[16,4],[25,12],[25,6]]) {
@@ -138,7 +148,7 @@ test('a continuous road journey rescues Orren and Neri and opens the Alder Fen f
   const south=await viewport(page);expect(south.height).toBeGreaterThan(576);expect(south.scrollY).toBeGreaterThan(0);
   await page.screenshot({path:'test-results/overworld-south.png',fullPage:true});
   await visit(page,8,29,at(8,29));
-  await visit(page,8,27,at(8,25));
+  await visit(page,8,27,at(8,24));
   await visit(page,8,21,at(8,21));
   expect((await viewport(page)).scrollY).toBeLessThan(south.scrollY);
   await page.screenshot({path:'test-results/overworld-salt-road.png',fullPage:true});
@@ -185,7 +195,7 @@ test('a continuous road journey rescues Orren and Neri and opens the Alder Fen f
   await visit(page,26,5,s=>s.campaign.stage===4);await dismiss(page);
   expect((await snapshot(page)).campaign.switches).toContain('neri_rescued');
   await visit(page,2,14,s=>s.area==='overworld');
-  await visit(page,23,21,s=>s.player.x===26&&s.player.y===21);
+  await visit(page,23,21,s=>s.player.x===27&&s.player.y===21);
   await visit(page,28,22,s=>s.area==='fen');
   await page.screenshot({path:'test-results/alder-fen-arrival.png',fullPage:true});
   const saved=await snapshot(page);

@@ -1,0 +1,47 @@
+"""Menus for learned magic, distinct stores, formation counts, and optional stories."""
+def patch(source):
+    changes=[]
+    def once(old,new,label):
+        nonlocal source
+        assert source.count(old)==1,f'{label}: {source.count(old)} anchors'
+        source=source.replace(old,new,1);changes.append(label)
+    def section(start,end,replacement,label):
+        a=source.index(start);b=source.index(end,a);once(source[a:b],replacement,label)
+
+    helpers=r'''var storeFilter=`all`,storeContext=``;
+function magicShopUI(state,heroId){let hero=state.heroes.find(h=>h.id===heroId),offers=spellOffers(state,heroId);return`<section class="magic-shop"><div class="shop-head"><strong>Magic for ${Q(hero.name)}</strong><span class="shop-gold">${state.gold} gold</span></div>${st(state,heroId)}<p class="shop-intro">${Q(hero.role)} · Level ${hero.level}. Each purchase teaches this traveler one spell permanently. Learning does not refill charges; rest to recover them.</p><div class="shop-list">${offers.map(offer=>{let spell=te.find(s=>s.id===offer.spellId),level=l.spell_tier_unlocks[spell.tier-1],disabled=offer.known||!offer.unlocked||state.gold<offer.price;return`<div class="inventory-row spell-offer"><span><strong>${Q(spell.name)} <small class="spell-tier-badge">Tier ${spell.tier}</small></strong><small>${Q(spell.description)}</small><small>${offer.known?`Learned by ${Q(hero.name)}`:offer.unlocked?`${hero.charges[spell.tier-1]} / ${hero.maxCharges[spell.tier-1]} charges`:`Requires level ${level}`}</small></span><span class="spell-price"><strong>${offer.price} G</strong><button class="small-button" data-learn-spell="${spell.id}" ${disabled?`disabled`:``}>${offer.known?`Learned`:!offer.unlocked?`Locked`:`Learn`}</button></span></div>`}).join(``)||`<p>${Q(hero.name)} follows a martial job and cannot learn magic. Select Iona, Soren, or another traveler with a magic job.</p>`}</div></section>`}
+function optionalJournal(state){return`<section class="side-quest-notes"><h3>People along the road</h3><p class="muted">Optional stories. The main expedition never waits for these errands.</p>${sideQuestSummary(state).map(quest=>`<article data-side-quest="${Q(quest.id)}" class="side-quest-note"><strong>${quest.complete?`✓ `:``}${Q(quest.title)}</strong><p>${Q(quest.text)}</p></article>`).join(``)}</section>`}
+'''
+    once('function shopUI(e){',helpers+'function shopUI(e){','shop and optional-story UI helpers')
+    shop=r'''function shopUI(e){if(e.message?.speaker===`Magic Shop`)return magicShopUI(e,$);let context=e.area+`:`+e.message?.speaker;if(context!==storeContext){storeContext=context;storeFilter=`all`}let b=shT===`buy`,equipment=e.message?.speaker===`Weapon Shop`,offers=fe(e).filter(offer=>storeFilter===`all`||storeFilter===`weapons`&&K(offer.itemId).slot===`weapon`||storeFilter===`armor`&&K(offer.itemId).kind===`equipment`&&K(offer.itemId).slot!==`weapon`);return`<p class="shop-intro">${Q(e.message?.text??``)}</p><div class="shop-head"><div class="hero-tabs"><button class="${b?`active`:``}" data-shop-tab="buy">Buy</button><button class="${b?``:`active`}" data-shop-tab="sell">Sell</button></div><strong class="shop-gold">${e.gold} gold</strong></div>${equipment&&b?`<nav class="store-categories" aria-label="Equipment category">${[`all`,`weapons`,`armor`].map(category=>`<button class="small-button ${storeFilter===category?`on`:``}" data-store-filter="${category}" aria-pressed="${storeFilter===category}">${category===`all`?`All equipment`:category===`weapons`?`Weapons`:`Armor & accessories`}</button>`).join(``)}</nav>`:``}${b?`<div class="shop-qty">Quantity: ${[1,5,10,`max`].map(q=>`<button class="small-button${shQ===q?` on`:``}" data-shop-qty="${q}">${q===`max`?`Max`:`×${q}`}</button>`).join(` `)}</div>`:``}<div class="shop-list">${b?offers.map(t=>{let item=K(t.itemId),n=Math.min(shQ===`max`?99:shQ,99-(e.inventory[t.itemId]??0),Math.floor(e.gold/t.price));return`<div class="inventory-row"><span><strong>${Q(item?.name??t.itemId)}</strong><small>${t.price} gold each${n>1?` · ${t.price*n} total`:``} · carrying ${e.inventory[t.itemId]??0}/99${item.kind===`equipment`?` · ${eqAvailable(e,t.itemId)} available`:``}${sI(e,t.itemId)}</small></span><button class="small-button" data-buy="${t.itemId}" ${n<1?`disabled`:``}>Buy${n>0?` ×${n}`:``}</button></div>`}).join(``):sL(e)}</div>`}'''
+    section('function shopUI(e){','function sI(e,t){',shop,'separate weapon and item store menus with preserved quantity controls')
+
+    start=source.index('if(e.message)n=',source.index('function Ht(){'))
+    end=source.index('else if(e.reward)',start)
+    message=r'''if(e.message){n=`message:`+e.message.text;let store=[`Quartermaster`,`Weapon Shop`,`Item Shop`,`Magic Shop`].includes(e.message.speaker);t=Vt(Q(e.message.speaker),store?e.message.speaker===`Magic Shop`?`LEARN MAGIC`:`TOWN TRADERS`:`A VOICE ON THE ROAD`,store?shopUI(e):`<p class="dialogue-text">${Q(e.message.text)}</p>`,`<button class="primary" data-command="dismiss" autofocus>${store?`Finish shopping`:`Continue`} <span>↵</span></button>`,store?`dialogue-modal store-modal`:`dialogue-modal`)}'''
+    once(source[start:end],message,'render all three real store services')
+
+    once('te.find(e=>e.id===n&&H(r,e))','te.find(spell=>spell.id===n&&knowsSpell(e,r,spell))','pending field spells require learning')
+    once('let a=te.filter(e=>H(r,e));','let a=te.filter(spell=>knowsSpell(e,r,spell));','field spell list shows learned magic')
+    once('let e=te.filter(e=>H(n,e));','let e=te.filter(spell=>knowsSpell(X.state,n,spell));','battle spell list shows learned magic')
+    once('te.some(e=>H(n,e))','te.some(spell=>knowsSpell(X.state,n,spell))','battle Magic command follows actual known spells')
+    once('Healing and recovery magic can be used on the road. Rest at a shelter or inn to restore tier charges.','Learned healing and recovery magic can be used on the road. Learn more spells at a town’s Magic Shop. Rest at a shelter or inn to restore tier charges.','explain magic learning in field menu')
+    once('if(t.dataset.packHero){', 'if(t.dataset.storeFilter){storeFilter=t.dataset.storeFilter,Ht();return}if(t.dataset.learnSpell){let spell=te.find(s=>s.id===t.dataset.learnSpell);Pt(X.buySpell($,t.dataset.learnSpell)?`${Dt($)} learned ${spell.name}.`:`Check this traveler’s job, spell tier, and gold.`),Gt();return}if(t.dataset.packHero){','buy spells for the selected traveler through actual engine method')
+
+    once('?Dt(e.id):e.name)', '?Dt(e.id):e.displayName||e.name)', 'target choices disambiguate repeated enemy names')
+    once('${Q(t.title)} <b>· ROUND ${t.round}</b>','${Q(t.title)} <b>· ${t.enemies.filter(enemy=>enemy.hp>0).length}/${t.enemies.length} FOES · ROUND ${t.round}</b>','show encounter group size in commands')
+    once('t.enemies.filter(e=>e.hp>0).map(e=>e.intent).join(` · `)','[...new Set(t.enemies.filter(enemy=>enemy.hp>0).map(enemy=>enemy.intent))].join(` · `)','compact repeated enemy intents')
+    a=source.index('function dt(e){');b=source.index('var ft=',a);old=source[a:b]
+    assert old.endswith('}')
+    once(old,old[:-1]+'+optionalJournal(e)}','journal tracks three expanded optional story arcs')
+
+    # Services behave like menus while ordinary story dialogue retains its pacing.
+    once('if(e.key===`Escape`&&Ot===`creator`)', 'if(!Ot&&e.key===`Escape`&&[`Quartermaster`,`Weapon Shop`,`Item Shop`,`Magic Shop`].includes(X.state.message?.speaker)){X.dismiss(),e.preventDefault();return}if(e.key===`Escape`&&Ot===`creator`)','Escape leaves town services without changing purchases')
+    once('document.body.classList.toggle(`in-battle`,e.mode===`battle`),','document.body.classList.toggle(`in-battle`,e.mode===`battle`),document.body.classList.toggle(`has-battle`,!!e.battle),','hide exploration controls through battle and results')
+    css='''<style>
+.has-battle .touch-pad{display:none}
+.store-modal{max-width:760px}.store-modal .shop-list{max-height:40dvh;overflow:auto;overscroll-behavior:contain}.shop-intro{font-size:11px!important;line-height:1.65!important;color:#c9daf8;margin:10px 0 14px}.store-categories{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.store-categories .on{border-color:#fff;background:#3456a7}.store-modal .hero-tabs{flex-wrap:wrap}.spell-offer{gap:12px}.spell-offer>span:first-child{flex:1;min-width:0}.spell-price{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0}.spell-price>strong{color:#ffe1a0;font-size:12px}.spell-tier-badge{display:inline!important;color:#ffdfa0!important;font-size:10px!important}.magic-shop .shop-head>strong{font-size:15px;font-weight:normal}.side-quest-notes{margin-top:22px;border-top:1px solid #7792c8;padding-top:8px}.side-quest-note{padding:13px 0;border-bottom:1px solid #617bb1}.side-quest-note strong{font-size:13px;color:#ffdfa0}.side-quest-note p{font-size:12px;color:#c7d9f9;margin-bottom:0}.side-quest-notes>.muted{font-size:11px}
+@media(max-width:760px){.store-modal .shop-list{max-height:36dvh}.store-modal .hero-tabs button{padding:8px;font-size:10px}.store-categories{gap:5px}.store-categories button{font-size:10px;min-height:34px}.spell-price .small-button{min-height:36px;padding:8px 11px}.spell-offer small{font-size:10px}.shop-intro{font-size:10px!important}.magic-shop .shop-head{align-items:flex-start}.magic-shop .shop-head>strong{font-size:13px}.side-quest-note strong{font-size:12px}}
+</style>'''
+    once('</head>',css+'\n</head>','readable classic store and expanded story panels')
+    return source,changes

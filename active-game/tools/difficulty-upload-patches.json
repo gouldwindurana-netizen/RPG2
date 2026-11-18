@@ -1,0 +1,268 @@
+[
+  {
+    "old": "`Soren`],stats:{defense:3},set_id:`R01_SET`,uniqu",
+    "new": "`Soren`],stats:{defense:4,magicDefense:2},set_id:`R01_SET`,uniqu",
+    "base_start": 21231,
+    "base_end": 21232,
+    "user_edit": "4,magicDefense:2"
+  },
+  {
+    "old": "`Soren`],stats:{defense:2},set_id:`R01_SET`,uniq",
+    "new": "`Soren`],stats:{defense:3,attack:2},set_id:`R01_SET`,uniq",
+    "base_start": 21716,
+    "base_end": 21716,
+    "user_edit": "3,attack:"
+  },
+  {
+    "old": "`],stats:{magicDefense:4},set_id:`R01_SET`,uniqu",
+    "new": "`],stats:{magicDefense:4,magic:2},set_id:`R01_SET`,uniqu",
+    "base_start": 22204,
+    "base_end": 22204,
+    "user_edit": ",magic:2"
+  },
+  {
+    "old": "`Soren`],stats:{defense:4},set_id:`R02_SET`,uniq",
+    "new": "`Soren`],stats:{defense:7,magicDefense:4},set_id:`R02_SET`,uniq",
+    "base_start": 22684,
+    "base_end": 22684,
+    "user_edit": "7,magicDefense:"
+  },
+  {
+    "old": "`Soren`],stats:{defense:3},set_id:`R02_SET`,uniqu",
+    "new": "`Soren`],stats:{defense:6,attack:4},set_id:`R02_SET`,uniqu",
+    "base_start": 23168,
+    "base_end": 23169,
+    "user_edit": "6,attack:4"
+  },
+  {
+    "old": "n`],stats:{magicDefense:6},set_id:`R02_SET`,uniqu",
+    "new": "n`],stats:{magicDefense:8,magic:4},set_id:`R02_SET`,uniqu",
+    "base_start": 23654,
+    "base_end": 23655,
+    "user_edit": "8,magic:4"
+  },
+  {
+    "old": "`Soren`],stats:{defense:5},set_id:`R03_SET`,uniqu",
+    "new": "`Soren`],stats:{defense:12,magicDefense:6},set_id:`R03_SET`,uniqu",
+    "base_start": 24136,
+    "base_end": 24137,
+    "user_edit": "12,magicDefense:6"
+  },
+  {
+    "old": "`Soren`],stats:{defense:4},set_id:`R03_SET`,uniqu",
+    "new": "`Soren`],stats:{defense:10,attack:6},set_id:`R03_SET`,uniqu",
+    "base_start": 24621,
+    "base_end": 24622,
+    "user_edit": "10,attack:6"
+  },
+  {
+    "old": "n`],stats:{magicDefense:9},set_id:`R03_SET`,uniqu",
+    "new": "n`],stats:{magicDefense:14,magic:6},set_id:`R03_SET`,uniqu",
+    "base_start": 25108,
+    "base_end": 25109,
+    "user_edit": "14,magic:6"
+  },
+  {
+    "old": "`Soren`],stats:{defense:8},set_id:`R04_SET`,uniqu",
+    "new": "`Soren`],stats:{defense:18,magicDefense:9},set_id:`R04_SET`,uniqu",
+    "base_start": 25594,
+    "base_end": 25595,
+    "user_edit": "18,magicDefense:9"
+  },
+  {
+    "old": "`Soren`],stats:{defense:5},set_id:`R04_SET`,uniqu",
+    "new": "`Soren`],stats:{defense:15,attack:8},set_id:`R04_SET`,uniqu",
+    "base_start": 26083,
+    "base_end": 26084,
+    "user_edit": "15,attack:8"
+  },
+  {
+    "old": "n`],stats:{magicDefense:12},set_id:`R04_SET`,uniqu",
+    "new": "n`],stats:{magicDefense:21,magic:8},set_id:`R04_SET`,uniqu",
+    "base_start": 26574,
+    "base_end": 26576,
+    "user_edit": "21,magic:8"
+  },
+  {
+    "old": "`Soren`],stats:{defense:11},set_id:`R05_SET`,uniqu",
+    "new": "`Soren`],stats:{defense:25,magicDefense:13},set_id:`R05_SET`,uniqu",
+    "base_start": 27061,
+    "base_end": 27063,
+    "user_edit": "25,magicDefense:13"
+  },
+  {
+    "old": "`Soren`],stats:{defense:6},set_id:`R05_SET`,uniqu",
+    "new": "`Soren`],stats:{defense:21,attack:10},set_id:`R05_SET`,uniqu",
+    "base_start": 27551,
+    "base_end": 27552,
+    "user_edit": "21,attack:10"
+  },
+  {
+    "old": "n`],stats:{magicDefense:15},set_id:`R05_SET`,uniqu",
+    "new": "n`],stats:{magicDefense:29,magic:10},set_id:`R05_SET`,uniqu",
+    "base_start": 28042,
+    "base_end": 28044,
+    "user_edit": "29,magic:10"
+  },
+  {
+    "old": "`Soren`],stats:{defense:14},set_id:`R06_SET`,uniqu",
+    "new": "`Soren`],stats:{defense:34,magicDefense:17},set_id:`R06_SET`,uniqu",
+    "base_start": 28525,
+    "base_end": 28527,
+    "user_edit": "34,magicDefense:17"
+  },
+  {
+    "old": "`Soren`],stats:{defense:8},set_id:`R06_SET`,uniqu",
+    "new": "`Soren`],stats:{defense:28,attack:14},set_id:`R06_SET`,uniqu",
+    "base_start": 29011,
+    "base_end": 29012,
+    "user_edit": "28,attack:14"
+  },
+  {
+    "old": "n`],stats:{magicDefense:18},set_id:`R06_SET`,uniqu",
+    "new": "n`],stats:{magicDefense:39,magic:14},set_id:`R06_SET`,uniqu",
+    "base_start": 29498,
+    "base_end": 29500,
+    "user_edit": "39,magic:14"
+  },
+  {
+    "old": "eHero:`Iona`,spellIds:[`mend`,`shelter`,`renew`,",
+    "new": "eHero:`Iona`,spellIds:[`lumen`,`umbra`,`radiance`,`nightfall`,`mend`,`shelter`,`renew`,",
+    "base_start": 85218,
+    "base_end": 85218,
+    "user_edit": "lumen`,`umbra`,`radiance`,`nightfall`,`"
+  },
+  {
+    "old": "Hero:`Soren`,spellIds:[`ember`,`spark`,`frost`,`",
+    "new": "Hero:`Soren`,spellIds:[`lumen`,`umbra`,`radiance`,`nightfall`,`ember`,`spark`,`frost`,`",
+    "base_start": 85632,
+    "base_end": 85632,
+    "user_edit": "lumen`,`umbra`,`radiance`,`nightfall`,`"
+  },
+  {
+    "old": "ue:`#668db5`}},R={name:`Ari`,job:`warden`,pronouns:`she`,skin:`warm`,hair:`chestnut`,cloak:`gold`,hairStyle:`short`},z={...R,name:`Mara`};function B(e){if(!e||",
+    "new": "ue:`#668db5`}},R={name:`Saitama`,job:`warden`,pronouns:`he`,skin:`warm`,hair:`chestnut`,cloak:`gold`,hairStyle:`short`},z={...R,name:`Mara`,pronouns:`she`};function B(e){if(!e||",
+    "base_start": 86311,
+    "base_end": 86422,
+    "user_edit": "Saitama`,job:`warden`,pronouns:`he`,skin:`warm`,hair:`chestnut`,cloak:`gold`,hairStyle:`short`},z={...R,name:`Mara`,pronouns:`she"
+  },
+  {
+    "old": "he rest of this round.`},...[`ember`,`spark`,`fr",
+    "new": "he rest of this round.`},{id:`lumen`,name:`Lumen`,tier:1,users:[`Iona`,`Soren`],target:`enemy`,effect:`damage`,power:13,element:`light`,description:`Light school: a lance of holy light. Grows stronger the more you cast it.`},{id:`umbra`,name:`Umbra`,tier:1,users:[`Iona`,`Soren`],target:`enemy`,effect:`damage`,power:13,element:`dark`,description:`Dark school: a bolt of shadow. Grows stronger the more you cast it.`},{id:`radiance`,name:`Radiance`,tier:3,users:[`Iona`,`Soren`],target:`allEnemies`,effect:`damage`,power:30,element:`light`,description:`Light school: a burst of radiance across all enemies.`},{id:`nightfall`,name:`Nightfall`,tier:3,users:[`Iona`,`Soren`],target:`allEnemies`,effect:`damage`,power:30,element:`dark`,description:`Dark school: a wave of shadow across all enemies.`},...[`ember`,`spark`,`fr",
+    "base_start": 90929,
+    "base_end": 90929,
+    "user_edit": ",{id:`lumen`,name:`Lumen`,tier:1,users:[`Iona`,`Soren`],target:`enemy`,effect:`damage`,power:13,element:`light`,description:`Light school: a lance of holy light. Grows stronger the more you cast it.`},{id:`umbra`,name:`Umbra`,tier:1,users:[`Iona`,`Soren`],target:`enemy`,effect:`damage`,power:13,element:`dark`,description:`Dark school: a bolt of shadow. Grows stronger the more you cast it.`},{id:`radiance`,name:`Radiance`,tier:3,users:[`Iona`,`Soren`],target:`allEnemies`,effect:`damage`,power:30,element:`light`,description:`Light school: a burst of radiance across all enemies.`},{id:`nightfall`,name:`Nightfall`,tier:3,users:[`Iona`,`Soren`],target:`allEnemies`,effect:`damage`,power:30,element:`dark`,description:`Dark school: a wave of shadow across all enemies.`}"
+  },
+  {
+    "old": ".join(``):sL(e)}</div>`}function sI(e,t){let n=K",
+    "new": ".join(``):sL(e)}</div>`}var dfS=`easy`,DIFFM={easy:{hp:1,atk:1,def:1},normal:{hp:1.35,atk:1.25,def:1.15},hard:{hp:1.8,atk:1.6,def:1.3},hell:{hp:2.6,atk:2.2,def:1.6}},DIFFL={easy:`Easy`,normal:`Normal`,hard:`Hard`,hell:`Hell`};var gm=``;function sLv(a,t,i){let u=a.sp?.[t.id]?.[i.id]??0;return Math.min(16,Math.floor((1+Math.sqrt(1+4*u))/2))}function sMul(a,t,i){return 1+.1*(sLv(a,t,i)-1)}function sGain(a,t,i){a.sp??={};let h=a.sp[t.id]??={},o=sLv(a,t,i);h[i.id]=(h[i.id]??0)+1;let n=sLv(a,t,i);return n>o?`${t.name}'s ${i.name} grew to level ${n}!`:``}var PHYS={warden:`slash`,striker:`pierce`,mender:`blunt`,arcanist:`blunt`,scout:`pierce`,spellblade:`slash`},FAMW={REEDBACK:{w:[`blunt`],r:[`pierce`]},HOUND:{w:[`pierce`],r:[`blunt`]},WISP:{w:[`light`],r:[`slash`,`pierce`]},SENTINEL:{w:[`blunt`,`lightning`],r:[`slash`,`pierce`]},CANTOR:{w:[`light`],r:[`dark`]},WIDOW:{w:[`slash`,`fire`],r:[`dark`]},HART:{w:[`fire`,`slash`],r:[`blunt`]}};function sI(e,t){let n=K",
+    "base_start": 100947,
+    "base_end": 100947,
+    "user_edit": "var dfS=`easy`,DIFFM={easy:{hp:1,atk:1,def:1},normal:{hp:1.35,atk:1.25,def:1.15},hard:{hp:1.8,atk:1.6,def:1.3},hell:{hp:2.6,atk:2.2,def:1.6}},DIFFL={easy:`Easy`,normal:`Normal`,hard:`Hard`,hell:`Hell`};var gm=``;function sLv(a,t,i){let u=a.sp?.[t.id]?.[i.id]??0;return Math.min(16,Math.floor((1+Math.sqrt(1+4*u))/2))}function sMul(a,t,i){return 1+.1*(sLv(a,t,i)-1)}function sGain(a,t,i){a.sp??={};let h=a.sp[t.id]??={},o=sLv(a,t,i);h[i.id]=(h[i.id]??0)+1;let n=sLv(a,t,i);return n>o?`${t.name}'s ${i.name} grew to level ${n}!`:``}var PHYS={warden:`slash`,striker:`pierce`,mender:`blunt`,arcanist:`blunt`,scout:`pierce`,spellblade:`slash`},FAMW={REEDBACK:{w:[`blunt`],r:[`pierce`]},HOUND:{w:[`pierce`],r:[`blunt`]},WISP:{w:[`light`],r:[`slash`,`pierce`]},SENTINEL:{w:[`blunt`,`lightning`],r:[`slash`,`pierce`]},CANTOR:{w:[`light`],r:[`dark`]},WIDOW:{w:[`slash`,`fire`],r:[`dark`]},HART:{w:[`fire`,`slash`],r:[`blunt`]}};"
+  },
+  {
+    "old": "nventory:n,gold:60,xp:0,hx:{Mara:0,Tavin:0,Iona:",
+    "new": "nventory:n,gold:60,xp:0,difficulty:dfS??`easy`,sp:{},hx:{Mara:0,Tavin:0,Iona:",
+    "base_start": 123167,
+    "base_end": 123167,
+    "user_edit": "difficulty:dfS??`easy`,sp:{},"
+  },
+  {
+    "old": "area=n.area,c.xp=n.xp,c.hx=Object.fromEntries(ne",
+    "new": "area=n.area,c.xp=n.xp,c.difficulty=[`easy`,`normal`,`hard`,`hell`].includes(n.difficulty)?n.difficulty:`easy`,c.sp=n.sp&&typeof n.sp==`object`&&!Array.isArray(n.sp)?n.sp:{},c.hx=Object.fromEntries(ne",
+    "base_start": 125327,
+    "base_end": 125327,
+    "user_edit": "difficulty=[`easy`,`normal`,`hard`,`hell`].includes(n.difficulty)?n.difficulty:`easy`,c.sp=n.sp&&typeof n.sp==`object`&&!Array.isArray(n.sp)?n.sp:{},c."
+  },
+  {
+    "old": "my=>({...enemy,hp:0})));a.battle={encounterId:e,",
+    "new": "my=>({...enemy,hp:0})));for(let en of i){let q=DIFFM[a.difficulty??`easy`]??DIFFM.easy,fm=FAMW[en.family];fm&&(en.weakness=[...new Set([...(en.weakness??[]),...fm.w])],en.resistance=[...new Set([...(en.resistance??[]),...fm.r])].filter(x=>!en.weakness.includes(x)));en.maxHp=en.hp=Math.round(en.maxHp*q.hp),en.attack=Math.round(en.attack*q.atk),en.defense=Math.round((en.defense??0)*q.def)}a.battle={encounterId:e,",
+    "base_start": 169243,
+    "base_end": 169243,
+    "user_edit": "for(let en of i){let q=DIFFM[a.difficulty??`easy`]??DIFFM.easy,fm=FAMW[en.family];fm&&(en.weakness=[...new Set([...(en.weakness??[]),...fm.w])],en.resistance=[...new Set([...(en.resistance??[]),...fm.r])].filter(x=>!en.weakness.includes(x)));en.maxHp=en.hp=Math.round(en.maxHp*q.hp),en.attack=Math.round(en.attack*q.atk),en.defense=Math.round((en.defense??0)*q.def)}"
+  },
+  {
+    "old": "){P();return}let i=0,a=0;for(let e=0;e<t.hits;e+",
+    "new": "){P();return}let i=0,a=0,pt=PHYS[t.job]??`slash`,pm=n.weakness?.includes(pt)?1.5:n.resistance?.includes(pt)?.5:1;for(let e=0;e<t.hits;e+",
+    "base_start": 181846,
+    "base_end": 181846,
+    "user_edit": ",pt=PHYS[t.job]??`slash`,pm=n.weakness?.includes(pt)?1.5:n.resistance?.includes(pt)?.5:1"
+  },
+  {
+    "old": "+=Math.max(1,Math.round(t.attack*(1.2+m()*.45))-n.defense));n.hp=Math.max(0,n.hp-",
+    "new": "+=Math.max(1,Math.round(Math.max(1,Math.round(t.attack*(1.2+m()*.45))-n.defense)*pm)));n.hp=Math.max(0,n.hp-",
+    "base_start": 181911,
+    "base_end": 181944,
+    "user_edit": "Math.max(1,Math.round(t.attack*(1.2+m()*.45))-n.defense)*pm)"
+  },
+  {
+    "old": "`:a===0?` \u2014 missed`:``}.`,{actor:t.id,target:n.i",
+    "new": "`:a===0?` \u2014 missed`:``}.${pm>1&&a>0?` Weak to ${pt}!`:pm<1&&a>0?` Resists ${pt}.`:``}`,{actor:t.id,target:n.i",
+    "base_start": 182057,
+    "base_end": 182057,
+    "user_edit": "${pm>1&&a>0?` Weak to ${pt}!`:pm<1&&a>0?` Resists ${pt}.`:``}"
+  },
+  {
+    "old": "se{t.charges[i.tier-1]--;for(let r of e)i.effect===`protect`?(n.add(r.id),i.power&&I(t,i,r)):I(t,i,r);S(`${t.name} casts $",
+    "new": "se{t.charges[i.tier-1]--,gm=sGain(a,t,i);gm&&S(gm);let sm=sMul(a,t,i),sp2={...i,power:i.power==null?i.power:Math.round(i.power*sm)};for(let r of e)i.effect===`protect`?(n.add(r.id),i.power&&I(t,sp2,r)):I(t,sp2,r);S(`${t.name} casts $",
+    "base_start": 182568,
+    "base_end": 182642,
+    "user_edit": ",gm=sGain(a,t,i);gm&&S(gm);let sm=sMul(a,t,i),sp2={...i,power:i.power==null?i.power:Math.round(i.power*sm)};for(let r of e)i.effect===`protect`?(n.add(r.id),i.power&&I(t,sp2,r)):I(t,sp2"
+  },
+  {
+    "old": "rn}t.charges[i.tier-1]--;for(let e of n){let r=i.element??`lightning`,a=e.weakness.includes(r)?t.job===`arcanist`?1.65:1.5:e.resistance.includes(r)?.5:1,o=Math.round(((i.power??12)+t.magic*2)*a*(n.length>1?.7:1));e.hp=Math.max(0,e.hp-o",
+    "new": "rn}t.charges[i.tier-1]--,gm=sGain(a,t,i);gm&&S(gm);let sm=sMul(a,t,i);for(let e of n){let r=i.element??`lightning`,a=e.weakness.includes(r)?t.job===`arcanist`?1.65:1.5:e.resistance.includes(r)?.5:1,o=Math.round(((i.power??12)+t.magic*2)*a*(n.length>1?.7:1)*sm);e.hp=Math.max(0,e.hp-o",
+    "base_start": 183087,
+    "base_end": 183274,
+    "user_edit": ",gm=sGain(a,t,i);gm&&S(gm);let sm=sMul(a,t,i);for(let e of n){let r=i.element??`lightning`,a=e.weakness.includes(r)?t.job===`arcanist`?1.65:1.5:e.resistance.includes(r)?.5:1,o=Math.round(((i.power??12)+t.magic*2)*a*(n.length>1?.7:1)*sm"
+  },
+  {
+    "old": "-;l();z.save();return!0},optimize(e){if(a.mode!=",
+    "new": "-;l();z.save();return!0},setDifficulty(e){return[`easy`,`normal`,`hard`,`hell`].includes(e)?(a.difficulty=dfS=e,l(),z.save(),!0):!1},optimize(e){if(a.mode!=",
+    "base_start": 188061,
+    "base_end": 188061,
+    "user_edit": ",setDifficulty(e){return[`easy`,`normal`,`hard`,`hell`].includes(e)?(a.difficulty=dfS=e,l(),z.save(),!0):!1}"
+  },
+  {
+    "old": "=\"custom-field\"><legend>Story pronouns</legend><div class=\"segmented\">${[[`she`,`She / her`],[`he`,`He / him`]].map(([t,n])=>`<butto",
+    "new": "=\"custom-field\"><legend>Gender</legend><div class=\"segmented\">${[[`he`,`Male`],[`she`,`Female`]].map(([t,n])=>`<butto",
+    "base_start": 197826,
+    "base_end": 197910,
+    "user_edit": "Gender</legend><div class=\"segmented\">${[[`he`,`Male`],[`she`,`Female"
+  },
+  {
+    "old": "n(``)}</div></fieldset><div class=\"creation-note",
+    "new": "n(``)}</div></fieldset><fieldset class=\"custom-field\"><legend>Difficulty</legend><div class=\"segmented\">${[`easy`,`normal`,`hard`,`hell`].map(t=>`<button data-diff-start=\"${t}\" aria-pressed=\"${dfS===t}\" class=\"${dfS===t?`chosen`:``}\">${DIFFL[t]}</button>`).join(``)}</div><small class=\"hint\">You can change this later on the Gear screen.</small></fieldset><div class=\"creation-note",
+    "base_start": 198091,
+    "base_end": 198091,
+    "user_edit": "fieldset class=\"custom-field\"><legend>Difficulty</legend><div class=\"segmented\">${[`easy`,`normal`,`hard`,`hell`].map(t=>`<button data-diff-start=\"${t}\" aria-pressed=\"${dfS===t}\" class=\"${dfS===t?`chosen`:``}\">${DIFFL[t]}</button>`).join(``)}</div><small class=\"hint\">You can change this later on the Gear screen.</small></fieldset><"
+  },
+  {
+    "old": "small></div><div class=\"pack-grid\">${eqUI(e,r,i,",
+    "new": "small></div><div class=\"shop-head\"><span>Difficulty</span><button class=\"small-button\" data-difficulty=\"cycle\">${DIFFL[e.difficulty??`easy`]}</button></div><div class=\"pack-grid\">${eqUI(e,r,i,",
+    "base_start": 1464347,
+    "base_end": 1464347,
+    "user_edit": "shop-head\"><span>Difficulty</span><button class=\"small-button\" data-difficulty=\"cycle\">${DIFFL[e.difficulty??`easy`]}</button></div><div class=\""
+  },
+  {
+    "old": "eventScroll:!0});return}if(t.dataset.custom){let",
+    "new": "eventScroll:!0});return}if(t.dataset.diffStart){dfS=t.dataset.diffStart,Mt(),Z(`front-root`).querySelector(`[data-diff-start=\"${dfS}\"]`)?.focus({preventScroll:!0});return}if(t.dataset.custom){let",
+    "base_start": 1472294,
+    "base_end": 1472294,
+    "user_edit": "if(t.dataset.diffStart){dfS=t.dataset.diffStart,Mt(),Z(`front-root`).querySelector(`[data-diff-start=\"${dfS}\"]`)?.focus({preventScroll:!0});return}"
+  },
+  {
+    "old": "kt,[e]:t.dataset.value};B({...n,name:n.name||`Ari`})&&(kt=n),Mt(),Z(`front",
+    "new": "kt,[e]:t.dataset.value};e===`pronouns`&&(t.dataset.value===`she`?(n.name===`Saitama`&&(n.name=`Hana`),n.hairStyle===`short`&&(n.hairStyle=`long`),n.hair===`chestnut`&&(n.hair=`copper`),n.cloak===`gold`&&(n.cloak=`plum`)):(n.name===`Hana`&&(n.name=`Saitama`),n.hairStyle===`long`&&(n.hairStyle=`short`),n.hair===`copper`&&(n.hair=`chestnut`),n.cloak===`plum`&&(n.cloak=`gold`)));B({...n,name:n.name||(n.pronouns===`she`?`Hana`:`Saitama`)})&&(kt=n),Mt(),Z(`front",
+    "base_start": 1472368,
+    "base_end": 1472394,
+    "user_edit": "e===`pronouns`&&(t.dataset.value===`she`?(n.name===`Saitama`&&(n.name=`Hana`),n.hairStyle===`short`&&(n.hairStyle=`long`),n.hair===`chestnut`&&(n.hair=`copper`),n.cloak===`gold`&&(n.cloak=`plum`)):(n.name===`Hana`&&(n.name=`Saitama`),n.hairStyle===`long`&&(n.hairStyle=`short`),n.hair===`copper`&&(n.hair=`chestnut`),n.cloak===`plum`&&(n.cloak=`gold`)));B({...n,name:n.name||(n.pronouns===`she`?`Hana`:`Saitama`)"
+  },
+  {
+    "old": "),Wt()):It(`inventory`);return}if(t.dataset.shop",
+    "new": "),Wt()):It(`inventory`);return}if(t.dataset.difficulty){let o=[`easy`,`normal`,`hard`,`hell`],n=o[(o.indexOf(X.state.difficulty??`easy`)+1)%4];X.setDifficulty(n),Pt(`Difficulty: ${DIFFL[n]}.`),Gt();return}if(t.dataset.shop",
+    "base_start": 1473415,
+    "base_end": 1473415,
+    "user_edit": "return}if(t.dataset.difficulty){let o=[`easy`,`normal`,`hard`,`hell`],n=o[(o.indexOf(X.state.difficulty??`easy`)+1)%4];X.setDifficulty(n),Pt(`Difficulty: ${DIFFL[n]}.`),Gt();"
+  }
+]

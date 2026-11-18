@@ -1,0 +1,103 @@
+{
+  "baseline_file": "journey-baseline.html",
+  "baseline_sha256": "b75e5b8b788b10ce0869ba07d2a78c0b8ebfcc91f0ef975d255d112f0ba2b0a6",
+  "working_file": "The_Road_Beyond_the_Bells.html",
+  "working_sha256": "218bee8425ed5a139b697f3e0072068530d187dc03e9fee57f2ee338c212247a",
+  "working_bytes": 1636076,
+  "modules": [
+    "journey_tactics",
+    "journey_tracker",
+    "journey_map"
+  ],
+  "module_sha256": {
+    "journey_tactics": "ed405ed13acd0e9ea9cdaed02eec516e146eb41eb3369fdab71f649bcbd19a32",
+    "journey_tracker": "9bdde6c6d8f517d70832eed2adf30a5e77119a1f7002f6c3977b5f7fe362ab40",
+    "journey_map": "b73839401fbf9d51fd3960d88b87a45d59291e16d1764f4758dcff77466c5671"
+  },
+  "changes": [
+    "read-only battle notes and planning helpers follow discovered catalog ranks",
+    "classic tactics window and shared supply reservation feedback",
+    "tactics opens only while a battle waits for plans",
+    "tactics closes when battle planning ends",
+    "tactics uses standard modal focus and close controls",
+    "round controls offer optional tactics without adding a battle action",
+    "ally targets reflect item cure revival and living-target rules",
+    "item choices show owned reserved and available copies and valid uses",
+    "Escape returns directly from tactics to the battle command cursor",
+    "responsive tactical notes preserve the original blue menu appearance",
+    "new commission journals begin without an active tracked goal",
+    "optional tracked goal imports only accepted unclaimed known commissions",
+    "derive tracked progress and next steps from existing commission state",
+    "idle exploration can track or clear an already accepted commission",
+    "delivering a tracked commission clears its finished exploration goal",
+    "small journal tracking controls and exploration summary helpers",
+    "accepted journal work can be tracked without remote acceptance or payout",
+    "show one compact tracked objective inside the existing exploration panel",
+    "track stop and view controls keep authority and focus in the normal menus",
+    "responsive tracked goals fit the original blue interface",
+    "derive current-floor optional notes from saved discoveries",
+    "render a compact current-floor discovery checklist",
+    "area maps show records caches locks and lifts already completed",
+    "responsive floor notes stay within the existing map modal"
+  ],
+  "features": [
+    "Discovered tactical notes",
+    "Available battle supplies and valid targeting",
+    "Optional tracked commissions",
+    "Current-floor discovery checklist"
+  ],
+  "preserved": [
+    "Uploaded difficulty, spell practice, equipment and save compatibility",
+    "Turn planning, rewards, RNG, encounter layouts and main story",
+    "33 floors, commissions, discovered bestiary and camp conversations",
+    "Offline original artwork and third-party notices"
+  ],
+  "published": false,
+  "pushed": false,
+  "last_verified_date": "2026-11-18",
+  "status": "complete",
+  "validation": {
+    "engine_ui_renderer": {
+      "passed": 306,
+      "failed": 0,
+      "tested_sha256": "218bee8425ed5a139b697f3e0072068530d187dc03e9fee57f2ee338c212247a",
+      "command": "node --test tests/*core.test.cjs tests/*renderer.test.cjs",
+      "log": "tests/journey-validation/core-results.txt"
+    },
+    "browser": {
+      "passed": 6,
+      "failed": 0,
+      "unique_checks": 6,
+      "tested_sha256": "218bee8425ed5a139b697f3e0072068530d187dc03e9fee57f2ee338c212247a",
+      "artifacts": "tests/journey-browser-artifacts",
+      "viewport_recheck": {
+        "passed": 1,
+        "failed": 0,
+        "unique_additional_checks": 0,
+        "tested_sha256": "218bee8425ed5a139b697f3e0072068530d187dc03e9fee57f2ee338c212247a",
+        "artifacts": "tests/journey-mobile-recheck-artifacts",
+        "scope": "390px tactics bounds, visible close button and tracking after the transient toast clears",
+        "duration_seconds": 8.9
+      },
+      "visual_review": "Root inspected final mobile tactics viewport, unobscured tracked objective and completed current-floor notes; no horizontal clipping or unreachable close control found."
+    },
+    "review": {
+      "independent": "No material blockers; preserved prior save data, difficulty, spell practice and four worn charms; tactical checks and tracking guards agree with engine rules.",
+      "qodo": "CLI unavailable",
+      "advisor": "Installed launcher unavailable"
+    },
+    "limits": [
+      "Declared later-state browser and combat fixtures are not a full-campaign playthrough.",
+      "Whole-campaign Hard/Hell tuning requires longer player playtesting."
+    ]
+  },
+  "delivery": {
+    "active": "The_Road_Beyond_the_Bells.html",
+    "demo": "/workspace/RPG2/demo/index.html",
+    "export": "/workspace/RPG2/dist/index.html",
+    "byte_identical": true,
+    "dev_preview_serves_exact_bytes": true,
+    "packaged_with": "npm run build in /workspace/RPG2"
+  },
+  "completed_date": "2026-11-18"
+}

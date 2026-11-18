@@ -1,0 +1,17 @@
+
+Running 10 tests using 1 worker
+
+(node:34785) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/jobs-browser.spec.mjs:121:1 › Warden starts with a real martial skill and spends MP only when its round resolves (5.7s)
+  ✓   2 tests/jobs-browser.spec.mjs:137:1 › Skill Shop teaches an unlocked martial technique once without refilling MP and saves it (4.5s)
+  ✓   3 tests/jobs-browser.spec.mjs:150:1 › all companions can choose jobs during creation and change them without MP farming or lost copies (5.2s)
+  ✓   4 tests/jobs-browser.spec.mjs:174:1 › insufficient MP blocks skills while silence blocks magic and leaves martial skills usable (5.7s)
+  ✓   5 tests/jobs-browser.spec.mjs:192:1 › an actual previous charge-based save imports as MP without losing equipment or progress (4.0s)
+  ✓   6 tests/jobs-browser.spec.mjs:210:1 › 390px job, MP, skill and preparation panels remain readable with a visible close control (3.0s)
+  ✓   7 tests/jobs-browser.spec.mjs:222:1 › field MP tea cannot be wasted and ordinary shelter rest restores the party MP pools (4.6s)
+  ✓   8 tests/jobs-browser.spec.mjs:236:1 › shared battle MP tea uses a normal item action and restores only the chosen depleted ally (4.7s)
+  ✓   9 tests/jobs-browser.spec.mjs:248:1 › weapon selection compares the chosen traveler and quantity purchases keep four charm copies usable (4.8s)
+  ✓  10 tests/jobs-browser.spec.mjs:289:1 › 390px inventory shows current HP and capped recovery previews before and after supplies (5.6s)
+
+  10 passed (49.5s)

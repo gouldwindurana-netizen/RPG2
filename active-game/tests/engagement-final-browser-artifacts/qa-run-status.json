@@ -1,0 +1,17 @@
+{
+  "date": "2026-11-17",
+  "status": "passed",
+  "passed": 6,
+  "failed": 0,
+  "game_sha256": "db2cf5bdecd3333a40c279ead59618fad5db8766a1c93bacad71765099ccb3da",
+  "scope": [
+    "Actual walking to board, acceptance, focus, Escape and reload",
+    "Actual battle victory, accepted kill progress, discovered affinities and reload",
+    "Survey delivery, exact once-only reward and reload",
+    "390px journal tabs, regional goals and chapter locks",
+    "Custom-hero four-line shelter dialogue, replay and resource preservation",
+    "Later board gates and remote read-only controls"
+  ],
+  "page_errors": [],
+  "limits": "Declared progression fixtures isolate later states; not a full campaign playthrough."
+}

@@ -108,6 +108,12 @@ export function createArt(scene: Phaser.Scene) {
     box(c, '#f0bf64', 11, 15, 10, 13); box(c, '#ffe4a1', 14, 17, 4, 9);
     box(c, '#94733f', 8, 30, 16, 4); box(c, '#80724c', 8, 42, 17, 3);
   });
+  canvas(scene, 'signpost', 44, 46, c => {
+    box(c, '#283a3b88', 12, 41, 24, 4);box(c, '#6c5139', 20, 8, 5, 35);box(c, '#b0905e', 21, 8, 2, 34);
+    box(c, '#584532', 5, 6, 31, 11);box(c, '#c6aa75', 6, 7, 29, 8);box(c, '#c6aa75', 35, 9, 5, 4);
+    box(c, '#4d4738', 10, 20, 30, 11);box(c, '#a99168', 11, 21, 28, 8);box(c, '#a99168', 6, 23, 5, 4);
+    box(c, '#4b5b65', 12, 10, 17, 2);box(c, '#4b5b65', 16, 24, 16, 2);
+  });
   for (const open of [false, true]) canvas(scene, open ? 'chest-open' : 'chest', 40, 36, c => {
     box(c, '#182b2b88', 2, 29, 36, 5); box(c, '#40382e', 3, 9, 34, 22);
     box(c, '#967046', 5, open ? 2 : 10, 30, 10); box(c, '#7a563a', 5, 21, 30, 9);
@@ -121,6 +127,33 @@ export function createArt(scene: Phaser.Scene) {
     for (let i = 0; i < 4; i++) box(c, '#263c3a', 17 + i * 8, 14, 2, 54);
     box(c, '#af8a4c', 15, 25, 34, 4); box(c, '#b89759', 35, 39, 5, 7);
     box(c, '#233837', 0, 66, 64, 6); box(c, '#aaa282', 8, 63, 48, 4);
+  });
+  for (const service of ['shop', 'inn']) canvas(scene, `service-${service}-door`, 40, 46, c => {
+    box(c, '#172b39', 8, 17, 24, 28); box(c, '#c2b397', 5, 16, 5, 29); box(c, '#c2b397', 30, 16, 5, 29);
+    box(c, '#7c613f', 11, 20, 18, 25); box(c, '#d6c18b', 22, 31, 3, 4); box(c, '#e0d3a6', 5, 15, 30, 4);
+    box(c, '#413d34', 1, 0, 38, 16); box(c, '#d6caa5', 3, 2, 34, 12);
+    if (service === 'inn') {
+      box(c, '#4c5d80', 8, 6, 3, 8); box(c, '#4c5d80', 11, 8, 17, 4); box(c, '#4c5d80', 26, 7, 3, 7); box(c, '#a17f71', 12, 5, 5, 3);
+    } else {
+      for (let i = 0; i < 8; i++) { box(c, '#486b7d', 10 + i * 2, 3 + i, 3, 2); box(c, '#486b7d', 25 - i * 2, 3 + i, 3, 2); }
+      box(c, '#97774a', 7, 11, 7, 3); box(c, '#97774a', 25, 11, 7, 3);
+    }
+    box(c, '#243746', 3, 43, 34, 3);
+  });
+  canvas(scene, 'site-bridge', 64, 84, c => {
+    for (let y=8;y<82;y+=9) {box(c,'#bda77b',15,y,34,7);box(c,'#d8c18e',17,y,30,2);}
+    for(const x of [10,49]){box(c,'#514638',x,4,5,79);for(const y of [5,35,68]){box(c,'#9f8659',x-2,y,9,15);box(c,'#e2cf9d',x-3,y,11,3);}}
+  });
+  canvas(scene, 'site-pass', 72, 64, c => {
+    for (const left of [0,43])for(let i=0;i<7;i++){box(c,i%2?'#80918f':'#a3afa1',left+12-i*2,3+i*8,9+i*4,8);}
+    box(c,'#e0d6af',11,3,10,5);box(c,'#e0d6af',53,3,10,5);box(c,'#c9b686',27,44,19,20);box(c,'#e6cca0',31,45,2,18);
+  });
+  canvas(scene, 'site-gate', 76, 84, c => {
+    box(c,'#24374b',12,19,52,62);box(c,'#a5afa7',8,17,16,65);box(c,'#a5afa7',52,17,16,65);
+    box(c,'#d1cbb0',9,17,58,9);box(c,'#ded8ba',7,13,18,6);box(c,'#ded8ba',51,13,18,6);
+    box(c,'#1b3046',26,30,24,52);box(c,'#82744e',27,36,3,43);box(c,'#82744e',46,36,3,43);
+    box(c,'#6d8f9c',12,30,8,27);box(c,'#6d8f9c',56,30,8,27);box(c,'#d1c28e',14,32,4,8);box(c,'#d1c28e',58,32,4,8);
+    box(c,'#d6cba7',5,79,66,4);
   });
   for (const rare of [false, true]) canvas(scene, rare ? 'enemy-silver' : 'enemy-reedback', 64, 48, c => {
     box(c, '#13282b88', 5, 39, 54, 6);
@@ -359,6 +392,8 @@ export function textureForEntity(sprite: string, kind: string) {
   if (kind === 'chest') return 'chest';
   if (kind === 'campfire' || /fire/.test(key)) return 'fire-0';
   if (kind === 'exit') {
+    if (/shop/.test(key)) return 'service-shop-door';
+    if (/\binn\b|inn-/.test(key)) return 'service-inn-door';
     if (/basilica|heart/.test(key)) return 'site-basilica';
     if (/works|granary|cave|hollow/.test(key)) return 'site-cave';
     if (/dock|ferry|fen/.test(key)) return 'site-dock';
@@ -367,6 +402,8 @@ export function textureForEntity(sprite: string, kind: string) {
     return 'door';
   }
   if (/lantern/.test(key)) return 'lantern';
+  if (/signpost/.test(key)) return 'signpost';
+  if (/innkeeper/.test(key)) return 'hero-bessa';
   if (kind === 'npc') return /bessa|sen|iona|neri/.test(key) ? 'hero-bessa' : 'hero-merchant';
   let texture = /hound|jackal/.test(key) ? 'enemy-hound' : /widow/.test(key) ? 'enemy-widow'
     : /hart/.test(key) ? 'enemy-hart' : /cantor|choir/.test(key) ? 'enemy-cantor'
@@ -399,19 +436,21 @@ export function paintWorld(scene: Phaser.Scene, map: GameMap, area: string) {
   const ox = Math.floor((width - map.width * tile) / 2), oy = Math.floor((height - map.height * tile) / 2);
   const texture = scene.textures.createCanvas(key, width, height)!;
   const c = texture.getContext(); c.imageSmoothingEnabled = false;
-  const baseColors = AREA_COLORS[area] || AREA_COLORS.camp;
-  const indoor = ['works', 'granary', 'heart', 'tollhouse'].includes(area);
+  const baseColors = AREA_COLORS[map.parent || area] || AREA_COLORS.camp;
+  const room = map.kind === 'interior';
+  const indoor = room || ['works', 'granary', 'heart', 'tollhouse'].includes(area);
   const rand = noise([...area].reduce((n, v) => n + v.charCodeAt(0), 193));
   const scenery: Scenery[] = [];
   const at = (x: number, y: number) => map.tiles[y]?.[x] || '#';
-  box(c, '#182b3b', 0, 0, width, height);
+  box(c, room ? '#08142b' : '#182b3b', 0, 0, width, height);
+  if (room) box(c, '#020a1d', ox - 9, oy + 10, map.width * tile + 18, map.height * tile + 5);
   for (let y = 0; y < map.height; y++) for (let x = 0; x < map.width; x++) {
     const ch = at(x,y), px = ox+x*tile, py = oy+y*tile;
     const worldBiome: Record<string, string> = {R01:'camp',R02:'dunmere',R03:'fen',R04:'orchard',R05:'crown',R06:'veyr'};
     const biome = area === 'overworld' ? worldBiome[regionAt('overworld',x,y)] : area;
     const [grass, light, stone, water] = area === 'overworld' ? AREA_COLORS[biome] : baseColors;
     const isWater = ch === 'w';
-    const ground = isWater ? water : ch === 'd' ? '#ab9872' : ch === 's' ? stone : ch === 'f' ? (indoor ? '#69776d' : stone) : ch === '#' ? (indoor ? '#465b5e' : '#6a7c74') : grass;
+    const ground = isWater ? water : room ? (ch === '#' ? '#4d5967' : map.service === 'inn' ? '#987d5e' : '#859092') : ch === 'd' ? '#ab9872' : ch === 's' ? stone : ch === 'f' ? (indoor ? '#69776d' : stone) : ch === '#' ? (indoor ? '#465b5e' : '#6a7c74') : grass;
     box(c, ground, px, py, tile, tile);
     if (isWater) {
       for (let i=0;i<3;i++) box(c, i%2 ? '#a5c3bc50' : '#1d425b66', px+3+Math.floor(rand()*16),py+5+i*9,6+Math.floor(rand()*9),1);
@@ -427,6 +466,21 @@ export function paintWorld(scene: Phaser.Scene, map: GameMap, area: string) {
       for (let i=0;i<5;i++) box(c, i%2?'#b69e72':'#c2ab7b',px+(horizontal?i*6:6),py+(horizontal?6:i*6),horizontal?5:18,horizontal?18:5);
       box(c,'#e1c895',px+(horizontal?0:3),py+(horizontal?3:0),horizontal?30:2,horizontal?2:30);
       box(c,'#6b604b',px+(horizontal?0:25),py+(horizontal?25:0),horizontal?30:2,horizontal?2:30);
+    } else if (room && ch !== '#') {
+      const inn = map.service === 'inn';
+      box(c, inn ? '#6c5948' : '#596e78', px, py + 29, 30, 1);
+      box(c, inn ? '#ae9470' : '#a3b0ad', px, py, 1, 30);
+      if ((x + y) % 3 === 0) box(c, inn ? '#bf9e752e' : '#d5d8c32e', px + 3, py + 3, 24, 2);
+      if (x >= 8 && x <= 12 && y >= 7 && y <= 11 && ['f','s'].includes(ch)) {
+        box(c, inn ? '#77577b' : '#416c87', px, py, 30, 30);
+        if (x === 8 || x === 12) box(c, '#c6ad7b', px + (x === 8 ? 2 : 26), py, 2, 30);
+        if (y === 7 || y === 11) box(c, '#c6ad7b', px, py + (y === 7 ? 2 : 26), 30, 2);
+        if ((x + y) % 2 === 0) { box(c, '#a7bed26b', px + 12, py + 10, 6, 9); box(c, '#a7bed26b', px + 9, py + 13, 12, 3); }
+      }
+      if (ch === 'C') {
+        box(c, '#4b3b35', px, py + 4, 30, 26); box(c, '#9e794d', px, py + 2, 30, 17);
+        box(c, '#c4a16d', px, py + 2, 30, 3); box(c, '#6c5139', px, py + 18, 30, 4); box(c, '#d4b878', px + 5, py + 8, 20, 1);
+      }
     } else if (ch === 's' || ch === 'f' || ch === '#') {
       box(c,ch==='#'?'#283f49':'#4a625d',px,py,30,1); box(c,ch==='#'?'#314950':'#8e9e87',px,py,1,30);
       if ((x+y)%2===0) box(c,ch==='#'?'#7a8b7c':'#d0c7a12a',px+2,py+2,26,2);
@@ -444,22 +498,41 @@ export function paintWorld(scene: Phaser.Scene, map: GameMap, area: string) {
     if (isWater && area!=='overworld' && (x+y)%5===0) c.drawImage(scene.textures.get('reeds').getSourceImage() as HTMLCanvasElement,px,py,30,30);
   }
   // Connected building footprints become one readable piece of town architecture.
+  for (const marker of ['T', 'B', 'H']) {
   const visited = new Set<string>();
-  for(let y=0;y<map.height;y++) for(let x=0;x<map.width;x++) if(at(x,y)==='T'&&!visited.has(`${x},${y}`)) {
+  for(let y=0;y<map.height;y++) for(let x=0;x<map.width;x++) if(at(x,y)===marker&&!visited.has(`${x},${y}`)) {
     const queue = [{x,y}], cells: {x:number;y:number}[]=[];
-    while(queue.length){const p=queue.shift()!;const id=`${p.x},${p.y}`;if(visited.has(id)||at(p.x,p.y)!=='T')continue;visited.add(id);cells.push(p);for(const [dx,dy]of[[0,-1],[1,0],[0,1],[-1,0]])queue.push({x:p.x+dx,y:p.y+dy});}
+    while(queue.length){const p=queue.shift()!;const id=`${p.x},${p.y}`;if(visited.has(id)||at(p.x,p.y)!==marker)continue;visited.add(id);cells.push(p);for(const [dx,dy]of[[0,-1],[1,0],[0,1],[-1,0]])queue.push({x:p.x+dx,y:p.y+dy});}
     const minX=Math.min(...cells.map(p=>p.x)),maxX=Math.max(...cells.map(p=>p.x)),minY=Math.min(...cells.map(p=>p.y)),maxY=Math.max(...cells.map(p=>p.y));
     const w=(maxX-minX+1)*tile,h=(maxY-minY+1)*tile;
-    if(area==='camp') c.drawImage(scene.textures.get('tent').getSourceImage() as HTMLCanvasElement,ox+minX*tile,oy+minY*tile,w,h);
+    if(marker==='B') {
+      const px=ox+minX*tile,py=oy+minY*tile;
+      box(c,'#4e3e34',px+2,py+1,w-4,h-1); box(c,'#c9b68e',px+6,py+5,w-12,h-11);
+      box(c,'#e6debd',px+10,py+9,w-20,12); box(c,'#708aa2',px+6,py+24,w-12,h-30);
+      box(c,'#a7b5b7',px+8,py+25,w-16,5); box(c,'#705942',px+2,py+h-7,w-4,7);
+    } else if(marker==='H') {
+      const px=ox+minX*tile,py=oy+minY*tile;
+      box(c,'#4e3c31',px+2,py+2,w-4,h-4); box(c,'#b08a5b',px+2,py+1,w-4,5);
+      for(let sy=py+10;sy<py+h-6;sy+=22) {box(c,'#b08a5b',px+3,sy+13,w-6,3);for(let sx=px+6;sx<px+w-6;sx+=9){box(c,['#75929a','#ae7673','#b8ab79'][(Math.floor(sx/9)+Math.floor(sy/22))%3],sx,sy,6,12);box(c,'#d2c49a',sx+1,sy+3,4,1);}}
+    } else if(area==='camp') c.drawImage(scene.textures.get('tent').getSourceImage() as HTMLCanvasElement,ox+minX*tile,oy+minY*tile,w,h);
     else {
-      const basilica=area==='veyr'&&w>=120,textureName=basilica?'site-basilica':(minX+minY)%3===0?'site-inn':(minX+minY)%3===1?'site-shop':'site-house';
+      const door=map.entities.find(e=>e.kind==='exit'&&e.id.startsWith('door-')&&e.x>=minX&&e.x<=maxX&&e.y===maxY+1);
+      const basilica=area==='veyr'&&w>=120,textureName=door?.id.endsWith('-inn')?'site-inn':door?.id.endsWith('-shop')?'site-shop':basilica?'site-basilica':'site-house';
       const image=scene.textures.get(textureName).getSourceImage() as HTMLCanvasElement;
       c.drawImage(image,ox+minX*tile-3,oy+minY*tile-12,w+6,h+14);
     }
   }
+  }
   if(area==='camp') for(const[x,y]of[[8,8],[20,10],[26,13]]){box(c,'#705a42',ox+x*tile,oy+y*tile+4,24,11);box(c,'#c3a578',ox+x*tile,oy+y*tile+4,24,2);}
   if(indoor) for(let y=1;y<map.height-1;y+=4)for(let x=2;x<map.width-1;x+=6)if(at(x,y)==='#'){
     box(c,'#aa976a',ox+x*tile+5,oy+y*tile,4,25);box(c,'#e5ca8d',ox+x*tile+3,oy+y*tile+13,8,5);
+  }
+  if (room) {
+    for (const x of [4,map.width-5]) {
+      const px=ox+x*tile,py=oy+3;
+      box(c,'#263b59',px,py,40,22);box(c,'#9eb4c2',px+3,py+3,34,16);box(c,'#dfd8b7',px+19,py+3,3,16);box(c,'#dfd8b7',px+3,py+9,34,2);
+    }
+    for (const x of [1,map.width-2]) {const px=ox+x*tile+12,py=oy+3*tile;box(c,'#6d573d',px,py,7,19);box(c,'#d5bd82',px-2,py+3,11,9);box(c,'#fff0ae',px+1,py+4,5,6);}
   }
   if(area==='dunmere'||area==='veyr') {
     const cx=area==='veyr'?16:15,cy=area==='veyr'?11:9;

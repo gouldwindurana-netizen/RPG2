@@ -1,0 +1,21 @@
+{
+  "status": "superseded_travel_harness",
+  "html_sha256": "57484856a698facf70e6ef98bf41731588f6f89658af88a3365c19c61f7cc2bb",
+  "passed": 14,
+  "failed": 2,
+  "elapsed_report": "5.8m",
+  "equipment": {
+    "passed": 7,
+    "failed": 0,
+    "final": true
+  },
+  "travel_initial": {
+    "passed": 7,
+    "failed": 2
+  },
+  "failures": [
+    "Precomputed held-key route approached Perrin instead of Bessa; helper now replans from actual player position.",
+    "Old single-exit assertion rejected the intentionally added dungeon stair. New assertion retains exactly one canonical world exit and allows only same-root interior stairs/lifts."
+  ],
+  "gameplay_changes_for_failures": false
+}

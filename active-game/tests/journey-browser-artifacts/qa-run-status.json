@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-18",
+  "status": "passed",
+  "game_sha256": "218bee8425ed5a139b697f3e0072068530d187dc03e9fee57f2ee338c212247a",
+  "page_errors": [],
+  "limits": "Declared save fixtures isolate discovered history, conditions and later floors; this is not a full campaign playthrough.",
+  "unique_checks": 6,
+  "passed": 6,
+  "failed": 0,
+  "duration_seconds": 37.6,
+  "command": "/workspace/RPG2/node_modules/.bin/playwright test -c tests/journey-playwright.config.mjs",
+  "scope": [
+    "Read-only tactics, unknown and exact discovered enemy affinities, whole-state equality",
+    "Shared item reservation counts, current-plan editing and invalid curative/revive target disabling",
+    "Accepted commission pin, reload, contextual View and untracking",
+    "Tracked evidence delivery clears goal and pays only the existing reward once",
+    "390px tracking/tactics and hidden exploration goal during combat",
+    "Actual current-floor record/cache/lift interactions, checklist updates, resource reserves and reload"
+  ],
+  "visual_review": "Inspected desktop known tactics, shared-supply screenshot, mobile tactics, toast-free tracked objective and completed current-floor checklist; readable and no horizontal clipping in these fixtures."
+}

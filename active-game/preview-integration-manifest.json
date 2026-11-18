@@ -1,0 +1,41 @@
+{
+  "date": "2026-11-12",
+  "authoritative_game": "/workspace/active-game/The_Road_Beyond_the_Bells.html",
+  "sha256": "735a067db6344d66df0e5911a12585fb8a211368d946f604bd8250a17b345293",
+  "bytes": 1547204,
+  "outputs": [
+    "/workspace/RPG2/dist/index.html",
+    "/workspace/RPG2/demo/index.html"
+  ],
+  "default_dev_root": "http://127.0.0.1:5173/",
+  "built_preview_verified": "http://127.0.0.1:4173/",
+  "save_key": "avel-demo-v1",
+  "gameplay_html_changed": false,
+  "packaging": "npm run build checks embedded JavaScript syntax and copies exact selected HTML. Vite dev serves it directly; portable checkouts fall back to demo/index.html.",
+  "prior_outputs_backup": "preview-before-expansion/manifest.json",
+  "validation": {
+    "engine_renderer": {
+      "passed": 135,
+      "failed": 0
+    },
+    "http_bytes": "Dev root/index/demo routes and built root match authoritative SHA256 exactly.",
+    "portable_packaging_fallback": "Passed isolated checkout packaging with no active-game sibling.",
+    "browser_expansion_initial": {
+      "passed": 9,
+      "failed": 1
+    },
+    "browser_expansion_courier_recheck": {
+      "passed": 1,
+      "failed": 0,
+      "initial_failure": "Held-key test helper overshot a tile; trace showed x13 to x15, then fixed route hit NPC. Isolated rerun passed without gameplay changes."
+    },
+    "built_preview": "Actual title/new hero/camp/reload/Continue passed with no page errors; screenshot visually reviewed.",
+    "artifacts": [
+      "tests/current-preview-artifacts",
+      "tests/current-preview-courier-recheck-artifacts",
+      "tests/current-built-preview-artifacts"
+    ]
+  },
+  "limitations": "Older TypeScript source and its tests are retained separately. This application changes preview and packaging, not a port of the selected game back into those source modules.",
+  "pushed_or_published": false
+}

@@ -10,7 +10,7 @@ class MemoryStorage implements Storage {
 }
 function start(storage:Storage|null=null){const e=createEngine({storage,seed:321,roundDelay:0});e.beginAdventure(DEFAULT_PROFILE);e.skipIntro();e.configure({encounters:'visible'});return e;}
 function drain(e:DemoEngine){while(e.state.message)e.dismiss();}
-function beside(e:DemoEngine,area:Area,id:string){drain(e);e.state.area=area;const entity=e.map().entities.find(x=>x.id===id)!;assert.ok(entity,id);e.state.player={x:entity.x-1,y:entity.y,facing:'right'};e.interact(id);}
+function beside(e:DemoEngine,area:Area,id:string){drain(e);e.state.area=area;const map=e.map(),entity=map.entities.find(x=>x.id===id)!;assert.ok(entity,id);const tile=[[0,1],[1,0],[-1,0],[0,-1]].map(([dx,dy])=>({x:entity.x+dx,y:entity.y+dy})).find(p=>'gdsfb'.includes(map.tiles[p.y]?.[p.x]??'!')&&!map.entities.some(row=>row.x===p.x&&row.y===p.y))!;assert.ok(tile);e.state.player={...tile,facing:'right'};e.interact(id);}
 async function win(e:DemoEngine,area:Area,id:string){beside(e,area,id);assert.equal(e.state.mode,'battle');for(const enemy of e.state.battle!.enemies){enemy.hp=1;enemy.attack=0;}const target=e.state.battle!.enemies[0].id;for(const hero of e.state.heroes)e.plan(hero.id,{type:'attack',target});await e.resolveRound();assert.equal(e.state.mode,'victory');if(e.state.reward!.choices.length)e.claim(e.state.reward!.choices[0]);e.continue();drain(e);}
 
 for(const version of [1,2])test(`version ${version} completed chapter migrates twice without ending or losing resources`,()=>{
@@ -24,7 +24,7 @@ for(const version of [1,2])test(`version ${version} completed chapter migrates t
 test('final dialogue opens the ending once and postgame stays playable across reloads',()=>{
   const storage=new MemoryStorage(),e=start(storage);e.state.campaign.stage=10;e.state.flags.completed=true;e.state.campaign.switches=['heart_defeated'];e.state.message={speaker:'Bessa',text:'The road is open.'};e.state.messageQueue=[{speaker:'Ari',text:'Then we keep walking.'}];e.save();
   const resumed=createEngine({storage});resumed.dismiss();assert.equal(resumed.state.mode,'explore');assert.equal(resumed.state.message?.speaker,'Ari');resumed.dismiss();assert.equal(resumed.state.mode,'ending');assert.ok(resumed.state.campaign.switches.includes('ending_seen'));
-  resumed.continue();drain(resumed);assert.equal(resumed.state.mode,'explore');beside(resumed,'camp','merchant');drain(resumed);assert.equal(resumed.state.mode,'explore');resumed.save();
+  resumed.continue();drain(resumed);assert.equal(resumed.state.mode,'explore');beside(resumed,'camp-shop','merchant');drain(resumed);assert.equal(resumed.state.mode,'explore');resumed.save();
   const postgame=createEngine({storage});assert.equal(postgame.state.mode,'explore');postgame.dismiss();assert.equal(postgame.state.mode,'explore');
 });
 
@@ -35,7 +35,7 @@ test('regional service zones sell their tier, charge rest, and restore local def
     const before=e.state.gold;e.state.heroes[0].hp=1;e.rest();assert.equal(e.state.gold,before-tier*10);assert.equal(e.state.heroes[0].hp,e.state.heroes[0].maxHp);drain(e);assert.equal(e.state.safeReturn.area,area);assert.equal(createEngine({storage}).state.safeReturn.area,area);
     e.state.player={x:23,y:10,facing:'right'};assert.equal(shopOffers(e.state).length,0);const damaged=e.state.heroes[0].hp=3;e.rest();assert.equal(e.state.heroes[0].hp,damaged);
   }
-  e.state.gold=10000;e.state.heroes[0].hp=1;beside(e,'heart','heart-relief');assert.equal(e.state.heroes[0].hp,e.state.heroes[0].maxHp);assert.equal(e.state.safeReturn.area,'heart');drain(e);e.state.mode='defeat';e.continue();assert.equal(e.state.area,'heart');assert.equal(e.state.player.x,4);assert.equal(e.state.heroes[0].hp,e.state.heroes[0].maxHp);
+  e.state.gold=10000;e.state.heroes[0].hp=1;beside(e,'heart','heart-relief');assert.equal(e.state.heroes[0].hp,e.state.heroes[0].maxHp);assert.equal(e.state.safeReturn.area,'heart');drain(e);e.state.mode='defeat';e.continue();assert.equal(e.state.area,'heart');assert.equal(e.state.player.x,e.state.safeReturn.x);assert.equal(e.state.heroes[0].hp,e.state.heroes[0].maxHp);
 });
 
 test('all eight unlocked caster tiers have usable spells and field recovery spends charges once',()=>{

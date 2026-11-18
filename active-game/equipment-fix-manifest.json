@@ -1,0 +1,33 @@
+{
+  "baseline_upload": "The_Road_Beyond_the_Bells_FFPR_Mod_v2.html",
+  "baseline_sha256": "6826e7d70ba56ddd2bbf868d9b8c31b4a2d4c641fb332b6fad603ac4b0dc32e7",
+  "working_file": "The_Road_Beyond_the_Bells.html",
+  "working_sha256": "a1daa7eac65d047cda4f4471a6f16b5907d77b4578b089fba24b8cdcc1bdb55f",
+  "changes": [
+    "Shared equipment-copy accounting",
+    "Equipment menu copy counts and eligibility",
+    "Show owned gear with explicit job restrictions",
+    "Equip exactly one owned copy per wearer",
+    "Sell only spare equipment copies",
+    "Optimize all five slots using one consistent stat score",
+    "Hide unsellable and unique items from the sell menu",
+    "Score every equipment stat consistently",
+    "Honest no-upgrade feedback",
+    "Match sell menu to available copies",
+    "Document inventory ownership in the pack"
+  ],
+  "preserved": [
+    "Original CSS and artwork",
+    "Per-hero EXP and existing save key",
+    "User slot equipment UI",
+    "Buy quantities and sell menu",
+    "Story, maps, combat, and other uploaded modifications"
+  ],
+  "validation": {
+    "engine_tests": 28,
+    "browser_tests": 7,
+    "baseline_optimize_regression": "Reproduced before fix; passed after fix",
+    "styles_and_other_user_modifications": "Preserved",
+    "direct_file_navigation": "Blocked by managed Chromium policy; standalone tested by fulfilling disk HTML and blocking all other requests"
+  }
+}

@@ -1,0 +1,168 @@
+{
+  "baseline_file": "polish-baseline.html",
+  "baseline_sha256": "57484856a698facf70e6ef98bf41731588f6f89658af88a3365c19c61f7cc2bb",
+  "working_file": "The_Road_Beyond_the_Bells.html",
+  "working_sha256": "7ea381bba54c2d5feb260ed2f0a3dd1034d9287d9da85a4ccf305c53bf778895",
+  "working_bytes": 1593862,
+  "modules": [
+    "polish_combat",
+    "polish_save",
+    "polish_ui",
+    "difficulty_merge"
+  ],
+  "module_sha256": {
+    "polish_combat": "397325a2922cf73fb0e1a61a6706103b8c80b7285350e35e9b8ad10087194269",
+    "polish_save": "474ec0380bb1264f04b331fe98b064ad9398369ca936d3506024d0e0cff82bf8",
+    "polish_ui": "23701d2062b4433a838751413cdf9b338ab9cfe53cae8549a3731a72049bbca6",
+    "difficulty_merge": "8917e01777f03a332e1da890ff0ec52d336244fee47c589217893ed036f395d0"
+  },
+  "merged_upload": "difficulty-upload.html",
+  "merged_upload_sha256": "cbb83307ef4e82b2c57f3416457d3633b4789b2a674b022ed7792f21fd147487",
+  "changes": [
+    "derive magic defense from the equipped copies without changing base stats",
+    "apply ward equipment to magical pulses while preserving physical damage and mitigation order",
+    "show effective magic defense in the status panel",
+    "show effective magic defense in the equipment summary",
+    "preserve the uploaded status display while adding its missing ward statistic",
+    "share item eligibility between field menus and engine checks",
+    "reject ineffective consumables without reserving or spending their copies",
+    "make owned field meals and chosen tea tiers work and keep redundant recovery items",
+    "retain anticipatory battle healing plans before an ally takes damage",
+    "accept an explicit field tea tier without changing existing item callers",
+    "shop-compare-all-stats-and-custom-names",
+    "shop-reject-invalid-quantities-before-mutation",
+    "field-supply-actions-and-battle-focus-helper",
+    "keyboard-battle-targets-scroll-into-view",
+    "new-target-and-ability-lists-focus-visible-choice",
+    "clearing-a-plan-restores-command-focus",
+    "quick-planning-restores-resolve-focus",
+    "owned-deep-tea-appears-with-field-use-actions",
+    "supplies-disable-no-effect-actions-and-let-player-choose-tea-tier",
+    "selected-tea-tier-reaches-engine",
+    "responsive-supply-actions-and-readable-shop-comparisons",
+    "user difficulty edit 38",
+    "user difficulty edit 37",
+    "user difficulty edit 36",
+    "user difficulty edit 35",
+    "user difficulty edit 34",
+    "user difficulty edit 33",
+    "user difficulty edit 32",
+    "user difficulty edit 31",
+    "user difficulty edit 30",
+    "user difficulty edit 29",
+    "user difficulty edit 28",
+    "user difficulty edit 27",
+    "user difficulty edit 26",
+    "user difficulty edit 25",
+    "user difficulty edit 24",
+    "user difficulty edit 23",
+    "user difficulty edit 22",
+    "user difficulty edit 21",
+    "user difficulty edit 20",
+    "user difficulty edit 19",
+    "user difficulty edit 18",
+    "user difficulty edit 17",
+    "user difficulty edit 16",
+    "user difficulty edit 15",
+    "user difficulty edit 14",
+    "user difficulty edit 13",
+    "user difficulty edit 12",
+    "user difficulty edit 11",
+    "user difficulty edit 10",
+    "user difficulty edit 09",
+    "user difficulty edit 08",
+    "user difficulty edit 07",
+    "user difficulty edit 06",
+    "user difficulty edit 05",
+    "user difficulty edit 04",
+    "user difficulty edit 03",
+    "user difficulty edit 02",
+    "user difficulty edit 01",
+    "validate optional practice counters without rejecting an otherwise valid save",
+    "preserve valid per-hero spell practice and discard malformed counters on import",
+    "keep long-running practice counters within the save range",
+    "cap practiced revival at maximum HP while retaining weaker revive growth",
+    "change difficulty between encounters so active enemy stats stay consistent",
+    "clarify when changed difficulty applies",
+    "show enemy multipliers without promising extra rewards",
+    "explain preserved battle-cast growth in both spell menus",
+    "show each selected traveler spell level during battle planning",
+    "show saved spell practice in the field spellbook"
+  ],
+  "preserved": [
+    "Uploaded customization and all five equipment slots",
+    "Owned copies, per-hero EXP, learned spells and version-3 saves",
+    "Story outcomes, 33 dungeon floors and ten exterior destinations",
+    "Slower earnings, original art and third-party notices"
+  ],
+  "delivery": {
+    "active": "The_Road_Beyond_the_Bells.html",
+    "demo": "/workspace/RPG2/demo/index.html",
+    "export": "/workspace/RPG2/dist/index.html",
+    "byte_identical": true,
+    "packaged_with": "npm run build in /workspace/RPG2",
+    "dev_preview_serves_exact_bytes": true
+  },
+  "published": false,
+  "pushed": false,
+  "last_verified_date": "2026-11-17",
+  "validation": {
+    "engine_ui_renderer": {
+      "passed": 258,
+      "failed": 0,
+      "command": "GAME_HTML=/tmp/polish-final-candidate.html node --test tests/*core.test.cjs tests/*renderer.test.cjs",
+      "tested_sha256": "7ea381bba54c2d5feb260ed2f0a3dd1034d9287d9da85a4ccf305c53bf778895",
+      "active_and_candidate_byte_equal": true,
+      "log": "tests/polish-validation/core-results.txt"
+    },
+    "browser": {
+      "previous_merged_sha256": "4def76c92498b1cc6fd692ea3eeb8f2e87366b03dcd65784658ac9fbe9a64489",
+      "polish_and_merge": {
+        "passed": 8,
+        "artifacts": "tests/polish-final-browser-artifacts"
+      },
+      "equipment_initial": {
+        "passed": 6,
+        "timeout": 1,
+        "artifacts": "tests/polish-equipment-artifacts",
+        "reason": "The manual workflow exceeded the 45s timer during concurrent suites; the unchanged case passed in 34.7s on the final hash with a 120s total timer."
+      },
+      "dungeon_mobile": {
+        "passed": 3,
+        "artifacts": "tests/polish-depth-artifacts"
+      },
+      "final_hash_smoke": {
+        "passed": 2,
+        "failed": 0,
+        "tested_sha256": "7ea381bba54c2d5feb260ed2f0a3dd1034d9287d9da85a4ccf305c53bf778895",
+        "artifacts": "tests/polish-final-hash-recheck-artifacts",
+        "scenarios": [
+          "390px creation Hard, Gear Hell, reload and overflow",
+          "Lumen purchase, real battle cast, victory, saved practice and reload"
+        ]
+      },
+      "equipment_recheck": {
+        "passed": 1,
+        "failed": 0,
+        "tested_sha256": "7ea381bba54c2d5feb260ed2f0a3dd1034d9287d9da85a4ccf305c53bf778895",
+        "artifacts": "tests/polish-final-equipment-artifacts",
+        "duration_seconds": 34.7,
+        "timeout_ms": 120000
+      },
+      "unique_checks_passed": 18,
+      "final_difference": "The last code change is a maximum-HP cap in revival; all258 core/UI/renderer tests cover exact final bytes, including four revival regressions. Two UI flows and the five-slot manual equipment flow were rechecked on that final hash."
+    },
+    "review": {
+      "independent": "One Rebirth above-max-HP finding fixed and covered by four real-cast/retreat/reload tests; no remaining material blockers reported.",
+      "qodo": "CLI unavailable",
+      "advisor": "Launcher unavailable"
+    },
+    "limits": [
+      "Automated campaign routes and prepared fixtures are not a complete campaign playthrough.",
+      "Whole-campaign Hard/Hell balance requires longer player playtesting.",
+      "Cloud browser does not permit direct file navigation; standalone bytes served with secondary network requests blocked."
+    ]
+  },
+  "status": "complete",
+  "completed_date": "2026-11-17"
+}

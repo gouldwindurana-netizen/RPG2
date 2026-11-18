@@ -1,0 +1,22 @@
+{
+  "status": "passed",
+  "html_sha256": "57484856a698facf70e6ef98bf41731588f6f89658af88a3365c19c61f7cc2bb",
+  "suite": "travel-browser.spec.mjs",
+  "passed": 9,
+  "failed": 0,
+  "elapsed_report": "2.4m",
+  "harness_updates": [
+    "Movement helpers replan from actual player position, preserving real held-key movement semantics.",
+    "World-site assertion requires exactly one canonical overworld exit; any extra exit must be a same-root dungeon stair/lift.",
+    "Map regression explicitly selects the world tab in the new dual map interface."
+  ],
+  "preserved_assertions": [
+    "No threshold encounter or gate bypass",
+    "All ten canonical site entry/return pairs",
+    "Stale return repair",
+    "Held-key arrival latch and fresh-key requirement",
+    "Touch-pad gaps,390px and reduced-motion traversal",
+    "Legacy saves on entrances and exits",
+    "Standalone boot with all secondary requests blocked"
+  ]
+}

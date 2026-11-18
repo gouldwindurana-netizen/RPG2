@@ -50,7 +50,7 @@ test('all maps have consistent dimensions and every entity has a reachable inter
   for (const [area, map] of Object.entries(MAPS)) {
     assert.equal(map.tiles.length, map.height);
     assert.ok(map.tiles.every(row => row.length === map.width));
-    const start = area === 'camp' ? [11,10] : area==='works'?[3,15]:area==='overworld'?[8,33]:[3,14];
+    const start = map.kind==='interior'?[10,11]:area === 'camp' ? [11,10] : area==='works'?[3,15]:area==='overworld'?[8,33]:[3,14];
     const visited = new Set<string>(); const queue = [start];
     while (queue.length) {
       const [x, y] = queue.shift()!; const key = `${x},${y}`;

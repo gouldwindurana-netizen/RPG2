@@ -1,29 +1,36 @@
-import type { Area, GameMap, GameState, MapEntity } from './contracts';
+import type { Area, Direction, GameMap, GameState, MapEntity, SettlementArea } from './contracts';
+import { buildInteriors, INTERIOR_INFO, interiorTransitions, serviceDoors, SETTLEMENTS } from './interiors';
 
 export interface CampaignMessage { speaker: string; text: string; }
 export interface StoryEvent { messages: CampaignMessage[]; stage?: number; switches?: string[]; }
-export interface TravelTransition { area: Area; x: number; y: number; minStage?: number; requiredSwitch?: string; blockedText?: string; }
+export interface TravelTransition { area: Area; x: number; y: number; minStage?: number; requiredSwitch?: string; blockedText?: string; facing?: Direction; }
 export interface BossRequirement { minStage?: number; requiredSwitch?: string; blockedText: string; }
-export interface AreaInformation { name: string; regionId: string; safe: boolean; recommended: [number, number]; }
+export interface AreaInformation { name: string; regionId: string; safe: boolean; recommended: [number, number]; kind: 'world' | 'town' | 'dungeon' | 'interior'; service?: 'shop' | 'inn'; parent?: SettlementArea; }
 
 export const AREA_INFO: Record<Area, AreaInformation> = {
-  camp: { name: 'Reedbank Shelter', regionId: 'R01', safe: true, recommended: [1, 5] },
-  works: { name: 'Merewatch Bellworks', regionId: 'R01', safe: false, recommended: [1, 5] },
-  overworld: { name: 'The Roads of Avel', regionId: 'R01', safe: false, recommended: [1, 34] },
-  dunmere: { name: 'Dunmere Market', regionId: 'R02', safe: true, recommended: [5, 10] },
-  tollhouse: { name: 'The Impounding Tollhouse', regionId: 'R02', safe: false, recommended: [5, 10] },
-  fen: { name: 'Alder Fen Village', regionId: 'R03', safe: true, recommended: [10, 16] },
-  granary: { name: 'The Flooded Granary', regionId: 'R03', safe: false, recommended: [10, 16] },
-  orchard: { name: 'Orchard Highroad', regionId: 'R04', safe: false, recommended: [16, 22] },
-  crown: { name: 'Crown Road Handover', regionId: 'R05', safe: false, recommended: [22, 28] },
-  veyr: { name: 'Veyr Refuge Quarter', regionId: 'R06', safe: true, recommended: [28, 34] },
-  heart: { name: 'The Last Service Passage', regionId: 'R06', safe: false, recommended: [30, 34] },
+  camp: { kind: 'town', name: 'Reedbank Shelter', regionId: 'R01', safe: true, recommended: [1, 5] },
+  works: { kind: 'dungeon', name: 'Merewatch Bellworks', regionId: 'R01', safe: false, recommended: [1, 5] },
+  overworld: { kind: 'world', name: 'The Roads of Avel', regionId: 'R01', safe: false, recommended: [1, 34] },
+  dunmere: { kind: 'town', name: 'Dunmere Market', regionId: 'R02', safe: true, recommended: [5, 10] },
+  tollhouse: { kind: 'dungeon', name: 'The Impounding Tollhouse', regionId: 'R02', safe: false, recommended: [5, 10] },
+  fen: { kind: 'town', name: 'Alder Fen Village', regionId: 'R03', safe: true, recommended: [10, 16] },
+  granary: { kind: 'dungeon', name: 'The Flooded Granary', regionId: 'R03', safe: false, recommended: [10, 16] },
+  orchard: { kind: 'town', name: 'Orchard Highroad', regionId: 'R04', safe: false, recommended: [16, 22] },
+  crown: { kind: 'town', name: 'Crown Road Handover', regionId: 'R05', safe: false, recommended: [22, 28] },
+  veyr: { kind: 'town', name: 'Veyr Refuge Quarter', regionId: 'R06', safe: true, recommended: [28, 34] },
+  heart: { kind: 'dungeon', name: 'The Last Service Passage', regionId: 'R06', safe: false, recommended: [30, 34] },
+  ...INTERIOR_INFO,
 };
+
+export function locationKind(area: Area): AreaInformation['kind'] { return AREA_INFO[area].kind; }
+export function parentSettlement(area: Area): SettlementArea | undefined {
+  return AREA_INFO[area].parent ?? (Object.hasOwn(SETTLEMENTS, area) ? area as SettlementArea : undefined);
+}
 
 /** Village courts and the rear-guard checkpoint stay calm within dangerous maps. */
 export function isSafeLocation(area: Area, x: number, y: number): boolean {
   if (AREA_INFO[area].safe) return true;
-  if ((area === 'orchard' || area === 'crown') && x >= 2 && x <= 18 && y >= 8 && y <= 16) return true;
+  if ((area === 'orchard' || area === 'crown') && x >= 2 && x <= 18 && y >= 2 && y <= 16) return true;
   return area === 'heart' && x >= 3 && x <= 6 && y >= 13 && y <= 15;
 }
 
@@ -45,20 +52,20 @@ export const KNOWN_SWITCHES = [
 export const TRANSITIONS: Record<string, TravelTransition> = {
   toWorks: { area: 'works', x: 3, y: 15 },
   toCamp: { area: 'camp', x: 27, y: 8 },
-  'world-camp': { area: 'overworld', x: 8, y: 33, minStage: 2, blockedText: 'Bring Orren back to Bessa first. The Reedbank evacuation needs you here.' },
+  'world-camp': { area: 'overworld', x: 8, y: 33 },
   'world-works': { area: 'overworld', x: 15, y: 32 },
   'enter-camp': { area: 'camp', x: 27, y: 14 },
   'enter-works': { area: 'works', x: 3, y: 15 },
-  'road-dunmere': { area: 'overworld', x: 8, y: 25, minStage: 2, blockedText: 'Bessa must dispatch the Reedbank convoy before the north road opens.' },
-  'road-reedbank': { area: 'overworld', x: 8, y: 27 },
-  'ferry-fen': { area: 'overworld', x: 26, y: 21, minStage: 4, blockedText: 'The ferry is held for the rescued tollhouse captives. Find Neri and arrange their departure first.' },
-  'ferry-saltroad': { area: 'overworld', x: 23, y: 21 },
-  'pass-orchard': { area: 'overworld', x: 35, y: 28, minStage: 5, blockedText: 'Sen needs the granary supplies and a supervised shelter trial before sending anyone through the high pass.' },
-  'pass-fen': { area: 'overworld', x: 33, y: 28 },
-  'road-crown': { area: 'overworld', x: 46, y: 22, minStage: 6, blockedText: 'Complete the second shelter with the Orchard keeper. The convoy needs a safe receiving point.' },
-  'road-orchard': { area: 'overworld', x: 46, y: 24 },
-  'gate-veyr': { area: 'overworld', x: 53, y: 10, minStage: 7, requiredSwitch: 'regional_feeders_retired', blockedText: 'Halden must complete the regional tower handovers before the party can enter Veyr.' },
-  'gate-crown': { area: 'overworld', x: 53, y: 12 },
+  'road-dunmere': { area: 'overworld', x: 8, y: 24, facing: 'up', minStage: 2, blockedText: 'Bessa must dispatch the Reedbank convoy before the north road opens.' },
+  'road-reedbank': { area: 'overworld', x: 8, y: 28, facing: 'down' },
+  'ferry-fen': { area: 'overworld', x: 27, y: 21, facing: 'right', minStage: 4, blockedText: 'The ferry is held for the rescued tollhouse captives. Find Neri and arrange their departure first.' },
+  'ferry-saltroad': { area: 'overworld', x: 22, y: 21, facing: 'left' },
+  'pass-orchard': { area: 'overworld', x: 36, y: 28, facing: 'right', minStage: 5, blockedText: 'Sen needs the granary supplies and a supervised shelter trial before sending anyone through the high pass.' },
+  'pass-fen': { area: 'overworld', x: 32, y: 28, facing: 'left' },
+  'road-crown': { area: 'overworld', x: 46, y: 21, facing: 'up', minStage: 6, blockedText: 'Complete the second shelter with the Orchard keeper. The convoy needs a safe receiving point.' },
+  'road-orchard': { area: 'overworld', x: 46, y: 25, facing: 'down' },
+  'gate-veyr': { area: 'overworld', x: 53, y: 9, facing: 'up', minStage: 7, requiredSwitch: 'regional_feeders_retired', blockedText: 'Halden must complete the regional tower handovers before the party can enter Veyr.' },
+  'gate-crown': { area: 'overworld', x: 53, y: 13, facing: 'down' },
   'enter-dunmere': { area: 'dunmere', x: 3, y: 14, minStage: 2 },
   'world-dunmere': { area: 'overworld', x: 8, y: 21 },
   'enter-tollhouse': { area: 'tollhouse', x: 3, y: 14, minStage: 3, requiredSwitch: 'leth_records', blockedText: 'Speak to Leth in Dunmere. His copied records and witness plan will get you through the tollhouse.' },
@@ -78,6 +85,7 @@ export const TRANSITIONS: Record<string, TravelTransition> = {
   'enter-heart': { area: 'heart', x: 3, y: 14, minStage: 8, requiredSwitch: 'evacuation_ready', blockedText: 'Meet Leth, Neri and Bessa in Veyr. The intake patients, kitchens and ward crews must all be ready.' },
   'town-heart': { area: 'heart', x: 3, y: 14, minStage: 8, requiredSwitch: 'evacuation_ready', blockedText: 'The final operation needs Leth’s intake report, Neri’s supply convoy and Bessa’s ward schedule.' },
   'world-heart': { area: 'overworld', x: 58, y: 6 },
+  ...interiorTransitions(),
 };
 
 export const BOSS_REQUIREMENTS: Record<string, BossRequirement> = {
@@ -177,12 +185,11 @@ function finish(area: Area, tiles: string[][], entities: MapEntity[]): GameMap {
   return { width: tiles[0].length, height: tiles.length, tiles: tiles.map(row => row.join('')), entities, ...AREA_INFO[area] };
 }
 function town(area: Area, extras: MapEntity[], region: string): GameMap {
-  const tiles = grid(32, 18, 'g', 't');
+  const tiles = grid(32, 18, 'g', area === 'dunmere' || area === 'veyr' ? '#' : 't');
   rect(tiles, 5, 3, 5, 3, 'T'); rect(tiles, 13, 3, 5, 3, 'T'); rect(tiles, 22, 3, 5, 3, 'T');
   rect(tiles, 7, 8, 19, 7, 'd'); line(tiles, 2, 14, 28, 14, 'd'); line(tiles, 28, 8, 28, 14, 'd');
   const entities = [exit(`world-${area}`, 2, 14, 'the roads of Avel'),
-    entity(`shop-${region}`, 10, 12, 'npc', 'Supply keeper', 'merchant', 'Buy regional equipment and supplies'),
-    entity(`inn-${region}`, 17, 12, 'campfire', 'Shelter beds', 'fire', 'Rest — restore HP and spell charges'), ...extras];
+    ...extras];
   return finish(area, tiles, entities);
 }
 function dungeon(area: Area, extras: MapEntity[], region: string): GameMap {
@@ -239,7 +246,7 @@ function overworldMap(): GameMap {
 }
 
 export function buildCampaignMaps(legacy: { camp: GameMap; works: GameMap }): Record<Area, GameMap> {
-  const camp: GameMap = { ...legacy.camp, ...AREA_INFO.camp, entities: [...legacy.camp.entities, exit('world-camp', 28, 14, 'the roads of Avel')] };
+  const camp: GameMap = { ...legacy.camp, ...AREA_INFO.camp, entities: [...legacy.camp.entities.filter(item => item.id !== 'merchant'), exit('world-camp', 28, 14, 'the roads of Avel')] };
   const works: GameMap = { ...legacy.works, ...AREA_INFO.works, entities: [...legacy.works.entities] };
   const dunmere = town('dunmere', [
     entity('leth', 14, 9, 'npc', 'Leth', 'bessa'),
@@ -269,8 +276,6 @@ export function buildCampaignMaps(legacy: { camp: GameMap; works: GameMap }): Re
   const orchard = finish('orchard', orchardTiles, [
     exit('world-orchard', 2, 14, 'the highroad'),
     entity('orchard-keeper', 12, 9, 'npc', 'Orchard keeper', 'bessa'),
-    entity('shop-R04', 8, 12, 'npc', 'Rest-house trader', 'merchant', 'Buy regional equipment and supplies'),
-    entity('inn-R04', 14, 12, 'campfire', 'Rest-house beds', 'fire', 'Rest — restore HP and spell charges'),
     entity('orchard-halden', 10, 10, 'npc', 'Captain Halden', 'soren'),
     entity('cache-R04', 16, 13, 'chest', 'Rest-house cupboard', 'chest', 'Open the regional equipment cache'),
     monster('R04_patrol_a', 19, 10, 'Contaminated terrace patrol', 'wisp', 'enemy'),
@@ -288,8 +293,6 @@ export function buildCampaignMaps(legacy: { camp: GameMap; works: GameMap }): Re
     exit('world-crown', 2, 14, 'the Crown Road'),
     entity('halden', 13, 9, 'npc', 'Captain Halden', 'soren'),
     entity('crown-bessa', 16, 10, 'npc', 'Bessa’s depot', 'bessa'),
-    entity('shop-R05', 9, 12, 'npc', 'Handover quartermaster', 'merchant', 'Buy regional equipment and supplies'),
-    entity('inn-R05', 17, 12, 'campfire', 'Relief crew beds', 'fire', 'Rest — restore HP and spell charges'),
     entity('cache-R05', 16, 14, 'chest', 'Returned-equipment chest', 'chest', 'Open the regional equipment cache'),
     monster('R05_patrol_a', 24, 10, 'Feeder approach patrol', 'sentinel', 'enemy'),
     monster('B_R05_CENSER', 27, 4, 'Gate-Censer', 'sentinel'),
@@ -313,7 +316,19 @@ export function buildCampaignMaps(legacy: { camp: GameMap; works: GameMap }): Re
   ], 'R06');
   // The capital cache belongs in the inhabited refuge, not twice in the engine room.
   heart.entities = heart.entities.filter(item => item.id !== 'cache-R06');
-  return { camp, works, overworld: overworldMap(), dunmere, tollhouse, fen, granary, orchard, crown, veyr, heart };
+  const settlements = { camp, dunmere, fen, orchard, crown, veyr };
+  for (const parent of Object.keys(settlements) as SettlementArea[]) {
+    const map = settlements[parent];
+    const tiles = map.tiles.map(row => Array.from(row));
+    const doors = serviceDoors(parent);
+    for (const door of doors) for (let y = door.y; y <= 14; y++)
+      if (!map.entities.some(item => item.x === door.x && item.y === y)) tiles[y][door.x] = parent === 'crown' ? 's' : 'd';
+    const sign = parent === 'camp' ? {x: 29, y: 13} : {x: 4, y: 14};
+    const directions = parent === 'camp' ? 'Merewatch: east. World road: southeast. Supply tent and beds: north.' : 'World road: west gate. Outfitters and inn: north. Walk through a doorway to enter.';
+    map.entities.push(...doors, entity(`sign-${parent}-services`, sign.x, sign.y, 'npc', 'Road sign', 'signpost', directions));
+    map.tiles = tiles.map(row => row.join(''));
+  }
+  return { ...settlements, works, overworld: overworldMap(), tollhouse, granary, heart, ...buildInteriors() };
 }
 
 export function regionAt(area: Area, x: number, y: number): string {
