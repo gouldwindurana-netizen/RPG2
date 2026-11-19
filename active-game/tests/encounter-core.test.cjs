@@ -37,6 +37,10 @@ function at(game, area, point = { x: 11, y: 10 }) {
 }
 function begin(context, game, area, id) {
   clearMessages(game);
+  if (id === 'silver' && context.regionalRareFor) {
+    // Seed1 rolls the actual five-percent regional rare through a real patrol.
+    area = 'works'; id = 'encounter1'; game.state.rng = 1;
+  }
   let entity = context.he[area]?.entities.find(entity => entity.id === id);
   if (!entity) {
     const located = Object.entries(context.he).find(([, map]) => map.entities.some(candidate => candidate.id === id));
@@ -394,8 +398,11 @@ function startFixedFormation(context,game,region,kind){
   assert.ok(index>=0,`${region}/${kind} is available at this real dungeon depth`);
   const before=eligible.slice(0,index).reduce((sum,candidate)=>sum+candidate.weight,0);
   const total=eligible.reduce((sum,candidate)=>sum+candidate.weight,0),low=before/total,high=(before+row.weight)/total;
-  const advance=seed=>{let value=seed;value^=value<<13;value^=value>>>17;value^=value<<5;return(value>>>0)/4294967296;};
-  let seed=1;while(!(advance(seed)>=low&&advance(seed)<high)&&seed<2000000)seed++;
+  const advance=seed=>{let value=seed;value^=value<<13;value^=value>>>17;value^=value<<5;return value>>>0;};
+  // A regional rare check consumes the first draw; request the table row only
+  // when that draw is ordinary, then test the actual second weighted roll.
+  const rolls=seed=>{const first=advance(seed);return {rare:first/4294967296,table:advance(first)/4294967296};};
+  let seed=1;while(seed<2000000){const draw=rolls(seed);if(draw.rare>=context.regionalRareRate&&draw.table>=low&&draw.table<high)break;seed++;}
   assert.ok(seed<2000000,'deterministic formation seed exists');game.state.rng=seed;
   const patrol=context.he[area].entities.find(entity=>entity.kind==='enemy');assert.ok(patrol);
   begin(context,game,area,patrol.id);

@@ -38,6 +38,7 @@ function board(fix, regionId = 'R01') {
 function begin(fix, id) {
   const { game, context } = fix;
   clear(game); game.configure({ encounters: 'visible' });
+  if (id === 'silver' && context.regionalRareFor) { id = 'encounter1'; game.state.rng = 1; }
   const located = Object.values(context.he).flatMap(map => map.entities.map(entity => ({ map, entity }))).find(row => row.entity.id === id);
   assert.ok(located, id); game.state.area = located.map.area || 'works';
   game.state.player = { x: located.entity.x, y: located.entity.y + 1, facing: 'up' };

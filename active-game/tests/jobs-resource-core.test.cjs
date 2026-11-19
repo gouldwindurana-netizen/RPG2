@@ -116,6 +116,9 @@ test('job changes equip free compatible copies while preserving four worn charms
 
 test('purchased skills remain personal across jobs, buying never restores MP and wrong jobs cannot use them', () => {
   const fix=setup(); level(fix,'Mara',5); const h=hero(fix.game,'Mara'); h.mp=1; fix.game.state.gold=1000;
+  fix.game.state.area='dunmere';
+  const merchant=fix.c.he.dunmere.entities.find(entity=>entity.shopKind==='magic');
+  fix.game.state.player={x:merchant.x,y:merchant.y+1,facing:'up'};
   fix.game.state.message={speaker:'Skill Shop',text:'Learn.'};
   const offer=fix.c.skillOffers(fix.game.state,'Mara').find(row=>row.skillId==='rally');
   assert.ok(offer); assert.equal(offer.unlocked,true); assert.equal(fix.game.buySkill('Mara','rally'),true);
@@ -129,7 +132,7 @@ test('purchased skills remain personal across jobs, buying never restores MP and
   const loaded=fix.reload(); assert.equal(loaded.state.mode,'explore'); assert.ok(loaded.state.learnedSpells.Mara.includes('rally'));
 });
 
-test('Skill Shop purchases enforce level, job and service while deprecated buySpell delegates safely', () => {
+test('Skill Shop purchases enforce regional stock, job and service while deprecated buySpell delegates safely', () => {
   const fix=setup(); fix.game.state.gold=10000;
   assert.equal(fix.game.buySkill('Mara','rally'),false);
   fix.game.state.message={speaker:'Skill Shop',text:'Learn.'};

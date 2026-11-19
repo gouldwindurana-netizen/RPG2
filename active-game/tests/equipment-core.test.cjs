@@ -179,25 +179,26 @@ test('class restrictions remain effective for manual equips and optimization', (
   assert.deepEqual(plain(game.state.heroes.find(hero => hero.id === 'Iona').equipment), originalIona);
 });
 
-test('unique set pieces stay single-owner and save validation rejects duplicated gear', () => {
+test('regional set copies follow owned counts and save validation rejects over-equipping', () => {
   const { game, context, serialized } = createGame();
   const itemId = 'R01_SET_HEAD';
   game.state.inventory[itemId] = 1;
   game.state.setAcquired.push(itemId);
   assert.equal(game.equip('Mara', itemId), true);
-  assert.equal(game.equip('Tavin', itemId), false);
-  assert.equal(game.sell(itemId), false);
-  assert.equal(game.buy(itemId, 4), false, 'unique pieces are absent from ordinary shops');
+  assert.equal(game.equip('Tavin', itemId), false, 'one owned copy has one wearer');
+  assert.equal(game.sell(itemId), false, 'regional equipment retains unsellable catalog rules');
+  assert.equal(game.buy(itemId, 4), false, 'rare pieces remain absent from ordinary shops');
   assert.equal(game.save(), true);
   assert.ok(context.we(serialized(), 7321));
 
-  const duplicateUnique = JSON.parse(serialized());
-  duplicateUnique.inventory[itemId] = 2;
-  assert.equal(context.we(JSON.stringify(duplicateUnique), 7321), null);
+  const additionalCopy = JSON.parse(serialized());
+  additionalCopy.inventory[itemId] = 2;
+  additionalCopy.heroes[1].equipment.head = itemId;
+  assert.ok(context.we(JSON.stringify(additionalCopy), 7321), 'a second earned copy supports a second wearer');
 
-  const overEquipped = JSON.parse(serialized());
-  overEquipped.heroes[1].equipment.head = itemId;
-  assert.equal(context.we(JSON.stringify(overEquipped), 7321), null);
+  const overEquipped = structuredClone(additionalCopy);
+  overEquipped.heroes[2].equipment.head = itemId;
+  assert.equal(context.we(JSON.stringify(overEquipped), 7321), null, 'three wearers cannot share two copies');
 
   const incompatible = JSON.parse(serialized());
   incompatible.heroes[2].equipment.weapon = incompatible.heroes[0].equipment.weapon;
@@ -205,7 +206,8 @@ test('unique set pieces stay single-owner and save validation rejects duplicated
 
   const missingAcquisition = JSON.parse(serialized());
   missingAcquisition.setAcquired = [];
-  assert.equal(context.we(JSON.stringify(missingAcquisition), 7321), null);
+  const repaired = context.we(JSON.stringify(missingAcquisition), 7321);
+  assert.ok(repaired); assert.ok(repaired.setAcquired.includes(itemId), 'owned pieces repair old incomplete discovery metadata');
 });
 
 test('ordinary equipped totals cannot exceed inventory in saved games', () => {
@@ -217,17 +219,25 @@ test('ordinary equipped totals cannot exceed inventory in saved games', () => {
   assert.equal(context.we(JSON.stringify(malformed), 7321), null);
 });
 
-test('unique copy limits and unsellable quest equipment remain enforced in memory', () => {
-  const { game } = createGame();
-  game.state.inventory.R01_SET_HEAD = 4;
-  game.state.setAcquired.push('R01_SET_HEAD');
-  assert.equal(game.equip('Mara', 'R01_SET_HEAD'), true);
-  assert.equal(game.equip('Tavin', 'R01_SET_HEAD'), false, 'surplus malformed quantity cannot clone a unique piece');
-  game.state.inventory.QUEST_HALDEN_CLOAK = 1;
+test('non-regional unique flags and unsellable quest equipment remain enforced', () => {
+  const { game, context, serialized } = createGame();
+  // The shipped catalog's only unique items became repeatable regional sets.
+  // Mark an existing quest cloak unique only in this isolated test context to
+  // retain generic unique-rule coverage for other/future catalog equipment.
+  const itemId = 'QUEST_HALDEN_CLOAK';
+  context.K(itemId).unique_per_save = true;
+  game.state.inventory[itemId] = 4;
+  assert.equal(game.equip('Mara', itemId), true);
+  assert.equal(game.equip('Tavin', itemId), false, 'surplus quantity cannot clone an explicitly unique item');
+  game.state.inventory[itemId] = 1;
+  assert.equal(game.save(), true);
+  const forged = JSON.parse(serialized());
+  forged.heroes[1].equipment.mantle = itemId;
+  assert.equal(context.we(JSON.stringify(forged), 7321), null, 'unique worn count is checked again on import');
   const beforeGold = game.state.gold;
-  assert.equal(game.sell('QUEST_HALDEN_CLOAK'), false);
+  assert.equal(game.sell(itemId), false);
   assert.equal(game.state.gold, beforeGold, 'unsellable quest prices cannot corrupt the gold total');
-  assert.equal(game.state.inventory.QUEST_HALDEN_CLOAK, 1);
+  assert.equal(game.state.inventory[itemId], 1);
 });
 
 test('Optimize All distributes four stronger charms and preserves their ownership on reload', () => {
@@ -263,7 +273,7 @@ test('optimization accepts mixed defense/magic improvements and leaves equal-sco
   assert.deepEqual(plain(game.state.heroes.map(hero => hero.equipment)), before, 'repeating optimization does not reshuffle ties');
 });
 
-test('Optimize All respects scarce ordinary copies and unique set restrictions', () => {
+test('Optimize All respects scarce owned copies of ordinary and regional set equipment', () => {
   const { game } = createGame('striker');
   game.state.inventory.R02_COMMON_CHARM = 2;
   game.state.inventory.R03_TAVIN_WEAPON = 1;

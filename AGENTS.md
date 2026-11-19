@@ -20,3 +20,6 @@ Keep the established classic party-RPG direction consistent when adding features
 - Preserve compatible saved progress when extending the world. Never erase a journey merely because the player opens or cancels character creation.
 - Keep simulation rules outside Phaser rendering. Use the existing checkout and stack.
 - Verify relevant engine, browser, and content checks. Distinguish implemented gameplay from future design documents, and refresh the standalone build when delivering a playable change.
+
+
+The current standalone game starts from the user's November 19 growth upload. Preserve usage-based growth, regional skill-store distribution, MP/jobs and compatible saves. Regional rare foes are repeatable dangerous encounters with a seeded 5% chance and guaranteed missing-first regional set drops; the 18 regional set items support owned copies for multiple travelers. Stationary mission-linked rares are removed. Current reproduction is `active-game/tools/build_growth.py`; read that directory's current instructions. Refresh the committed snapshot from the authoritative workspace game when synchronizing further cloud edits, never the reverse. Do not push/publish without a new request.

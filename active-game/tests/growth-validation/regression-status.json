@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-19",
+  "command": "node --test tests/*core.test.cjs tests/*renderer.test.cjs",
+  "game_sha256": "fb971017069894b560b5eb3937796b5be351900af426d9022830d7f10b556f44",
+  "passed": 396,
+  "failed": 0,
+  "skipped": 0,
+  "log": "tests/growth-validation/core-results.txt",
+  "existing_test_adaptations": {
+    "depth-economy-core.test.cjs": "Seed the actual regional rare via a dangerous patrol; permit only intentional set source/uniqueness metadata differences while retaining prices and all other exact catalog comparisons.",
+    "encounter-core.test.cjs": "Seed actual rare patrol replacements; choose declared ordinary formation seeds accounting for the preceding rare RNG draw; retain all reward and combat-budget checks.",
+    "engagement-core.test.cjs": "Record bestiary rare victory through its repeatable dangerous patrol encounter rather than a removed town marker.",
+    "equipment-core.test.cjs": "Validate repeatable regional set copies, reject over-equipping, retain unsellable rules; use an isolated quest-item unique flag fixture to preserve generic unique-rule checks.",
+    "difficulty-merge-core.test.cjs": "Preserve all18set stats and spell properties while asserting repeatable set metadata and regional rather than character-level skill stock.",
+    "jobs-combat-core.test.cjs": "Retain MP/job/learning/sleep gates; assert learned compatible skills may be planned below former level requirements.",
+    "jobs-resource-core.test.cjs": "Purchase Rally from its real R02 skill merchant; retain personal history, no MP refill, job switching and save/reload checks.",
+    "magic-shop-core.test.cjs": "Verify all24magic and4Striker skills across six regional stores, pure offers, personal purchases and no MP refill; preserve all true legacy history assertions unchanged."
+  },
+  "limits": [
+    "System and declared combat fixtures are not an exhaustive full-campaign balance playthrough.",
+    "The generic unique-flag catalog fixture is test-only; it does not alter shipped data."
+  ]
+}

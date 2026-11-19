@@ -1,6 +1,6 @@
 # The Road Beyond the Bells
 
-An original four-person party RPG set in Avel. The playable build now uses the user's selected, modified standalone game, including the latest encounter, shop, story, equipment, and route changes. Create a hero, explore a connected world, and follow the campaign from Merewatch to the last bell in Veyr.
+An original four-person party RPG set in Avel. The playable build now uses the user's selected, modified standalone game, including the selected growth build and the latest encounter, shop, story, equipment, and route changes. Create a hero, explore a connected world, and follow the campaign from Merewatch to the last bell in Veyr.
 
 In this workspace, `/workspace/active-game/The_Road_Beyond_the_Bells.html` is authoritative. The normal Vite preview serves its bytes directly on port 5173, preserving the existing origin and save key. The older TypeScript source remains available for reference; it is not regenerated over the selected game. Outside this workspace, the preview uses the committed [active-game/The_Road_Beyond_the_Bells.html](active-game/The_Road_Beyond_the_Bells.html), with `demo/index.html` as a fallback. The `active-game/` directory also preserves patch tools, archived migration baselines, current tests, and validation receipts. Generated browser traces, screenshots, and caches are excluded.
 
@@ -27,6 +27,10 @@ Walk with **WASD / arrows**, click a destination, or use the touch pad. Hold **S
 
 Implemented gameplay includes:
 
+- The uploaded usage-based growth system, regional skill-shop stock, family item drops and discovered-family notes. The growth build remains the current baseline.
+- Six repeatable regional rare foes with a seeded 5% chance in dangerous ordinary encounters, replacing stationary after-mission rare hunts. Each victory gives one regional set piece, missing pieces first, then balanced copies for the rest of the party. The Field Journal shows set collection progress. See [regional rares and the growth build](active-game/docs/regional-rares-and-growth.md).
+- Repaired encounter creation and automatic equipment awards, safe import of affected growth saves, and responsive blue-and-silver exploration, battle and shop layouts.
+
 - A unified 40-ability skill system with MP for all six jobs, including 16 martial techniques. Skill Shops replace Magic Shops. All four party jobs can be chosen at creation or changed at safe shelters, with persistent learned history and compatible owned equipment.
 - Recipient-aware equipment shopping, slot/usable filters, and current-versus-offered base stats. Inventory All/Equipment/Supplies views show live HP/MP, conditions and capped recovery previews before using an item. Battle feedback reports actual HP/MP recovery.
 - Optional Battle tactics with bestiary-gated enemy affinities, shared-supply reservation counts and valid recovery targets. Track one accepted commission beside the exploration objective, and check current-floor records, caches, locks and lifts from the area map.
@@ -41,7 +45,7 @@ Implemented gameplay includes:
 - Deliberate layouts for one through eight enemies, with nine-small compatibility, stable defeated slots, and a four-person right-side party column. Original battle scenes change with outdoor terrain, dungeon identity, and deeper chambers.
 - Six dungeon expeditions with 3/4/5/6/7/8 floors: 33 floors total, including 27 new interiors. Branch supply caches and evidence, persistent service lifts, later cross-locks, and separate final-route guardians reward preparation and staged attempts.
 - Future ordinary rewards retain 50% EXP and 65% gold; boss/rare budgets retain 65% EXP and 75% gold. Existing earned resources, prices, and level thresholds remain intact. Area maps and Journal preparation notes show actual medicine, HP, and MP.
-- Separate Item, Weapon, and Skill Shops in six settlements. Equipment shops include armor and accessories. Skills are learned per traveler with job and level requirements; older compatible saves keep their unlocked magic. Learning does not refill MP.
+- Separate Item, Weapon, and Skill Shops in six settlements. Equipment shops include armor and accessories. Skills are learned per traveler with job and regional stock requirements; older compatible saves keep their unlocked magic. Learning does not refill MP.
 - Shared equipment across five slots, explicit owned/equipped/available copy counts, quantity buying, spare-copy selling, and Optimize. Four owned copies can equip four compatible travelers. Regional equipment and rare stronger enemy colors remain present.
 - Blue menu windows for Items / Equipment, Skills, Jobs, Status, Area Map, World Map, Journal, and System. Healing and recovery spells work outside battle. Mobile movement controls hide throughout battle/results and return for exploration.
 - Three optional journal-tracked stories about a courier, relief supplies, and family records, with modest once-only rewards. The main story's permanent outcomes are preserved.

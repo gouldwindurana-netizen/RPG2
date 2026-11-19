@@ -1,0 +1,26 @@
+{
+  "date": "2026-11-19",
+  "status": "passed",
+  "game_sha256": "a5815160ceae4d9c87fae186dd1f642614c4eb7b55ff821638cbc6abc54fd23d",
+  "game_bytes": 1688476,
+  "command": "/workspace/RPG2/node_modules/.bin/playwright test -c tests/growth-playwright.config.mjs --grep 'classic walking|visible patrol battle' --output=tests/growth-final-smoke-browser-artifacts",
+  "passed": 2,
+  "failed": 0,
+  "positive_scenario_page_errors": [],
+  "elapsed_seconds": 8.5,
+  "log": "tests/growth-validation/final-smoke-browser.txt",
+  "checks": [
+    "Classic held-key walking starts normal battle, actual attacks resolve victory, continue restores exploration and movement.",
+    "Visible-patrol battle at390px supports skill selection and command resolution, victory and return; touchpad hidden during battle/results; no horizontal overflow."
+  ],
+  "visual_review": [
+    "Final desktop screenshot: clipped redundant in-canvas instruction strip removed, while complete DOM battle instructions remain readable; actor positions and command/party windows unchanged.",
+    "Final390px screenshot: no clipped instruction strip or exploration touchpad; skill MP, buttons and all four party cards remain readable without overflow."
+  ],
+  "notes": [
+    "These repeat two positive scenarios from the seven-case full run; combined unique count remains six positive feature scenarios plus one immutable-upload expected-error reproduction.",
+    "The only product difference after the full run was battle canvas hint visibility; code geometry, encounter mechanics, loot and save behavior were unchanged.",
+    "Full run finished before root rebuilt to this final hash; no mixed-build coverage.",
+    "Fixture and campaign-coverage limits are recorded in growth-final-browser-artifacts/qa-run-status.json."
+  ]
+}

@@ -37,6 +37,10 @@ function at(game, area, point = { x: 11, y: 10 }) {
 }
 function begin(context, game, area, id) {
   clearMessages(game);
+  if (id === 'silver' && context.regionalRareFor) {
+    // Seed1 rolls the actual five-percent regional rare through a real patrol.
+    area = 'works'; id = 'encounter1'; game.state.rng = 1;
+  }
   const entity = context.he[area].entities.find(entity => entity.id === id);
   assert.ok(entity, `${area}/${id} exists`);
   at(game, area, entity);
@@ -219,12 +223,13 @@ test('existing earned EXP, gold, inventory, learned spells and prices do not cha
   assert.deepEqual(plain(context.spellPrices), plain(prior.spellPrices));
   // The user's difficulty build deliberately strengthens regional set stats.
   // The MP update also changes the two existing teas' recovery descriptions.
-  // Keep comparing every other field, including their prices and copy limits.
+  // Regional set farming changes only their source/copy flags; prices and all
+  // unrelated catalog fields still remain part of this exact comparison.
   assert.match(context.K('SPARK_TEA').effect, /Restore 20 MP/);
   assert.match(context.K('DEEP_TEA').effect, /Restore 60 MP/);
   assert.equal(context.K('CAMP_MEAL').effect, 'Restore 30% maximum HP to one living hero outside battle; no MP recovery.');
   const unchangedCatalogFields = items => plain(items).map(item => {
-    if (item.set_id) delete item.stats;
+    if (item.set_id) { delete item.stats; delete item.source; delete item.unique_per_save; }
     if (['SPARK_TEA','DEEP_TEA','CAMP_MEAL'].includes(item.id)) delete item.effect;
     return item;
   });

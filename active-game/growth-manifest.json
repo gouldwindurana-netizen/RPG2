@@ -1,0 +1,125 @@
+{
+  "baseline_file": "growth-baseline.html",
+  "baseline_sha256": "60a22efc7e72b71024057eef913e8527cad316a63c99682e6b541779bb17ad14",
+  "baseline_upload": "The Road Beyond the Bells (growth build).html",
+  "working_file": "The_Road_Beyond_the_Bells.html",
+  "working_sha256": "a5815160ceae4d9c87fae186dd1f642614c4eb7b55ff821638cbc6abc54fd23d",
+  "working_bytes": 1688476,
+  "modules": [
+    "growth_stability",
+    "growth_rares",
+    "growth_presentation"
+  ],
+  "module_sha256": {
+    "growth_stability": "ef5bba2a72d83bede3039e6177cc143e2073f073ae33d73d95278942dda6df45",
+    "growth_rares": "0c69c801454bdd0d65014c6d8a7287c2f900d93755c451d5be8fc945c20a0d83",
+    "growth_presentation": "a67b96fd1d60f9a19037ab4f8097d6216873393481b708c3d754422b09d40217"
+  },
+  "changes": [
+    "encounters use the existing rare catalogue rather than an undefined helper",
+    "automatic boss rewards resolve catalogue item records before awarding",
+    "automatic cache rewards resolve catalogue item records before awarding",
+    "automatic boss equipment preserves regional collection history",
+    "automatic cache equipment preserves regional collection history",
+    "repair the known accidental undefined inventory key from broken growth auto rewards",
+    "validate optional growth bonuses usage counters and discovered families without changing valid records",
+    "import growth and discovered families through bounded known-field normalization",
+    "new adventures clear old growth before deriving their starting heroes",
+    "legacy missing spellbooks retain their original level unlocks while current growth skills remain level independent",
+    "repeatable regional set metadata and seeded rare selection helpers",
+    "remove stationary mission-linked rare markers from every playable map",
+    "retire mission-gated hunt readiness without deleting legacy save fields",
+    "ordinary dangerous encounters can become a fixed local rare regardless of mission progress",
+    "victories no longer unlock a separate after-mission hunt",
+    "rare victories grant one missing-first regional set piece and safe explicit full-stack compensation",
+    "a rare equipment drop does not also trigger the old automatic set reward",
+    "Bessa advances the story without creating a camp rare encounter",
+    "owned regional pieces normalize discovery history before saved gear validation",
+    "saved regional set copies remain bounded and usable by different party members",
+    "equipment copy accounting follows each catalog uniqueness rule rather than all set membership",
+    "replace conflicting growth layout overrides with a compact responsive game theme",
+    "show repeatable regional rare encounters and owned set pieces inside the field journal",
+    "describe encounter settings without removed static rare hunts",
+    "describe the uploaded regional skill tiers without obsolete level requirements",
+    "remove the orchard dialogue reference to a stationary rare hunt",
+    "keep the exploration map clear of duplicated canvas location text",
+    "use readable DOM exploration instructions instead of tiny duplicate canvas text",
+    "restore battle labels when switching from the uncluttered exploration map",
+    "keep battle instructions readable in the command panel instead of a clipped duplicate canvas strip"
+  ],
+  "preserved": [
+    "Uploaded usage-based growth and regional skill-store distribution",
+    "MP, party jobs, skill practice, difficulty, equipment-copy ownership and existing saves",
+    "Story, 33 dungeon floors, travel, commissions, inventory/shop controls and original artwork",
+    "Offline standalone delivery and third-party notices"
+  ],
+  "pushed": false,
+  "published": false,
+  "status": "complete",
+  "completed_date": "2026-11-19",
+  "save_version": 4,
+  "regional_rares": {
+    "eligible_encounter_rate": 0.05,
+    "regions": 6,
+    "set_pieces": 18,
+    "equipment_per_victory": 1,
+    "selection": "least-owned eligible regional piece, random among ties",
+    "repeatable": true,
+    "legacy_fields_retained": true
+  },
+  "validation": {
+    "core_and_renderer": {
+      "passed": 396,
+      "failed": 0,
+      "sha256": "a5815160ceae4d9c87fae186dd1f642614c4eb7b55ff821638cbc6abc54fd23d",
+      "command": "node --test tests/*core.test.cjs tests/*renderer.test.cjs",
+      "log": "tests/growth-validation/final-core-results.txt"
+    },
+    "browser": {
+      "positive_unique_scenarios": 6,
+      "expected_upload_crash_reproduction": 1,
+      "full_run_passed": 7,
+      "full_run_sha256": "f5956872cbf994f68caf543cdddd697b2ac8bb96cbf27962bf97e36976b66a61",
+      "full_run_receipt": "tests/growth-final-browser-artifacts/qa-run-status.json",
+      "final_affected_scenarios_repeated": 2,
+      "final_smoke_sha256": "a5815160ceae4d9c87fae186dd1f642614c4eb7b55ff821638cbc6abc54fd23d",
+      "final_smoke_receipt": "tests/growth-final-smoke-browser-artifacts/qa-run-status.json",
+      "unexpected_page_errors": 0,
+      "note": "Only duplicate in-canvas battle instruction visibility changed after the full run; affected battle scenarios were repeated on final bytes."
+    },
+    "independent_checks": {
+      "review_sha256": "fb971017069894b560b5eb3937796b5be351900af426d9022830d7f10b556f44",
+      "rare_victories_with_reload": 72,
+      "regions": 6,
+      "equipment_copy_check": "Four copies of all regional pieces equipped by four heroes and reloaded.",
+      "safe_walkable_coordinates_excluded": 2144,
+      "material_blockers": [],
+      "note": "Subsequent changes only hide duplicate text and hide movement controls in battle."
+    },
+    "visual_review": [
+      "Desktop and390px exploration map, objectives and controls",
+      "Desktop and390px battle commands, skills, party HP/MP and actor positions",
+      "Weapon shop comparisons and inventory recovery",
+      "Field Journal regional rare collection"
+    ],
+    "limits": [
+      "Declared fixtures and bounded feature checks, not a complete campaign or exhaustive economy balance playthrough."
+    ],
+    "qodo": "unavailable: no installed CLI or callable tool",
+    "advisor": "unavailable: installed launcher absent"
+  },
+  "delivery": {
+    "command": "npm run build",
+    "syntax_check": "passed",
+    "source": "/workspace/active-game/The_Road_Beyond_the_Bells.html",
+    "outputs": [
+      "/workspace/RPG2/demo/index.html",
+      "/workspace/RPG2/dist/index.html"
+    ],
+    "committed_snapshot": "/workspace/RPG2/active-game/The_Road_Beyond_the_Bells.html",
+    "exact_bytes_verified": true,
+    "preview_exact_bytes_verified": true,
+    "sha256": "a5815160ceae4d9c87fae186dd1f642614c4eb7b55ff821638cbc6abc54fd23d",
+    "bytes": 1688476
+  }
+}

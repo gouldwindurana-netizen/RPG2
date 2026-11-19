@@ -1,0 +1,119 @@
+{
+  "previous_file": "growth-previous.html",
+  "previous_sha256": "6730da96cc37ffec25719ec854953981eac42ba2b1a3e20cab22a27e413f5885",
+  "upload_file": "growth-baseline.html",
+  "upload_sha256": "60a22efc7e72b71024057eef913e8527cad316a63c99682e6b541779bb17ad14",
+  "changed_ranges": [
+    {
+      "kind": "replace",
+      "old_lines": [
+        13,
+        13
+      ],
+      "new_lines": [
+        13,
+        13
+      ]
+    },
+    {
+      "kind": "replace",
+      "old_lines": [
+        20,
+        20
+      ],
+      "new_lines": [
+        20,
+        20
+      ]
+    },
+    {
+      "kind": "replace",
+      "old_lines": [
+        61,
+        61
+      ],
+      "new_lines": [
+        61,
+        61
+      ]
+    },
+    {
+      "kind": "replace",
+      "old_lines": [
+        226,
+        226
+      ],
+      "new_lines": [
+        226,
+        226
+      ]
+    },
+    {
+      "kind": "replace",
+      "old_lines": [
+        258,
+        258
+      ],
+      "new_lines": [
+        258,
+        258
+      ]
+    },
+    {
+      "kind": "replace",
+      "old_lines": [
+        263,
+        263
+      ],
+      "new_lines": [
+        263,
+        263
+      ]
+    },
+    {
+      "kind": "replace",
+      "old_lines": [
+        1074,
+        1074
+      ],
+      "new_lines": [
+        1074,
+        1074
+      ]
+    },
+    {
+      "kind": "replace",
+      "old_lines": [
+        1111,
+        1111
+      ],
+      "new_lines": [
+        1111,
+        1111
+      ]
+    },
+    {
+      "kind": "replace",
+      "old_lines": [
+        1116,
+        1116
+      ],
+      "new_lines": [
+        1116,
+        1116
+      ]
+    },
+    {
+      "kind": "replace",
+      "old_lines": [
+        1220,
+        1220
+      ],
+      "new_lines": [
+        1220,
+        1220
+      ]
+    }
+  ],
+  "intent": "User-selected new baseline; preserve supplied mechanics except requested rare encounter redesign and necessary fixes."
+}

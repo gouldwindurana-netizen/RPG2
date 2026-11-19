@@ -45,9 +45,10 @@ function createLegacyGame() {
 
 function hero(game, id) { return game.state.heroes.find(candidate => candidate.id === id); }
 function spell(context, id) { return context.te.find(candidate => candidate.id === id); }
-function visitShop(game, kind) {
-  game.state.area = 'camp';
-  game.state.player = { x: 11, y: 10, facing: 'right' };
+function visitShop(game, kind, region = 1, context) {
+  game.state.area = ['camp', 'dunmere', 'fen', 'orchard', 'crown', 'veyr'][region - 1];
+  const npc = context?.he[game.state.area].entities.find(entity => entity.shopKind === 'magic');
+  game.state.player = npc ? { x: npc.x, y: npc.y + 1, facing: 'up' } : { x: 11, y: 10, facing: 'right' };
   game.state.message = { speaker: `${kind} Shop`, text: 'Shop test.' };
 }
 function setLevel(fixture, id, level) {
@@ -80,22 +81,34 @@ for (const [job, initial] of [
   });
 }
 
-test('offers retain twenty-four magic skills and add martial choices with pure job and level checks', () => {
-  const fixture = createGame();
-  const { game, context } = fixture;
-  const before = JSON.stringify(game.state);
-  const ids = new Set([...context.spellOffers(game.state, 'Iona'), ...context.spellOffers(game.state, 'Soren')].map(offer => offer.spellId));
-  assert.equal(ids.size, 24);
+test('regional offers retain all twenty-four magic skills and martial choices with pure job checks', () => {
+  const { game, context } = createGame();
+  const ids = new Set(), techniques = new Set();
   assert.equal(context.te.length, 40);
   assert.equal(context.te.filter(skill => skill.kind === 'magic').length, 24);
   assert.deepEqual(plain([...new Set(context.te.filter(skill => skill.kind === 'magic').map(candidate => candidate.tier))].sort((a,b) => a-b)), [1, 2, 3, 4, 5, 6, 7, 8]);
-  assert.equal(context.spellOffers(game.state, 'Tavin').length, 4);
-  assert.equal(context.spellOffers(game.state, 'nobody').length, 0);
-  assert.equal(context.spellOffers(game.state, 'Iona').find(offer => offer.spellId === 'renew').unlocked, false);
+  for (let region = 1; region <= 6; region++) {
+    visitShop(game, 'Skill', region, context);
+    const before = JSON.stringify(game.state);
+    for (const id of ['Iona', 'Soren', 'Tavin']) {
+      for (const offer of context.spellOffers(game.state, id)) {
+        const ability = spell(context, offer.spellId);
+        assert.equal(context.H(hero(game, id), ability), true);
+        assert.equal(offer.unlocked, true, 'the growth build uses travel rather than character-level gates');
+        assert.ok(offer.known || Math.min(6, ability.tier) === region, `${offer.spellId} matches regional stock or known history`);
+        (id === 'Tavin' ? techniques : ids).add(offer.spellId);
+      }
+    }
+    assert.equal(JSON.stringify(game.state), before, 'reading offers never changes resources or history');
+    assert.equal(context.spellOffers(game.state, 'nobody').length, 0);
+  }
+  assert.equal(ids.size, 24); assert.equal(techniques.size, 4);
+  visitShop(game, 'Skill', 1, context);
+  assert.equal(context.spellOffers(game.state, 'Iona').find(offer => offer.spellId === 'renew'), undefined);
   assert.equal(context.spellOffers(game.state, 'Iona').find(offer => offer.spellId === 'mend').known, true);
-  assert.equal(JSON.stringify(game.state), before, 'reading offers does not mutate any state');
-  setLevel(fixture, 'Iona', 5);
+  visitShop(game, 'Skill', 2, context);
   assert.equal(context.spellOffers(game.state, 'Iona').find(offer => offer.spellId === 'renew').unlocked, true);
+  assert.equal(hero(game, 'Iona').level, 1);
 });
 
 test('learning charges gold once for the selected hero, saves, and never refills MP', () => {
@@ -125,22 +138,22 @@ test('learning charges gold once for the selected hero, saves, and never refills
   assert.equal(hero(restored, 'Iona').mp, 0);
 });
 
-test('all eight magic levels can be learned after their unlocks without restoring MP', () => {
-  const fixture = createGame();
-  const { game, context, reload } = fixture;
-  setLevel(fixture, 'Iona', 31);
-  setLevel(fixture, 'Soren', 31);
+test('all eight magic tiers can be learned through regional stores without restoring MP', () => {
+  const { game, context, reload } = createGame();
   game.state.gold = 100000;
-  visitShop(game, 'Skill');
-  for (const id of ['Iona', 'Soren']) {
-    hero(game, id).mp = 0;
-    for (const offer of context.spellOffers(game.state, id)) {
-      assert.equal(offer.unlocked, true);
-      if (!offer.known) assert.equal(game.buySpell(id, offer.spellId), true, `${id}/${offer.spellId}`);
+  for (const id of ['Iona', 'Soren']) hero(game, id).mp = 0;
+  for (let region = 1; region <= 6; region++) {
+    visitShop(game, 'Skill', region, context);
+    for (const id of ['Iona', 'Soren']) {
+      for (const offer of context.spellOffers(game.state, id)) {
+        assert.equal(offer.unlocked, true);
+        if (!offer.known) assert.equal(game.buySpell(id, offer.spellId), true, `${id}/${offer.spellId}`);
+      }
+      assert.equal(hero(game, id).mp, 0);
+      assert.equal(hero(game, id).level, 1, 'regional access replaces level prerequisites');
     }
-    assert.equal(hero(game, id).mp, 0);
-    assert.equal(game.state.learnedSpells[id].length, 14);
   }
+  for (const id of ['Iona', 'Soren']) assert.equal(game.state.learnedSpells[id].length, 14);
   const restored = reload();
   assert.equal(restored.state.mode, 'explore');
   assert.deepEqual(plain(restored.state.learnedSpells), plain(game.state.learnedSpells));
@@ -148,7 +161,7 @@ test('all eight magic levels can be learned after their unlocks without restorin
   assert.equal(hero(restored, 'Soren').mp, 0);
 });
 
-test('purchase rejects wrong jobs, locked tiers, absent merchants, and unknown IDs', () => {
+test('purchase rejects wrong jobs, out-of-region stock, absent merchants, and unknown IDs', () => {
   const { game } = createGame('spellblade');
   game.state.gold = 100000;
   visitShop(game, 'Skill');
@@ -173,8 +186,8 @@ test('field healing needs learning and still respects silence, MP and targets', 
   const { game, context } = fixture;
   setLevel(fixture, 'Iona', 5);
   hero(game, 'Mara').hp -= 30;
-  assert.equal(game.castField('Iona', 'renew', 'Mara'), false, 'tier unlock alone grants no spell');
-  visitShop(game, 'Skill');
+  assert.equal(game.castField('Iona', 'renew', 'Mara'), false, 'level growth alone grants no skill');
+  visitShop(game, 'Skill', 2, context);
   game.state.gold = 1000;
   assert.equal(game.buySpell('Iona', 'renew'), true);
   game.dismiss();

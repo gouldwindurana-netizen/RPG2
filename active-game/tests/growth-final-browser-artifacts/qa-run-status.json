@@ -1,0 +1,36 @@
+{
+  "date": "2026-11-19",
+  "status": "passed",
+  "game_sha256": "f5956872cbf994f68caf543cdddd697b2ac8bb96cbf27962bf97e36976b66a61",
+  "game_bytes": 1688476,
+  "command": "/workspace/RPG2/node_modules/.bin/playwright test -c tests/growth-playwright.config.mjs --output=tests/growth-final-browser-artifacts",
+  "passed": 7,
+  "failed": 0,
+  "positive_feature_scenarios": 6,
+  "expected_baseline_failure_reproductions": 1,
+  "positive_scenario_page_errors": [],
+  "expected_upload_error": "ReferenceError: gRare is not defined",
+  "upload_sha256": "60a22efc7e72b71024057eef913e8527cad316a63c99682e6b541779bb17ad14",
+  "elapsed_seconds": 28.6,
+  "log": "tests/growth-validation/full-browser.txt",
+  "checks": [
+    "Immutable uploaded growth build reproduces missing gRare encounter error after actual player interaction; no battle created.",
+    "Classic held-key walking enters normal battle, real commands resolve victory, continue restores exploration and movement.",
+    "Visible-patrol battle supports mobile390px skill selection, commands, victory and return; touch movement controls hidden throughout battle and results.",
+    "Four repeat rare victories through actual patrol UI grant three missing-first regional pieces then a duplicate party copy; owned counts and reload retain1/1/2.",
+    "Playable maps contain no stationary rare markers and classic walking inside safe town triggers no battle.",
+    "Weapon comparison remains visible;390px inventory shows current HP/MP and actual potion recovery preview.",
+    "Genuine uploaded-format growth save retains earned growth, practice, EXP, gold, four worn charm copies and exploration progress."
+  ],
+  "visual_review": [
+    "Desktop battle: original sprites/HP fit the stage; lower action and party windows have clear hierarchy.",
+    "390px battle: skills/MP costs, controls and four party cards readable without horizontal overflow; touchpad absent.",
+    "Desktop Reedbank: map has clear labels and services, no Silver Reedback marker, objective appears compactly below stage.",
+    "390px inventory: live43/168HP and2/20MP; Potion60HP preview43to103 is visible; disabled ineffective cures readable."
+  ],
+  "notes": [
+    "Declared engine-generated local-save fixtures establish levels, inventory, location and RNG. Player actions use real UI; readonly __AVEL__ snapshots verify outcomes. This is not a full earned campaign/economy playthrough.",
+    "Initial provisional failures were QA input/fixture issues: keyboard.press can miss Phaser held-key update; pending fixture must apply after unload save rather than be overwritten. Final fixtures assert exact loaded RNG.",
+    "A minor clipped duplicate battle-canvas instruction strip was subsequently removed. Final two affected battle cases and screenshots are recorded in growth-final-smoke-browser-artifacts/qa-run-status.json."
+  ]
+}

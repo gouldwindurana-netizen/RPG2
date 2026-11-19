@@ -140,16 +140,21 @@ for (const [job, id] of techniques) {
   });
 }
 
-test('MP, job, learning, level and sleep gates refuse plans without spending or teaching', () => {
+test('MP, job, learning and sleep gates refuse plans while learned skills have no level gate', () => {
   const fix = setup('warden', html, 1); const actor = hero(fix); battle(fix);
   const before = resources(fix);
   learn(fix, actor.id, 'shield-bash'); actor.mp = 2;
   assert.equal(fix.game.plan(actor.id, { type: 'spell', spellId: 'shield-bash', target: 'probe-0' }), false);
   actor.mp = actor.maxMp;
-  for (const id of ['guardian-strike', 'power-strike']) {
+  for (const id of ['power-strike']) {
     learn(fix, actor.id, id);
     assert.equal(fix.game.plan(actor.id, { type: 'spell', spellId: id, target: 'probe-0' }), false, id);
   }
+  learn(fix, actor.id, 'guardian-strike');
+  assert.equal(actor.level, 1);
+  assert.equal(fix.game.plan(actor.id, { type: 'spell', spellId: 'guardian-strike', target: 'probe-0' }), true);
+  fix.game.undo(actor.id);
+  assert.equal(fix.game.state.battle.plans[actor.id], undefined);
   fix.game.state.learnedSpells.Mara = [];
   assert.equal(fix.game.plan(actor.id, { type: 'spell', spellId: 'shield-bash', target: 'probe-0' }), false);
   learn(fix, actor.id, 'shield-bash'); actor.status = 'sleep';

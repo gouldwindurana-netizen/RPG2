@@ -64,12 +64,12 @@ const sets = [
   [{ defense: 25, magicDefense: 13 }, { defense: 21, attack: 10 }, { magicDefense: 29, magic: 10 }],
   [{ defense: 34, magicDefense: 17 }, { defense: 28, attack: 14 }, { magicDefense: 39, magic: 14 }],
 ];
-test('all eighteen uploaded regional set stats are retained with unique copy rules', () => {
+test('all eighteen uploaded regional set stats are retained with repeatable party-copy rules', () => {
   const context = contextFor();
   sets.forEach((slots, index) => slots.forEach((stats, slot) => {
     const item = context.K(`R0${index + 1}_SET_${['HEAD', 'MANTLE', 'CHARM'][slot]}`);
     assert.deepEqual(plain(item.stats), stats);
-    assert.equal(item.unique_per_save, true); assert.equal(item.sellable, false);
+    assert.equal(item.unique_per_save, false); assert.equal(item.sellable, false);
   }));
 });
 
@@ -113,16 +113,21 @@ test('new light and dark spells retain school, tier and eligible jobs and requir
       assert.equal(context.H(hero(game, id), spell), true);
       assert.equal(context.knowsSpell(game.state, hero(game, id), spell), false);
       const offer = context.spellOffers(game.state, id).find(candidate => candidate.spellId === spell.id);
-      assert.ok(offer); assert.equal(offer.unlocked, tier === 1);
+      if (tier === 1) { assert.ok(offer); assert.equal(offer.unlocked, true); }
+      else assert.equal(offer, undefined, 'higher-tier skills belong to their region store');
     }
     assert.equal(context.H(hero(game, 'Tavin'), spell), false);
   }
   game.state.message = { speaker: 'Skill Shop', text: 'Shop fixture.' }; game.state.gold = 5000;
-  assert.equal(game.buySpell('Iona', 'radiance'), false, 'tier stays locked at level one');
+  assert.equal(game.buySpell('Iona', 'radiance'), false, 'R01 does not sell the R03 skill');
   assert.equal(game.buySpell('Iona', 'lumen'), true);
   assert.equal(game.buySpell('Iona', 'lumen'), false);
   assert.equal(context.knowsSpell(game.state, hero(game, 'Soren'), context.te.find(s => s.id === 'lumen')), false);
-  setLevel(fix, 'Iona', 9);
+  // Reaching the regional merchant replaces character-level purchase gates.
+  game.state.area = 'fen';
+  const merchant = context.he.fen.entities.find(entity => entity.shopKind === 'magic');
+  game.state.player = { x: merchant.x, y: merchant.y + 1, facing: 'up' };
+  assert.equal(hero(game, 'Iona').level, 1);
   assert.equal(game.buySpell('Iona', 'radiance'), true);
   assert.ok(fix.reload().state.learnedSpells.Iona.includes('radiance'));
 });

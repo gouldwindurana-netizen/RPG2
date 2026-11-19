@@ -1,0 +1,14 @@
+
+Running 7 tests using 1 worker
+
+(node:31206) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/growth-browser.spec.mjs:125:1 › uploaded baseline reproduces the encounter freeze with a missing helper (2.2s)
+  ✓  2 tests/growth-browser.spec.mjs:133:1 › classic walking starts a rendered battle and returns to exploration after victory (3.7s)
+  ✓  3 tests/growth-browser.spec.mjs:147:1 › visible patrol battle remains playable and readable at 390px (3.1s)
+  ✓  4 tests/growth-browser.spec.mjs:157:1 › rare victories complete a regional set and remain repeatable for party copies after reload (11.2s)
+  ✓  5 tests/growth-browser.spec.mjs:185:1 › safe towns have no post-mission rare markers or walking encounters (2.5s)
+  ✓  6 tests/growth-browser.spec.mjs:199:1 › shop comparisons and mobile recovery information remain visible after visual polish (2.6s)
+  ✓  7 tests/growth-browser.spec.mjs:213:1 › genuine uploaded growth save keeps earned growth, practice, copies and progress (2.1s)
+
+  7 passed (28.6s)
