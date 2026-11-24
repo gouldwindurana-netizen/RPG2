@@ -1,0 +1,63 @@
+{
+  "sha256": "8ccd6c9bc3d3ff1368920a55782167c8ee1198de0adce6dd39c7da4a84866002",
+  "results": [
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "pixels": {
+        "inner": [
+          36,
+          51,
+          80,
+          255
+        ],
+        "sameSky": [
+          36,
+          51,
+          80,
+          255
+        ],
+        "lit": [
+          176,
+          179,
+          170,
+          255
+        ],
+        "mask": "url(#camp-moon-cutout)",
+        "opaqueCoverCount": 0
+      },
+      "pageErrors": []
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "pixels": {
+        "inner": [
+          36,
+          51,
+          80,
+          255
+        ],
+        "sameSky": [
+          36,
+          51,
+          80,
+          255
+        ],
+        "lit": [
+          176,
+          179,
+          170,
+          255
+        ],
+        "mask": "url(#camp-moon-cutout)",
+        "opaqueCoverCount": 0
+      },
+      "pageErrors": []
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+
+Running 6 tests using 1 worker
+
+(node:4418) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/entrances-browser.spec.mjs:158:1 › all four Reedbank buildings open at their visible thresholds and return beside the same entrance (20.4s)
+  ✓  2 tests/entrances-browser.spec.mjs:181:1 › all twelve city shop openings share the facade threshold and retain their original merchant service (23.2s)
+  ✓  3 tests/entrances-browser.spec.mjs:207:1 › every city uses the same western route and arrival pause without crossing-step encounters (12.8s)
+  ✓  4 tests/entrances-browser.spec.mjs:233:1 › genuine old Reedbank saves retain progress at the eastern approach and normalize only newly blocked footprints (5.9s)
+  ✓  5 tests/entrances-browser.spec.mjs:251:1 › mobile touch follows real openings and the area map shows the connected western boardwalk (9.5s)
+  ✓  6 tests/entrances-browser.spec.mjs:268:1 › a new hero can meet Bessa and follow the corrected exit to Merewatch and back (12.2s)
+
+  6 passed (1.4m)

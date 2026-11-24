@@ -1,0 +1,32 @@
+{
+  "date": "2026-11-23",
+  "status": "passed",
+  "component": "main party menu",
+  "module_sha256": "9f0c9931fab467abab6e39f033363a0361aff85fe9623dd672f1724e7c07a4b2",
+  "candidate_sha256": "a2b35d42983890e52f7fb572c114e617500ad91db3779be38747283bcb0735e0",
+  "viewports": [
+    1280,
+    390,
+    320
+  ],
+  "browser_captures": 6,
+  "page_errors": [],
+  "checks": [
+    "Exact eight accessible destinations retained with existing data-panel handlers.",
+    "All four travelers show current HP and MP with bounded resource bars and conditions.",
+    "Portrait row opens actual Status menu, keyboard focus remains on a button and Escape closes panels.",
+    "Menu navigation leaves resources unchanged.",
+    "No horizontal document overflow at desktop,390px or320px."
+  ],
+  "gameplay_prefix_unchanged": true,
+  "embedded_javascript_syntax": "passed",
+  "screenshots": [
+    "/tmp/settlement-menu-before-desktop.png",
+    "/tmp/settlement-menu-before-mobile.png",
+    "/tmp/settlement-menu-before-narrow.png",
+    "/tmp/settlement-menu-after-desktop.png",
+    "/tmp/settlement-menu-after-mobile.png",
+    "/tmp/settlement-menu-after-narrow.png"
+  ],
+  "limits": "Declared partial-resource fixture, not a full campaign playthrough."
+}

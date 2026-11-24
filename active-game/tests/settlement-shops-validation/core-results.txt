@@ -1,0 +1,18 @@
+✔ twelve building-based stores move each existing keeper into one safe regional room without adding world sites (45.811875ms)
+✔ walking into and out of every shop preserves combat resources, RNG, story and the overworld approach (25.166279ms)
+✔ a weapon merchant is reached inside, sells only equipment and maintains shared copy accounting (18.597861ms)
+✔ skill merchants retain region-tier stock and learning spends gold without restoring MP (33.436036ms)
+✔ new interior saves and open merchant messages reload without changing owned equipment or progress (43.988092ms)
+✔ genuine preceding saves at exterior shop approaches and with an open shop remain valid (79.836041ms)
+✔ outdoor item counters keep their original location and merchant behavior (31.658603ms)
+✔ counter walls, shopkeeper and room edges block travel without blocking the exit route (36.573129ms)
+✔ shops provide no inn service: rest retains gold, HP, MP, conditions and checkpoint (203.618073ms)
+✔ outdoor shelter prices and recovery remain unchanged while shop objectives explain the local counter and doorway (29.863996ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 699.702316

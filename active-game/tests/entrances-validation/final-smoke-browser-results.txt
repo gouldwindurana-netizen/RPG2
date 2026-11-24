@@ -1,0 +1,9 @@
+
+Running 2 tests using 1 worker
+
+(node:5996) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/entrances-browser.spec.mjs:158:1 › all four Reedbank buildings open at their visible thresholds and return beside the same entrance (20.6s)
+  ✓  2 tests/entrances-browser.spec.mjs:251:1 › mobile touch follows real openings and the area map shows the connected western boardwalk (9.1s)
+
+  2 passed (31.2s)

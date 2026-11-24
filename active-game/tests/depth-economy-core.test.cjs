@@ -7,6 +7,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const test = require('node:test');
 const vm = require('node:vm');
+const { visitShop } = require('./shop-fixture.cjs');
 const htmlPath = process.env.GAME_HTML ? path.resolve(process.env.GAME_HTML)
   : path.resolve(__dirname, '..', 'The_Road_Beyond_the_Bells.html');
 const html = fs.readFileSync(htmlPath, 'utf8');
@@ -143,12 +144,7 @@ function beginLocated(context, game, id) {
   return begin(context, game, area, id);
 }
 function service(context, game, area, kind) {
-  clearMessages(game);
-  const npc = context.he[area].entities.find(entity => entity.shopKind === kind);
-  assert.ok(npc);
-  at(game, area, { x: npc.x, y: npc.y + 1 });
-  game.interact(npc.id);
-  assert.equal(game.state.message.speaker, { items: 'Item Shop', weapon: 'Weapon Shop', magic: 'Skill Shop' }[kind]);
+  return visitShop(context, game, area, kind);
 }
 
 test('future regular contributions are reduced once while combat strength stays fixed', () => {
@@ -368,8 +364,12 @@ test('an earned-resource Warden expedition walks all three bellworks floors, ope
   const record={walkingSteps:0,battles:[],used:{},purchases:[],floors:[],returns:0};
   await walkToEntity(context,game,'bessa',record);
   assert.equal(game.state.flags.briefed,true);
+  const skillStore=context.settlementShopRecords.find(store=>store.parent==='camp'&&store.kind==='magic');
+  assert.ok(skillStore,'the expedition uses the real walk-in skill store');
+  await walkToEntity(context,game,skillStore.doorId,record,{enter:true});
   await walkToEntity(context,game,'magic-camp',record,{keepMessage:true});
   assert.equal(game.buySpell('Soren','spark'),true);record.purchases.push('Spark:35G');clearMessages(game);
+  await walkToEntity(context,game,skillStore.exitId,record,{enter:true});
   await walkToEntity(context,game,'world-camp',record,{enter:true});
   await walkToEntity(context,game,'enter-works',record,{enter:true});record.floors.push(game.state.area);
   await walkToEntity(context,game,'depth-down-works-1',record,{enter:true});record.floors.push(game.state.area);
@@ -389,8 +389,10 @@ test('an earned-resource Warden expedition walks all three bellworks floors, ope
   assert.ok(game.state.heroes.every(hero=>hero.hp===hero.maxHp),'ordinary camp recovery restores the party');
   await walkToEntity(context,game,'merchant',record,{keepMessage:true});
   const goldBefore=game.state.gold;assert.equal(game.buy('POTION',4),4);assert.equal(goldBefore-game.state.gold,120);record.purchases.push('4 Potions:120G');clearMessages(game);
+  await walkToEntity(context,game,skillStore.doorId,record,{enter:true});
   await walkToEntity(context,game,'magic-camp',record,{keepMessage:true});
   assert.equal(game.buySpell('Iona','shelter'),true);record.purchases.push('Shelter:35G');clearMessages(game);
+  await walkToEntity(context,game,skillStore.exitId,record,{enter:true});
   await walkToEntity(context,game,'world-camp',record,{enter:true});
   await walkToEntity(context,game,'enter-works',record,{enter:true});
   await walkToEntity(context,game,'depth-return-works-3',record,{enter:true});

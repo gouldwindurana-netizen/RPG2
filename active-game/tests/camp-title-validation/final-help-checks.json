@@ -1,0 +1,62 @@
+{
+  "sha256": "8ccd6c9bc3d3ff1368920a55782167c8ee1198de0adce6dd39c7da4a84866002",
+  "results": [
+    {
+      "viewport": {
+        "width": 320,
+        "height": 740
+      },
+      "opening": {
+        "position": "fixed",
+        "top": 0,
+        "height": 740,
+        "scrollHeight": 817,
+        "clientHeight": 740,
+        "overflow": "auto",
+        "documentWidth": 320
+      },
+      "helpReachable": true,
+      "keyboardCollapse": true,
+      "cancelPreservesJourney": true,
+      "pageErrors": []
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "opening": {
+        "position": "fixed",
+        "top": 0,
+        "height": 844,
+        "scrollHeight": 844,
+        "clientHeight": 844,
+        "overflow": "auto",
+        "documentWidth": 390
+      },
+      "helpReachable": true,
+      "keyboardCollapse": true,
+      "cancelPreservesJourney": true,
+      "pageErrors": []
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "opening": {
+        "position": "fixed",
+        "top": 0,
+        "height": 390,
+        "scrollHeight": 689,
+        "clientHeight": 390,
+        "overflow": "auto",
+        "documentWidth": 844
+      },
+      "helpReachable": true,
+      "keyboardCollapse": true,
+      "cancelPreservesJourney": true,
+      "pageErrors": []
+    }
+  ]
+}

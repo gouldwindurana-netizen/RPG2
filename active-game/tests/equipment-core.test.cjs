@@ -59,7 +59,7 @@ for (const fixture of slotCases) {
     const xpByHero = { Mara: 12, Tavin: 52, Iona: 130, Soren: 256 };
     game.state.hx = { ...xpByHero };
     game.state.xp = 777;
-    game.state.settings = { battleSpeed: 3, encounters: 'off' };
+    game.state.settings = { battleSpeed: 3, encounters: 'off', npcMovement: 'still' };
     game.state.inventory[fixture.id] = 4;
     const inventoryBefore = plain(game.state.inventory);
     const eligible = game.state.heroes
@@ -81,7 +81,7 @@ for (const fixture of slotCases) {
     assert.deepEqual(plain(restored.state.inventory), inventoryBefore);
     assert.deepEqual(plain(restored.state.hx), xpByHero, 'per-hero EXP mod is preserved');
     assert.equal(restored.state.xp, 777);
-    assert.deepEqual(plain(restored.state.settings), { battleSpeed: 3, encounters: 'off' });
+    assert.deepEqual(plain(restored.state.settings), { battleSpeed: 3, encounters: 'off', npcMovement: 'still' });
     assert.equal(restored.state.profile.name, 'Rowan');
     assert.equal(restored.state.profile.job, fixture.job);
     assert.deepEqual(plain(restored.state.heroes.map(hero => hero.level)), [2, 3, 4, 5]);

@@ -1,0 +1,136 @@
+{
+  "status": "passed",
+  "date": "2026-11-21",
+  "module_sha256": "70e473a8a1bcae241acf588b0c8647b6c88101bfc12ba71b53fb6174273d765d",
+  "candidate_sha256": "8618c13f49a4c70dd5a010815b97bcfee0afe2a45d6be69e8560c3eebcf8e82b",
+  "candidate_bytes": 1722407,
+  "gameplay_prefix_unchanged": true,
+  "syntax_check": "passed",
+  "renderer_checks": 85,
+  "browser_captures": 10,
+  "page_errors": [],
+  "horizontal_overflow": false,
+  "screenshots": [
+    {
+      "variant": "before",
+      "area": "title",
+      "mobile": false,
+      "screenshot": "/tmp/settlement-soften-before-title.png",
+      "errors": [],
+      "geometry": {
+        "width": 1280,
+        "body": 1280,
+        "root": 1280
+      }
+    },
+    {
+      "variant": "before",
+      "area": "camp",
+      "mobile": false,
+      "screenshot": "/tmp/settlement-soften-before-camp.png",
+      "errors": [],
+      "geometry": {
+        "width": 1280,
+        "body": 1280,
+        "root": 1280
+      }
+    },
+    {
+      "variant": "before",
+      "area": "dunmere",
+      "mobile": false,
+      "screenshot": "/tmp/settlement-soften-before-dunmere.png",
+      "errors": [],
+      "geometry": {
+        "width": 1280,
+        "body": 1280,
+        "root": 1280
+      }
+    },
+    {
+      "variant": "before",
+      "area": "overworld",
+      "mobile": false,
+      "screenshot": "/tmp/settlement-soften-before-overworld.png",
+      "errors": [],
+      "geometry": {
+        "width": 1280,
+        "body": 1280,
+        "root": 1280
+      }
+    },
+    {
+      "variant": "before",
+      "area": "camp",
+      "mobile": true,
+      "screenshot": "/tmp/settlement-soften-before-camp-mobile.png",
+      "errors": [],
+      "geometry": {
+        "width": 390,
+        "body": 390,
+        "root": 390
+      }
+    },
+    {
+      "variant": "after",
+      "area": "title",
+      "mobile": false,
+      "screenshot": "/tmp/settlement-soften-after-title.png",
+      "errors": [],
+      "geometry": {
+        "width": 1280,
+        "body": 1280,
+        "root": 1280
+      }
+    },
+    {
+      "variant": "after",
+      "area": "camp",
+      "mobile": false,
+      "screenshot": "/tmp/settlement-soften-after-camp.png",
+      "errors": [],
+      "geometry": {
+        "width": 1280,
+        "body": 1280,
+        "root": 1280
+      }
+    },
+    {
+      "variant": "after",
+      "area": "dunmere",
+      "mobile": false,
+      "screenshot": "/tmp/settlement-soften-after-dunmere.png",
+      "errors": [],
+      "geometry": {
+        "width": 1280,
+        "body": 1280,
+        "root": 1280
+      }
+    },
+    {
+      "variant": "after",
+      "area": "overworld",
+      "mobile": false,
+      "screenshot": "/tmp/settlement-soften-after-overworld.png",
+      "errors": [],
+      "geometry": {
+        "width": 1280,
+        "body": 1280,
+        "root": 1280
+      }
+    },
+    {
+      "variant": "after",
+      "area": "camp",
+      "mobile": true,
+      "screenshot": "/tmp/settlement-soften-after-camp-mobile.png",
+      "errors": [],
+      "geometry": {
+        "width": 390,
+        "body": 390,
+        "root": 390
+      }
+    }
+  ],
+  "limits": "Isolated visual component checks on the completed visual baseline, not integrated shop/NPC verification."
+}

@@ -1,0 +1,227 @@
+
+Running 6 tests using 1 worker
+
+(node:1422) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/entrances-browser.spec.mjs:158:1 › all four Reedbank buildings open at their visible thresholds and return beside the same entrance (786ms)
+(node:1577) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/entrances-browser.spec.mjs:181:1 › all twelve city shop openings share the facade threshold and retain their original merchant service (583ms)
+(node:1744) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  3 tests/entrances-browser.spec.mjs:207:1 › every city uses the same western route and arrival pause without crossing-step encounters (498ms)
+(node:1903) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  4 tests/entrances-browser.spec.mjs:229:1 › genuine old Reedbank saves retain progress at the eastern approach and normalize only newly blocked footprints (947ms)
+(node:2088) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  5 tests/entrances-browser.spec.mjs:247:1 › mobile touch follows real openings and the area map shows the connected western boardwalk (10.4s)
+  ✓  6 tests/entrances-browser.spec.mjs:264:1 › a new hero can meet Bessa and follow the corrected exit to Merewatch and back (12.0s)
+
+
+  1) tests/entrances-browser.spec.mjs:158:1 › all four Reedbank buildings open at their visible thresholds and return beside the same entrance 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:5173/
+    Call log:
+      - navigating to "http://127.0.0.1:5173/", waiting until "load"
+
+
+      64 |     booted.add(page);
+      65 |   }
+    > 66 |   const response = await page.goto(gameURL);
+         |                               ^
+      67 |   expect(digest(await response.body()), 'preview is exact final game').toBe(gameHash);
+      68 |   await page.waitForFunction(() => window.__AVEL__?.map);
+      69 | }
+        at open (/workspace/active-game/tests/entrances-browser.spec.mjs:66:31)
+        at load (/workspace/active-game/tests/entrances-browser.spec.mjs:77:26)
+        at /workspace/active-game/tests/entrances-browser.spec.mjs:161:3
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "Failed to read the 'sessionStorage' property from 'Window': Access is denied for this document.",
+    + ]
+
+      31 |   page.on('pageerror', error => list.push(error.message));
+      32 | });
+    > 33 | test.afterEach(async ({ page }) => { expect(errors.get(page) || []).toEqual([]); });
+         |                                                                     ^
+      34 |
+      35 | function state({ context=c, area='camp', player={x:11,y:10,facing:'up'}, level=5, encounters='off' }={}) {
+      36 |   const game = context.Ee({ storage:null, seed:7321, roundDelay:0 });
+        at /workspace/active-game/tests/entrances-browser.spec.mjs:33:69
+
+    Error Context: tests/entrances-final-browser-artifacts/entrances-browser-all-four-59ff3-rn-beside-the-same-entrance/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/entrances-final-browser-artifacts/entrances-browser-all-four-59ff3-rn-beside-the-same-entrance/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/entrances-final-browser-artifacts/entrances-browser-all-four-59ff3-rn-beside-the-same-entrance/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests/entrances-browser.spec.mjs:181:1 › all twelve city shop openings share the facade threshold and retain their original merchant service 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:5173/
+    Call log:
+      - navigating to "http://127.0.0.1:5173/", waiting until "load"
+
+
+      64 |     booted.add(page);
+      65 |   }
+    > 66 |   const response = await page.goto(gameURL);
+         |                               ^
+      67 |   expect(digest(await response.body()), 'preview is exact final game').toBe(gameHash);
+      68 |   await page.waitForFunction(() => window.__AVEL__?.map);
+      69 | }
+        at open (/workspace/active-game/tests/entrances-browser.spec.mjs:66:31)
+        at load (/workspace/active-game/tests/entrances-browser.spec.mjs:77:26)
+        at /workspace/active-game/tests/entrances-browser.spec.mjs:186:5
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "Failed to read the 'sessionStorage' property from 'Window': Access is denied for this document.",
+    + ]
+
+      31 |   page.on('pageerror', error => list.push(error.message));
+      32 | });
+    > 33 | test.afterEach(async ({ page }) => { expect(errors.get(page) || []).toEqual([]); });
+         |                                                                     ^
+      34 |
+      35 | function state({ context=c, area='camp', player={x:11,y:10,facing:'up'}, level=5, encounters='off' }={}) {
+      36 |   const game = context.Ee({ storage:null, seed:7321, roundDelay:0 });
+        at /workspace/active-game/tests/entrances-browser.spec.mjs:33:69
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/entrances-final-browser-artifacts/entrances-browser-all-twel-5269e-r-original-merchant-service/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: tests/entrances-final-browser-artifacts/entrances-browser-all-twel-5269e-r-original-merchant-service/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/entrances-final-browser-artifacts/entrances-browser-all-twel-5269e-r-original-merchant-service/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/entrances-final-browser-artifacts/entrances-browser-all-twel-5269e-r-original-merchant-service/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) tests/entrances-browser.spec.mjs:207:1 › every city uses the same western route and arrival pause without crossing-step encounters 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:5173/
+    Call log:
+      - navigating to "http://127.0.0.1:5173/", waiting until "load"
+
+
+      64 |     booted.add(page);
+      65 |   }
+    > 66 |   const response = await page.goto(gameURL);
+         |                               ^
+      67 |   expect(digest(await response.body()), 'preview is exact final game').toBe(gameHash);
+      68 |   await page.waitForFunction(() => window.__AVEL__?.map);
+      69 | }
+        at open (/workspace/active-game/tests/entrances-browser.spec.mjs:66:31)
+        at load (/workspace/active-game/tests/entrances-browser.spec.mjs:77:26)
+        at /workspace/active-game/tests/entrances-browser.spec.mjs:213:5
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "Failed to read the 'sessionStorage' property from 'Window': Access is denied for this document.",
+    + ]
+
+      31 |   page.on('pageerror', error => list.push(error.message));
+      32 | });
+    > 33 | test.afterEach(async ({ page }) => { expect(errors.get(page) || []).toEqual([]); });
+         |                                                                     ^
+      34 |
+      35 | function state({ context=c, area='camp', player={x:11,y:10,facing:'up'}, level=5, encounters='off' }={}) {
+      36 |   const game = context.Ee({ storage:null, seed:7321, roundDelay:0 });
+        at /workspace/active-game/tests/entrances-browser.spec.mjs:33:69
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/entrances-final-browser-artifacts/entrances-browser-every-ci-ce050-ut-crossing-step-encounters/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: tests/entrances-final-browser-artifacts/entrances-browser-every-ci-ce050-ut-crossing-step-encounters/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/entrances-final-browser-artifacts/entrances-browser-every-ci-ce050-ut-crossing-step-encounters/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/entrances-final-browser-artifacts/entrances-browser-every-ci-ce050-ut-crossing-step-encounters/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) tests/entrances-browser.spec.mjs:229:1 › genuine old Reedbank saves retain progress at the eastern approach and normalize only newly blocked footprints 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:5173/
+    Call log:
+      - navigating to "http://127.0.0.1:5173/", waiting until "load"
+
+
+      64 |     booted.add(page);
+      65 |   }
+    > 66 |   const response = await page.goto(gameURL);
+         |                               ^
+      67 |   expect(digest(await response.body()), 'preview is exact final game').toBe(gameHash);
+      68 |   await page.waitForFunction(() => window.__AVEL__?.map);
+      69 | }
+        at open (/workspace/active-game/tests/entrances-browser.spec.mjs:66:31)
+        at load (/workspace/active-game/tests/entrances-browser.spec.mjs:77:26)
+        at /workspace/active-game/tests/entrances-browser.spec.mjs:236:48
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "Failed to read the 'sessionStorage' property from 'Window': Access is denied for this document.",
+    + ]
+
+      31 |   page.on('pageerror', error => list.push(error.message));
+      32 | });
+    > 33 | test.afterEach(async ({ page }) => { expect(errors.get(page) || []).toEqual([]); });
+         |                                                                     ^
+      34 |
+      35 | function state({ context=c, area='camp', player={x:11,y:10,facing:'up'}, level=5, encounters='off' }={}) {
+      36 |   const game = context.Ee({ storage:null, seed:7321, roundDelay:0 });
+        at /workspace/active-game/tests/entrances-browser.spec.mjs:33:69
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/entrances-final-browser-artifacts/entrances-browser-genuine--7e774-ly-newly-blocked-footprints/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: tests/entrances-final-browser-artifacts/entrances-browser-genuine--7e774-ly-newly-blocked-footprints/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/entrances-final-browser-artifacts/entrances-browser-genuine--7e774-ly-newly-blocked-footprints/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/entrances-final-browser-artifacts/entrances-browser-genuine--7e774-ly-newly-blocked-footprints/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4 failed
+    tests/entrances-browser.spec.mjs:158:1 › all four Reedbank buildings open at their visible thresholds and return beside the same entrance 
+    tests/entrances-browser.spec.mjs:181:1 › all twelve city shop openings share the facade threshold and retain their original merchant service 
+    tests/entrances-browser.spec.mjs:207:1 › every city uses the same western route and arrival pause without crossing-step encounters 
+    tests/entrances-browser.spec.mjs:229:1 › genuine old Reedbank saves retain progress at the eastern approach and normalize only newly blocked footprints 
+  2 passed (32.2s)

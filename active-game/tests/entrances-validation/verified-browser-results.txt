@@ -1,0 +1,54 @@
+
+Running 6 tests using 1 worker
+
+(node:2341) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/entrances-browser.spec.mjs:158:1 › all four Reedbank buildings open at their visible thresholds and return beside the same entrance (21.0s)
+  ✓  2 tests/entrances-browser.spec.mjs:181:1 › all twelve city shop openings share the facade threshold and retain their original merchant service (24.0s)
+  ✘  3 tests/entrances-browser.spec.mjs:207:1 › every city uses the same western route and arrival pause without crossing-step encounters (2.8s)
+(node:2627) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  4 tests/entrances-browser.spec.mjs:229:1 › genuine old Reedbank saves retain progress at the eastern approach and normalize only newly blocked footprints (6.8s)
+  ✓  5 tests/entrances-browser.spec.mjs:247:1 › mobile touch follows real openings and the area map shows the connected western boardwalk (9.4s)
+  ✓  6 tests/entrances-browser.spec.mjs:264:1 › a new hero can meet Bessa and follow the corrected exit to Merewatch and back (12.3s)
+
+
+  1) tests/entrances-browser.spec.mjs:207:1 › every city uses the same western route and arrival pause without crossing-step encounters 
+
+    Error: expect(received).toMatchObject(expected)
+
+    - Expected  - 1
+    + Received  + 0
+
+      Object {
+    -   "area": "overworld",
+        "x": 8,
+        "y": 33,
+      }
+
+      214 |     if (town==='camp') await shot(page,info,'desktop-reedbank-boardwalk-exit');
+      215 |     await step(page,'left'); await expectArea(page,'overworld');
+    > 216 |     expect((await snapshot(page)).player).toMatchObject(plain(c.g[exit.id]));
+          |                                           ^
+      217 |     expect(resources(await snapshot(page))).toEqual(before);
+      218 |     await page.waitForTimeout(350); expect((await snapshot(page)).area).toBe('overworld');
+      219 |     await page.locator('#game-world canvas').focus(); await page.keyboard.down('ArrowUp');
+        at /workspace/active-game/tests/entrances-browser.spec.mjs:216:43
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/entrances-verified-browser-artifacts/entrances-browser-every-ci-ce050-ut-crossing-step-encounters/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: tests/entrances-verified-browser-artifacts/entrances-browser-every-ci-ce050-ut-crossing-step-encounters/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/entrances-verified-browser-artifacts/entrances-browser-every-ci-ce050-ut-crossing-step-encounters/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/entrances-verified-browser-artifacts/entrances-browser-every-ci-ce050-ut-crossing-step-encounters/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/entrances-browser.spec.mjs:207:1 › every city uses the same western route and arrival pause without crossing-step encounters 
+  5 passed (1.3m)

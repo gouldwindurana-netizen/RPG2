@@ -27,6 +27,14 @@ Walk with **WASD / arrows**, click a destination, or use the touch pad. Hold **S
 
 Implemented gameplay includes:
 
+- All four starting-area buildings have aligned, enterable doorways, including two resident homes with connected paths. Twelve shop entrances match their visible openings, and all six towns use consistent western exits and inward arrivals. Older saved positions remain compatible. See [aligned entrances and town exits](active-game/docs/aligned-entrances.md).
+
+- A new dusk-camp opening menu with actual journey/party previews, a persistent How to Play guide and a clean transparent crescent moon. The in-game Travel ledger combines compact HP/MP rows, objective context and the existing eight destinations. See [camp and ledger menus](active-game/docs/camp-and-ledger-menus.md).
+
+- Twelve walk-in weapon/skill shop rooms with indoor merchants and paired returns beside the same buildings. Outdoor item counters, regional stock and prices remain.
+- Optional town-citizen wandering under System, with safe bounded paths and pauses near the party, during menus and during battles. Merchants and important quest keepers stay put.
+- Softer terrain, foliage, lighting and title scenery, richer battle backgrounds and a clearer main party menu with current HP/MP for all four travelers. See [shops and town life](active-game/docs/shops-and-town-life.md) and [visual presentation](active-game/docs/visual-presentation.md).
+
 - The uploaded usage-based growth system, regional skill-shop stock, family item drops and discovered-family notes. The growth build remains the current baseline.
 - Six repeatable regional rare foes with a seeded 5% chance in dangerous ordinary encounters, replacing stationary after-mission rare hunts. Each victory gives one regional set piece, missing pieces first, then balanced copies for the rest of the party. The Field Journal shows set collection progress. See [regional rares and the growth build](active-game/docs/regional-rares-and-growth.md).
 - Repaired encounter creation and automatic equipment awards, safe import of affected growth saves, and responsive blue-and-silver exploration, battle and shop layouts.
@@ -71,7 +79,7 @@ Run the current standalone regression suites from this checkout:
 ```bash
 cd active-game
 node --test tests/*core.test.cjs tests/*renderer.test.cjs
-../node_modules/.bin/playwright test -c tests/jobs-playwright.config.mjs
+../node_modules/.bin/playwright test -c tests/entrances-playwright.config.mjs
 ```
 
 Start `npm run dev` in a second terminal before the browser suite.

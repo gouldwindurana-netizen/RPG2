@@ -1,0 +1,48 @@
+
+Running 3 tests using 1 worker
+
+(node:7201) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/camp-menu-browser.spec.mjs:151:1 › fresh title offers clear new adventure actions and four-member creation (2.5s)
+(node:7348) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  2 tests/camp-menu-browser.spec.mjs:161:1 › saved title shows the real journey and Continue resumes it without changing progress (2.9s)
+  ✓  3 tests/camp-menu-browser.spec.mjs:178:1 › travel ledger resources context and eight destinations remain readable and keyboard usable (6.7s)
+
+
+  1) tests/camp-menu-browser.spec.mjs:151:1 › fresh title offers clear new adventure actions and four-member creation 
+
+    Error: locator.click: Error: strict mode violation: locator('[data-front="cancel"]') resolved to 2 elements:
+        1) <button data-front="cancel" class="text-button">← Title screen</button> aka getByRole('button', { name: '← Title screen' })
+        2) <button data-front="cancel" class="subtle-button">← Title</button> aka getByRole('button', { name: '← Title', exact: true })
+
+    Call log:
+      - waiting for locator('[data-front="cancel"]')
+
+
+      155 |   await shot(page,info,'desktop-title-new');await page.setViewportSize({width:390,height:844});await noOverflow(page);await shot(page,info,'mobile-title-new');
+      156 |   const start=page.locator('[data-front="new"]');await start.focus();await page.keyboard.press('Enter');await expect(page.locator('#hero-name')).toBeFocused();
+    > 157 |   await page.locator('[data-front="cancel"]').click();await newAdventure(page,'Elara');const state=await snapshot(page);
+          |                                               ^
+      158 |   expect(state.profile.name).toBe('Elara');expect(state.profile.job).toBe('scout');expect(state.partyJobs.Iona).toBe('spellblade');expect(state.mode).toBe('explore');await noOverflow(page);
+      159 | });
+      160 |
+        at /workspace/active-game/tests/camp-menu-browser.spec.mjs:157:47
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/camp-menu-baseline-browser-artifacts/camp-menu-browser-fresh-ti-a4079-ns-and-four-member-creation/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: tests/camp-menu-baseline-browser-artifacts/camp-menu-browser-fresh-ti-a4079-ns-and-four-member-creation/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/camp-menu-baseline-browser-artifacts/camp-menu-browser-fresh-ti-a4079-ns-and-four-member-creation/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/camp-menu-baseline-browser-artifacts/camp-menu-browser-fresh-ti-a4079-ns-and-four-member-creation/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/camp-menu-browser.spec.mjs:151:1 › fresh title offers clear new adventure actions and four-member creation 
+  2 passed (14.6s)

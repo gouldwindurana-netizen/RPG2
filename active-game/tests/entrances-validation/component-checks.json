@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-24",
+  "status": "passed",
+  "game_sha256": "46caab2dad71d678e0a5f93864095dfa66b5ea33fc24416e2876706f1b2e3e8e",
+  "game_bytes": 1783734,
+  "command": "GAME_HTML=/tmp/entrances-composed-candidate.html node --test tests/entrances-core.test.cjs",
+  "passed": 11,
+  "failed": 0,
+  "log": "tests/entrances-validation/component-core-results.txt",
+  "modules": {
+    "entrances_world": "582bd3387929b727840a198952daf8590a75240beeb8347fd32ca6721876e263",
+    "entrances_render": "036165d83516f23d7b4da3da1327b98b0d648dd54e7602ddade5861c4341b6e8"
+  },
+  "checks": [
+    "Four Reedbank building entrances reached from the actual watchfire paths and paired returns.",
+    "Twelve existing merchants remain usable inside their original regional rooms.",
+    "Six western town exits retain canonical overworld approaches, story gates and encounter RNG.",
+    "Residents repeat dialogue without resources, rewards, progression or recovery.",
+    "Genuine previous saves migrate exactly eight newly blocked camp grass cells without changing resources.",
+    "Migration is separately scoped to camp player and checkpoint positions; unrelated invalid saves remain rejected.",
+    "Old eastern arrivals and shop approaches remain valid.",
+    "All fourteen interiors save and reload.",
+    "Actual painted opening rectangles remain inside their logical threshold cells.",
+    "Item, skill, enemy, progression and story-switch catalogues remain unchanged."
+  ],
+  "notes": [
+    "Declared travel fixtures isolate late route gates and are not a full earned campaign playthrough.",
+    "The earlier audit coordinate guesses were corrected against immutable baseline tiles: changed grass cells use x22 and x17, not x24 and x19.",
+    "No product module changes were needed after review; only new test fixtures were corrected for existing discovery flags and actual overworld-approach recording."
+  ]
+}

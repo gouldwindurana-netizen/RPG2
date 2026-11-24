@@ -1,0 +1,42 @@
+{
+  "date": "2026-11-23",
+  "status": "passed",
+  "candidate_sha256": "4a50acf3c0710d33896021d40dd1a9f64acd906d89d01bbe4d1220dd21704b0a",
+  "module_sha256": "a47f570cc5b7e81c3096ec431a49ba191b475d84e5738c2f2f59c6e2ab2d863c",
+  "guarded_patches": 8,
+  "core_checks_passed": 10,
+  "core_checks_failed": 0,
+  "browser_captures": 4,
+  "unexpected_page_errors": 0,
+  "viewports": [
+    {
+      "width": 1280,
+      "height": 1000
+    },
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "screenshots": [
+    "/tmp/settlement-wood-door-outside-desktop.png",
+    "/tmp/settlement-wood-door-outside-mobile.png",
+    "/tmp/settlement-wood-door-inside-desktop.png",
+    "/tmp/settlement-wood-door-inside-mobile.png"
+  ],
+  "notes": [
+    "Isolated shop-module candidate; parent owns combined-module final verification.",
+    "Preserved original merchant IDs, region stock, ten world sites and outdoor item counters.",
+    "Real entry/exit, purchases, learned skill MP conservation and old/new save compatibility covered.",
+    "Indoor HUD gives local merchant/exit instructions and no Rest action; authoritative rest rejects shops without altering resources.",
+    "Original timber shop door is used only by shop entrances and interior exits, retaining original sprite dimensions/placement."
+  ],
+  "protected_encounter_reward_segments_unchanged": true,
+  "shop_door_texture": {
+    "key": "shop-door",
+    "width": 64,
+    "height": 72,
+    "reused": true,
+    "world_gates_unchanged": true
+  }
+}

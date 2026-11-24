@@ -4,6 +4,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
+const { visitShop } = require('./shop-fixture.cjs');
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const root = path.join(__dirname, '..');
@@ -116,10 +117,7 @@ test('job changes equip free compatible copies while preserving four worn charms
 
 test('purchased skills remain personal across jobs, buying never restores MP and wrong jobs cannot use them', () => {
   const fix=setup(); level(fix,'Mara',5); const h=hero(fix.game,'Mara'); h.mp=1; fix.game.state.gold=1000;
-  fix.game.state.area='dunmere';
-  const merchant=fix.c.he.dunmere.entities.find(entity=>entity.shopKind==='magic');
-  fix.game.state.player={x:merchant.x,y:merchant.y+1,facing:'up'};
-  fix.game.state.message={speaker:'Skill Shop',text:'Learn.'};
+  visitShop(fix.c,fix.game,'dunmere','magic');
   const offer=fix.c.skillOffers(fix.game.state,'Mara').find(row=>row.skillId==='rally');
   assert.ok(offer); assert.equal(offer.unlocked,true); assert.equal(fix.game.buySkill('Mara','rally'),true);
   assert.equal(h.mp,1); assert.equal(fix.game.state.gold,1000-offer.price); assert.equal(fix.game.buySkill('Mara','rally'),false);

@@ -6,6 +6,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 const test = require('node:test');
 const vm = require('node:vm');
+const { visitShop: visitSettlementShop } = require('./shop-fixture.cjs');
+const gameContexts = new WeakMap();
 
 const htmlPath = path.resolve(process.env.GAME_HTML || path.join(__dirname, '..', 'The_Road_Beyond_the_Bells.html'));
 const html = fs.readFileSync(htmlPath, 'utf8');
@@ -27,6 +29,7 @@ function createGame(job = 'warden') {
   const game = context.Ee({ storage, seed: 7321, roundDelay: 0 });
   assert.equal(game.beginAdventure({ ...context.R, name: 'Rowan', job }), true);
   game.skipIntro();
+  gameContexts.set(game, context);
   return { context, game, storage, serialized: () => storage.getItem(context.G), reload: () => context.Ee({ storage, seed: 7321, roundDelay: 0 }) };
 }
 
@@ -45,11 +48,9 @@ function createLegacyGame() {
 
 function hero(game, id) { return game.state.heroes.find(candidate => candidate.id === id); }
 function spell(context, id) { return context.te.find(candidate => candidate.id === id); }
-function visitShop(game, kind, region = 1, context) {
-  game.state.area = ['camp', 'dunmere', 'fen', 'orchard', 'crown', 'veyr'][region - 1];
-  const npc = context?.he[game.state.area].entities.find(entity => entity.shopKind === 'magic');
-  game.state.player = npc ? { x: npc.x, y: npc.y + 1, facing: 'up' } : { x: 11, y: 10, facing: 'right' };
-  game.state.message = { speaker: `${kind} Shop`, text: 'Shop test.' };
+function visitShop(game, kind, region = 1, context = gameContexts.get(game)) {
+  const town = ['camp', 'dunmere', 'fen', 'orchard', 'crown', 'veyr'][region - 1];
+  return visitSettlementShop(context, game, town, { Skill: 'magic', Weapon: 'weapon', Item: 'items' }[kind]);
 }
 function setLevel(fixture, id, level) {
   const { game, context } = fixture;

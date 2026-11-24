@@ -1,0 +1,51 @@
+
+Running 9 tests using 1 worker
+
+(node:11806) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/settlement-browser.spec.mjs:115:1 › title and four-member creation keep clear actions and usable mobile choices (3.5s)
+  ✓  2 tests/settlement-browser.spec.mjs:125:1 › town world and dungeon art preserve exploration input and modal boundaries (5.4s)
+  ✓  3 tests/settlement-browser.spec.mjs:134:1 › one and four foe battles keep actors resources and command resolution readable (8.0s)
+  ✓  4 tests/settlement-browser.spec.mjs:141:1 › eight and nine foe mobile battles preserve target scrolling and cell geometry (3.8s)
+  ✓  5 tests/settlement-browser.spec.mjs:162:1 › all twelve shop doors enter real safe interiors and leave beside their own building (16.4s)
+  ✘  6 tests/settlement-browser.spec.mjs:175:1 › indoor merchants retain weapon quantities regional skills and reload and old shop saves (7.8s)
+(node:12518) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  7 tests/settlement-browser.spec.mjs:193:1 › townspeople can wander pause for menus and dialogue and stay still after reload (17.1s)
+  ✓  8 tests/settlement-browser.spec.mjs:205:1 › inventory jobs and journal show resources collection and preserve saves (3.6s)
+  ✓  9 tests/settlement-browser.spec.mjs:214:1 › reduced motion and short landscape keep essential controls reachable (3.3s)
+
+
+  1) tests/settlement-browser.spec.mjs:175:1 › indoor merchants retain weapon quantities regional skills and reload and old shop saves 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: undefined
+
+      186 |   // A genuine pre-interior engine still writes the old outdoor shop message.
+      187 |   const oldHTML=await readFile(new URL('../settlement-baseline.html',import.meta.url),'utf8'),legacy=vm.createContext({structuredClone});vm.runInContext(oldHTML.slice(oldHTML.indexOf('var l={schemaVersion'),oldHTML.indexOf('var De=new Set')),legacy,{timeout:5000});
+    > 188 |   const game=legacy.Ee({storage:null,seed:7321,roundDelay:0});game.beginAdventure({...legacy.R,name:'Legacy'});game.skipIntro();game.configure({encounters:'off'});const oldShop=legacy.he.camp.entities.find(entity=>entity.shopKind==='weapon');game.state.player={x:oldShop.x,y:oldShop.y+1,facing:'up'};game.state.gold=733;expect(game.interact(oldShop.id)).toBe(true);const oldSave=plain(game.state);
+          |                                                                                                                                                                                                                                                                                                                                                                   ^
+      189 |   await load(page,oldSave);await expect(page.locator('#dialog-title')).toHaveText('Weapon Shop');expect((await snapshot(page)).gold).toBe(733);expect((await snapshot(page)).inventory).toEqual(oldSave.inventory);await page.locator('[data-command="dismiss"]').first().click();
+      190 | });
+      191 |
+        at /workspace/active-game/tests/settlement-browser.spec.mjs:188:355
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/settlement-final-browser-artifacts/settlement-browser-indoor--030f0-d-reload-and-old-shop-saves/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: tests/settlement-final-browser-artifacts/settlement-browser-indoor--030f0-d-reload-and-old-shop-saves/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/settlement-final-browser-artifacts/settlement-browser-indoor--030f0-d-reload-and-old-shop-saves/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/settlement-final-browser-artifacts/settlement-browser-indoor--030f0-d-reload-and-old-shop-saves/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/settlement-browser.spec.mjs:175:1 › indoor merchants retain weapon quantities regional skills and reload and old shop saves 
+  8 passed (1.2m)

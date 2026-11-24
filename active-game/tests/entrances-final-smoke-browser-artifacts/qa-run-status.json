@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-24",
+  "status": "passed",
+  "game_sha256": "5041bdf18a5d1e3b8ffb1d81c235f389630955842d2248d3a07f04e886e8a67f",
+  "game_bytes": 1783804,
+  "command": "/workspace/RPG2/node_modules/.bin/playwright test -c tests/entrances-playwright.config.mjs --grep 'all four|mobile touch' --output=tests/entrances-final-smoke-browser-artifacts",
+  "passed": 2,
+  "failed": 0,
+  "duration_seconds": 31.2,
+  "unexpected_page_errors": [],
+  "log": "tests/entrances-validation/final-smoke-browser-results.txt",
+  "checks": [
+    "All four Reedbank buildings entered through actual visible openings with paired returns.",
+    "Both new resident dialogues preserve party resources.",
+    "390px touch navigation, area map, shelter reload and western boardwalk exit."
+  ],
+  "visual_review": [
+    {
+      "path": "tests/entrances-final-smoke-browser-artifacts/entrances-browser-mobile-t-4f675-connected-western-boardwalk/mobile-reedbank-entrances-and-exit.png",
+      "result": "Reviewed at 390px: all four building doorways and west boardwalk are visible; new northern and southern shelter dirt approaches connect to the main street; no horizontal overflow."
+    }
+  ],
+  "notes": [
+    "Repeats two existing cases from the full six-case browser run; combined unique scenario count remains six.",
+    "Full six-case run passed on 46caab2dad71d678e0a5f93864095dfa66b5ea33fc24416e2876706f1b2e3e8e before the final path-only revision.",
+    "The final revision only changes connecting dirt path cells; gameplay, entrance metadata, return locations, resources and collision semantics are unchanged.",
+    "Full run completed before the final HTML rebuild. No test run mixed product hashes.",
+    "Every test captures uncaught page errors and asserts the list remains empty."
+  ]
+}

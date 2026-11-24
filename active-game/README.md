@@ -6,6 +6,18 @@ The normal preview in `/workspace/RPG2` now serves this exact file at its existi
 
 ## Current expansion
 
+- All four Reedbank buildings are enterable. Shop openings match their actual thresholds, two resident homes have connected paths, and the starting town uses the same western exit and inward arrival as the other cities. Existing journeys and merchant services are preserved. See `docs/aligned-entrances.md`.
+- Current reproduction is `tools/build_entrances.py` from immutable `entrances-baseline.html`; `entrances-manifest.json` records the tested output. Earlier assemblers reproduce their archived stages and must not overwrite newer work.
+
+- A new camp-at-dusk opening screen previews the actual journey and party, with clear Continue/New Adventure actions and persistent How to Play guidance. The crescent moon uses a transparent sky cutout.
+- The party menu is now a travel ledger: compact ruled HP/MP roster, current story/shop objective, unchanged destinations and a clear return action. See `docs/camp-and-ledger-menus.md`.
+
+- Twelve weapon/skill shop buildings now have safe walk-in rooms and indoor merchants, with paired exits beside the same building. Outdoor item counters, original stock, prices and saved journeys remain.
+- System → Town citizens offers Wander or Stay still. Ordinary citizens take bounded walks, pause nearby and during menus/dialogue/battles, and use authoritative positions for interaction. Important quest keepers and merchants stay put.
+- Softer foliage, banks, paths, light and title hills reduce hard block-like shapes while character pixels stay crisp. The main party menu shows HP and MP for all four travelers with clear commands and conditions. See `docs/shops-and-town-life.md`.
+
+- Refreshed presentation: a watchlight title/creator treatment, consistent blue-and-silver menus, detailed regional terrain and buildings, quieter contextual town labels, and richer battle scenery with framed enemy readouts and grounded shadows. Shop headings include a reachable close button. See `docs/visual-presentation.md`.
+
 - The selected growth upload is now the baseline. Usage-based stat growth, regional skill distribution, family drops and discovered-family notes are retained.
 - Each region has a repeatable rare foe with a seeded 5% chance in dangerous encounters. Victories give one regional set piece, missing pieces first, then balanced copies for other party members. Mission-linked stationary rare markers are removed.
 - Encounter creation and automatic reward IDs are repaired. The blue-and-silver interface has responsive canvas sizing, readable objectives, battle commands and shop information. See `docs/regional-rares-and-growth.md`.
@@ -44,11 +56,17 @@ The overworld remains the connection between ten authored local destinations. Ea
 
 `polish-baseline.html` archives the dungeon update; `difficulty-upload.html` preserves the exact uploaded difficulty build. `engagement-baseline.html` archives their completed merge and polish, `journey-baseline.html` archives the engagement update, and `jobs-baseline.html` archives the completed planning/exploration tools. `tools/build_jobs.py` reproduces that preceding jobs update: six modules add the skill catalogue, MP/jobs core, combat, menus, inventory/shop polish and current-job artwork. `jobs-manifest.json` records hashes and checks. The assembler refuses to overwrite an unrecognized later edit. Older generators reproduce earlier snapshots; do not replay them over the current game. Port later changes deliberately before rebuilding. Do not rebuild from the separate source project or push/publish without the user's instruction.
 
-`growth-baseline.html` is the unchanged growth upload, and `growth-previous.html` preserves the preceding completed game. The current reproduction path is `tools/build_growth.py`, applying `growth_stability.py`, `growth_rares.py`, then `growth_presentation.py`. `growth-manifest.json` records the baseline, modules, final bytes and validation.
+`growth-baseline.html` is the unchanged growth upload, and `growth-previous.html` preserves the preceding completed game. The growth update is reproduced by `tools/build_growth.py`, applying `growth_stability.py`, `growth_rares.py`, then `growth_presentation.py`. `growth-manifest.json` records the baseline, modules, final bytes and validation.
+
+`visual-baseline.html` archives the completed growth build. The presentation-only reproduction path is `tools/build_visual.py`, applying `visual_world.py`, `visual_battle.py` and `visual_ui.py`. It verifies the entire gameplay/data prefix is unchanged before writing the game. `visual-manifest.json` records its module hashes, final bytes and verification.
+
+`settlement-baseline.html` archives that complete visual candidate. That town-life update is reproduced by `tools/build_settlement.py`, applying shops, NPC movement, softer artwork and the preceding party menu. `settlement-manifest.json` records final bytes, module hashes and checks; it supersedes earlier assemblers for current follow-up work.
+
+`camp-menu-baseline.html` archives the completed town-life game. Current menu reproduction is `tools/build_camp_menu.py`, applying `camp_title.py` and `camp_ledger.py`. It verifies unchanged gameplay/data bytes and syntax before writing. `camp-menu-manifest.json` records the final menu build and validation.
 
 ## Validation
 
-Current checks include the original progression/equipment coverage adapted to MP, plus dedicated job, migration, skill, recovery-feedback and inventory/shop tests. Final counts, browser evidence and delivery hashes are recorded in `growth-manifest.json`. Earlier manifests describe their preceding snapshots. See `docs/jobs-skills-and-mp.md` for the new model and `docs/planning-and-exploration.md` for the prior tools.
+Current checks include the original progression/equipment coverage adapted to MP, plus dedicated job, migration, skill, recovery-feedback and inventory/shop tests. Final counts, browser evidence and delivery hashes are recorded in `camp-menu-manifest.json`. Earlier manifests describe their preceding snapshots. See `docs/jobs-skills-and-mp.md` for the new model and `docs/planning-and-exploration.md` for the prior tools.
 
 Opening combat probes use all six lead jobs with earned resources. A separate Warden route actually walks all three opening floors, opens a return lift, retreats for recovery and shopping, and returns to defeat the boss. Its depleted MP demonstrates a reason to regroup; the sampled seed did not need curatives. The second region has an earned-level training/shopping route. Later combat and browser fixtures use declared preparation and access conditions; none claims a complete campaign playthrough or universal late-dungeon balance.
 

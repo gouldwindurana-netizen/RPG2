@@ -1,0 +1,16 @@
+
+Running 9 tests using 1 worker
+
+(node:4570) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/settlement-browser.spec.mjs:115:1 › title and four-member creation keep clear actions and usable mobile choices (3.0s)
+  ✓  2 tests/settlement-browser.spec.mjs:125:1 › town world and dungeon art preserve exploration input and modal boundaries (4.3s)
+  ✓  3 tests/settlement-browser.spec.mjs:134:1 › one and four foe battles keep actors resources and command resolution readable (6.9s)
+  ✓  4 tests/settlement-browser.spec.mjs:141:1 › eight and nine foe mobile battles preserve target scrolling and cell geometry (3.7s)
+  ✓  5 tests/settlement-browser.spec.mjs:162:1 › all twelve shop doors enter real safe interiors and leave beside their own building (16.2s)
+  ✓  6 tests/settlement-browser.spec.mjs:175:1 › indoor merchants retain weapon quantities regional skills and reload and old shop saves (7.5s)
+  ✓  7 tests/settlement-browser.spec.mjs:193:1 › townspeople can wander pause for menus and dialogue and stay still after reload (19.1s)
+  ✓  8 tests/settlement-browser.spec.mjs:216:1 › main menu inventory jobs and journal show resources collection and preserve saves (7.5s)
+  ✓  9 tests/settlement-browser.spec.mjs:230:1 › reduced motion and short landscape keep essential controls reachable (3.1s)
+
+  9 passed (1.2m)

@@ -80,14 +80,30 @@ test('six dungeon roots have 3 through 8 real floors without adding exterior des
   }
 });
 
-test('old base maps keep all NPCs, chests, optional bosses and walkable saved coordinates', () => {
+test('old base maps keep story entities and saved floor while building merchants relocate intact', () => {
   const { context: c } = create(), old = contextFor(fs.readFileSync(path.join(__dirname, '..', 'depth-baseline.html'), 'utf8'));
   const relocated = new Set(Object.values(c.dungeonCatalog).flatMap(data => Object.values(data.bosses).flat()));
   for (const root of Object.keys(totals)) {
     for (const entity of old.he[root].entities.filter(e => !relocated.has(e.id))) {
-      const found = c.he[root].entities.find(e => e.id === entity.id);
-      assert.ok(found, `${root}/${entity.id}`);
-      assert.deepEqual(plain({ x: found.x, y: found.y }), { x: entity.x, y: entity.y });
+      const store = c.settlementShopRecords?.find(record => record.parent === root && record.merchantId === entity.id);
+      if (store) {
+        const matches = Object.entries(c.he).flatMap(([area, map]) => map.entities.filter(candidate => candidate.id === entity.id).map(found => ({ area, found })));
+        assert.equal(matches.length, 1, `${entity.id} remains one original merchant`);
+        assert.equal(matches[0].area, store.area);
+        assert.equal(matches[0].found.kind, entity.kind);
+        assert.equal(matches[0].found.shopKind, entity.shopKind);
+        assert.equal(matches[0].found.sprite, entity.sprite);
+        const door = c.he[root].entities.find(candidate => candidate.id === store.doorId);
+        assert.ok(door, `${root} retains the original building entrance`);
+        assert.deepEqual(plain({ x: door.x, y: door.y }), { x: entity.x, y: entity.y - 1 }, 'threshold is in the facade rather than below it');
+        assert.deepEqual(plain(store.door), { x: door.x, y: door.y });
+        assert.deepEqual(plain(store.approach), { x: door.x, y: door.y + 1 });
+        assert.ok(c.q.includes(c.he[root].tiles[door.y][door.x]));
+      } else {
+        const found = c.he[root].entities.find(e => e.id === entity.id);
+        assert.ok(found, `${root}/${entity.id}`);
+        assert.deepEqual(plain({ x: found.x, y: found.y }), { x: entity.x, y: entity.y });
+      }
     }
     for (let y = 0; y < old.he[root].height; y++) for (let x = 0; x < old.he[root].width; x++) {
       if (old.q.includes(old.he[root].tiles[y][x])) assert.ok(c.q.includes(c.he[root].tiles[y][x]), `${root} old tile ${x},${y}`);

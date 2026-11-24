@@ -1,0 +1,14 @@
+
+Running 7 tests using 1 worker
+
+(node:31826) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/camp-menu-browser.spec.mjs:165:1 › fresh title offers clear new adventure actions and four-member creation (3.3s)
+  ✓  2 tests/camp-menu-browser.spec.mjs:175:1 › saved title shows the real journey and Continue resumes it without changing progress (3.5s)
+  ✓  3 tests/camp-menu-browser.spec.mjs:185:1 › new-adventure previews and cancellation preserve an existing journey until Begin (2.9s)
+  ✓  4 tests/camp-menu-browser.spec.mjs:193:1 › travel ledger resources context and eight destinations remain readable and keyboard usable (6.7s)
+  ✓  5 tests/camp-menu-browser.spec.mjs:203:1 › opening the ledger pauses citizens and closing it resumes without clicking the playfield (7.4s)
+  ✓  6 tests/camp-menu-browser.spec.mjs:210:1 › new menus retain shop inventory and battle flows with context-specific ledger return (9.0s)
+  ✓  7 tests/camp-menu-browser.spec.mjs:220:1 › narrow short and reduced-motion menus remain standalone with session-only play (2.9s)
+
+  7 passed (37.1s)

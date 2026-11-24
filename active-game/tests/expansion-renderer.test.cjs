@@ -41,7 +41,11 @@ test('defeated enemies keep their cells so formations do not shuffle mid-round',
 const textureStart=html.indexOf('travelTexture(e,t){');
 const textureEnd=html.indexOf('refreshWorld(e){',textureStart);
 assert.ok(textureStart>=0&&textureEnd>textureStart,'shipped world texture selector exists');
-const Selectors=vm.runInNewContext('(class {'+html.slice(textureStart,textureEnd)+'})',{Xe:()=> 'original-texture'});
+const model=vm.createContext({structuredClone});vm.runInContext(html.slice(html.indexOf('var l={schemaVersion'),html.indexOf('var De=new Set')),model);
+const entranceHelperStart=html.indexOf('function entranceRecordFor('),entranceHelperEnd=html.indexOf('function entranceOpeningGeometry(',entranceHelperStart);
+assert.ok(entranceHelperStart>=0&&entranceHelperEnd>entranceHelperStart,'shipped facade selector helper exists');
+vm.runInContext(html.slice(entranceHelperStart,entranceHelperEnd),model);
+const Selectors=vm.runInNewContext('(class {'+html.slice(textureStart,textureEnd)+'})',{Xe:()=> 'original-texture',he:model.he,entranceRecordFor:model.entranceRecordFor});
 const selector=new Selectors();selector.crossing=()=>null;
 for(const kind of ['weapon','items','magic'])test(`${kind} shop has a distinct original stall texture`,()=>assert.equal(selector.travelTexture({kind:'npc',shopKind:kind},'camp'),'service-'+kind));
 test('ordinary citizens keep their original appearance',()=>assert.equal(selector.travelTexture({kind:'npc',name:'Bessa',sprite:'bessa'},'camp'),'original-texture'));

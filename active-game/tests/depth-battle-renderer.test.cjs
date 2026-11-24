@@ -59,13 +59,16 @@ test('forest terrain and shoreline have distinct exterior scenes',()=>{
   assert.equal(backdrop(state('overworld'),'f').terrain,'forest');
   const rows=Array.from({length:40},()=>Array(70).fill('g'));rows[10][19]='w';rows[9][20]='w';scene.readMap=()=>({tiles:rows.map(row=>row.join(''))});assert.equal(scene.battleBackdrop(state('overworld')).terrain,'shore');
 });
-for(const root of ['works','tollhouse','granary','orchard','crown','heart'])test(`${root} interiors select original dungeon scenery and a deeper variant`,()=>{
+for(const root of ['works','tollhouse','granary','orchard','crown','heart'])test(`${root} maps select their outdoor approach or original dungeon scenery and a deeper variant`,()=>{
   const upper=backdrop(state(root)),total={works:3,tollhouse:4,granary:5,orchard:6,crown:7,heart:8}[root],deep=backdrop(state(root+'-depth-'+total));
-  assert.equal(upper.environment,'interior');assert.equal(upper.terrain,root);assert.equal(upper.floor,1);assert.equal(deep.floor,total);assert.notEqual(upper.texture,deep.texture);assert.ok(deep.texture.endsWith('-deep'));
+  // Orchard and Crown Road's base maps are outdoor routes, including their dangerous eastern approaches.
+  if(['orchard','crown'].includes(root)){assert.equal(upper.environment,'exterior');assert.equal(upper.terrain,root==='orchard'?'orchard-field':'highland');assert.equal(upper.floor,0);}
+  else {assert.equal(upper.environment,'interior');assert.equal(upper.terrain,root);assert.equal(upper.floor,1);}
+  assert.equal(deep.environment,'interior');assert.equal(deep.terrain,root);assert.equal(deep.floor,total);assert.notEqual(upper.texture,deep.texture);assert.ok(deep.texture.endsWith('-deep'));
 });
 test('safe orchard/crown courts stay exterior when coordinates are supplied',()=>{for(const root of ['orchard','crown'])assert.equal(backdrop(state(root,'R04',4,6)).environment,'exterior')});
 test('each terrain and dungeon backdrop draws a standalone full-field original texture',()=>{
-  const infos=[...['R01','R03','R04','R05','R06'].map(region=>backdrop(state('overworld',region))),backdrop(state('overworld'),'f'),...['works','tollhouse','granary','orchard','crown','heart'].map(root=>backdrop(state(root)))];
+  const infos=[...['R01','R03','R04','R05','R06'].map(region=>backdrop(state('overworld',region))),backdrop(state('overworld'),'f'),...['works','tollhouse','granary','orchard','crown','heart'].map(root=>backdrop(state(['orchard','crown'].includes(root)?root+'-depth-2':root)))];
   const keys=new Set();for(const info of infos){const key=scene.battleTexture(info);assert.equal(rendered.key,key);assert.equal(rendered.width,960);assert.equal(rendered.height,576);assert.ok(rendered.calls.length>100);keys.add(key)}assert.equal(keys.size,infos.length);
 });
 test('rear scenery is proportionally compressed so every battle row stands below the floor horizon',()=>{
@@ -91,7 +94,12 @@ const explorationEnd=html.indexOf('function $e(',explorationStart);
 assert.ok(explorationStart>=0&&explorationEnd>explorationStart);
 vm.runInContext(html.slice(explorationStart,explorationEnd),context);
 function exploration(area,tiles=['#####','#gfw#','#####']){
-  const ctx={calls:[],drawImage(){}};
+  // Model the Canvas2D drawing surface used by baked scenery, including
+  // curved banks and light. Existing material/geometry assertions stay below.
+  const ctx={calls:[],drawImage(){},save(){},restore(){},translate(){},rotate(){},scale(){},
+    beginPath(){},moveTo(){},lineTo(){},bezierCurveTo(){},quadraticCurveTo(){},closePath(){},
+    fill(){},stroke(){},ellipse(){},fillRect(x,y,w,h){this.calls.push(['fill',x,y,w,h])},
+    createRadialGradient(){return{addColorStop(){}}}};
   const renderer={textures:{
     exists(){return false},
     remove(){},

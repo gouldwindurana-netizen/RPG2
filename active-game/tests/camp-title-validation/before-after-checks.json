@@ -1,0 +1,101 @@
+{
+  "sha256": "b42b6877492ed5a55562e8a8c230fca81a779a0c6de27a3434fbea2c8f0a8161",
+  "results": [
+    {
+      "mode": "before",
+      "width": 1280,
+      "resume": false,
+      "path": "/tmp/camp-title-before-1280-fresh.png",
+      "errors": [],
+      "metrics": {
+        "width": 1280,
+        "scroll": 1280,
+        "height": 912
+      }
+    },
+    {
+      "mode": "before",
+      "width": 1280,
+      "resume": true,
+      "path": "/tmp/camp-title-before-1280-resume.png",
+      "errors": [],
+      "metrics": {
+        "width": 1280,
+        "scroll": 1280,
+        "height": 912
+      }
+    },
+    {
+      "mode": "before",
+      "width": 390,
+      "resume": false,
+      "path": "/tmp/camp-title-before-390-fresh.png",
+      "errors": [],
+      "metrics": {
+        "width": 390,
+        "scroll": 390,
+        "height": 844
+      }
+    },
+    {
+      "mode": "before",
+      "width": 390,
+      "resume": true,
+      "path": "/tmp/camp-title-before-390-resume.png",
+      "errors": [],
+      "metrics": {
+        "width": 390,
+        "scroll": 390,
+        "height": 844
+      }
+    },
+    {
+      "mode": "after",
+      "width": 1280,
+      "resume": false,
+      "path": "/tmp/camp-title-after-1280-fresh.png",
+      "errors": [],
+      "metrics": {
+        "width": 1280,
+        "scroll": 1280,
+        "height": 912
+      }
+    },
+    {
+      "mode": "after",
+      "width": 1280,
+      "resume": true,
+      "path": "/tmp/camp-title-after-1280-resume.png",
+      "errors": [],
+      "metrics": {
+        "width": 1280,
+        "scroll": 1280,
+        "height": 912
+      }
+    },
+    {
+      "mode": "after",
+      "width": 390,
+      "resume": false,
+      "path": "/tmp/camp-title-after-390-fresh.png",
+      "errors": [],
+      "metrics": {
+        "width": 390,
+        "scroll": 390,
+        "height": 844
+      }
+    },
+    {
+      "mode": "after",
+      "width": 390,
+      "resume": true,
+      "path": "/tmp/camp-title-after-390-resume.png",
+      "errors": [],
+      "metrics": {
+        "width": 390,
+        "scroll": 390,
+        "height": 844
+      }
+    }
+  ]
+}

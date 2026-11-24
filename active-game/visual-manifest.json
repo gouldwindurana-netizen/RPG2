@@ -1,0 +1,53 @@
+{
+  "baseline_file": "visual-baseline.html",
+  "baseline_sha256": "a5815160ceae4d9c87fae186dd1f642614c4eb7b55ff821638cbc6abc54fd23d",
+  "working_file": "The_Road_Beyond_the_Bells.html",
+  "working_sha256": "c566c3d5c2a7eee911ce7a449d50fb9203f8298ee12f3b698eca1c1f20519218",
+  "working_bytes": 1718756,
+  "modules": [
+    "visual_world",
+    "visual_battle",
+    "visual_ui"
+  ],
+  "module_sha256": {
+    "visual_world": "19c2987bc80370d52b07265f5ee496a8088c7f4b7134f73503c9ee8fbeb0ad08",
+    "visual_battle": "4a5873a3f0cf1dc837829df894394631fe921e7e0b34f9e1c1b95b77562d0cb3",
+    "visual_ui": "6d97081334cc5ec1d93c2841770f4bd2d798d3a832b9d5447e936f005e99596f"
+  },
+  "changes": [
+    "layer original tree canopies with clean foliage clusters and bark highlights",
+    "give shelter tents a defined ridge canvas seams and grounded shadows",
+    "redraw settlement architecture with gabled roofs warm windows masonry and trim",
+    "paint region-specific ground water roads stonework and baked light pools without changing map data",
+    "choose one nearby or selected citizen name while retaining all citizen names in the prologue",
+    "keep signs services exits and discoveries labeled while preventing adjacent citizen-name overlap",
+    "base orchard and crown routes use outdoor scenery while deeper floors retain dungeon architecture",
+    "replace flat battle floors with original region-specific pixel masonry and layered landscapes",
+    "give lone ordinary foes more presence within their existing actor cell",
+    "ground battle actors with shadows and give enemy names and HP clear framed readouts",
+    "frame the original bell sigil with a restrained watch-star ornament",
+    "add original warm waylights along the title horizon",
+    "keep a shop exit reachable in the sticky heading on touch screens",
+    "unify title creation HUD and menus with responsive blue silver and warm-gold styling"
+  ],
+  "gameplay_model_unchanged": true,
+  "gameplay_model_sha256": "e946993b40bf1799fc43d3ad9e97e0d947b7cbb9037276f36857345b22b465dd",
+  "gameplay_model_bytes": 266777,
+  "preserved": [
+    "Usage-based growth, regional skill shops, MP and all-member jobs",
+    "Repeatable regional rares, equipment drops and ownership rules",
+    "Story, travel, dungeon floors, difficulty and saved journeys",
+    "Original sprites, offline delivery and third-party notices"
+  ],
+  "pushed": false,
+  "published": false,
+  "status": "integrated into settlement update",
+  "validation": {
+    "core_before_settlement": {
+      "passed": 396,
+      "failed": 0,
+      "log": "tests/visual-validation/core-results.txt"
+    },
+    "combined_final_validation": "settlement-manifest.json"
+  }
+}

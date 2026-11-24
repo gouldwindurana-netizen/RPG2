@@ -1,0 +1,42 @@
+{
+  "date": "2026-11-23",
+  "status": "passed",
+  "game_sha256": "c6ba59e2cfd83388a87e01011901718060b4da83332c35f0740dfa36038d34d1",
+  "game_bytes": 1769990,
+  "command": "/workspace/RPG2/node_modules/.bin/playwright test -c tests/camp-menu-playwright.config.mjs --output=tests/camp-menu-final-browser-artifacts",
+  "passed": 7,
+  "failed": 0,
+  "unique_positive_scenarios": 7,
+  "elapsed_seconds": 37.1,
+  "page_errors": [],
+  "log": "tests/camp-menu-validation/browser-results.txt",
+  "checks": [
+    "Fresh title exposes New adventure without a false Continue, keyboard activation works, guide summary is Tab reachable and Enter expands/collapses persistently, and actual four-member creation reaches exploration.",
+    "Current-journey hero, location and chapter match the genuine saved state; Continue and return-to-title preserve progress; completed journeys use the actual completed chapter.",
+    "New-adventure name/job/appearance previews and cancellation retain an existing indoor-shop journey and reload successfully until Begin is confirmed.",
+    "Travel ledger exposes all four HP/MP values, meters, jobs and conditions, all eight exact accessible destinations, keyboard order, current objective, explicit return and restored focus.",
+    "NPC movement pauses while the ledger is open and resumes after closing without a playfield click; RNG and party steps remain unchanged.",
+    "Real indoor weapon purchase, inventory potion use and a normal battle still work; battle ledger preserves plans/resources and displays context-specific return.",
+    "320px,390px and short-landscape menus remain reachable without horizontal overflow; reduced motion, blocked external assets and unavailable local storage retain session-only creation and live Continue."
+  ],
+  "moon": {
+    "mask_used": true,
+    "cutout_alpha": 0,
+    "crescent_alpha": 199,
+    "old_opaque_cover_count": 0,
+    "evidence": "tests/camp-menu-final-browser-artifacts/camp-menu-browser-fresh-ti-a4079-ns-and-four-member-creation/moon-cutout-evidence.json"
+  },
+  "visual_review": [
+    "Desktop title: curved dusk landscape, four original party figures, campfire and naturally transparent crescent; no flat colored inner moon disc.",
+    "390px saved title: scene, Continue, real journey/chapter/location, party portraits and secondary actions fit coherently and remain readable.",
+    "390px travel ledger: compact flat roster, current HP/MP and Poisoned condition, clear eight-command rail, sticky close and reachable final traveler.",
+    "Desktop and short-landscape ledger/return views retain useful controls and clear foreground text."
+  ],
+  "notes": [
+    "Every final preview boot and reload verifies exact served bytes against this game hash; final run did not route a private candidate over the preview.",
+    "Fixtures are genuine engine-generated saved states. They declare levels, access and resources for bounded QA; they are not a complete earned campaign or universal balance playthrough.",
+    "Actual UI performs creation, menu navigation, purchases, healing and combat. window.__AVEL__ is used only for snapshot/map/viewport reads; no runtime mutation API was added.",
+    "Moon alpha is sampled by drawing the actual serialized visible moon and mask into a detached local canvas; full title screenshots were visually reviewed separately.",
+    "Baseline diagnostics found only a test locator ambiguity (two intentional creator Cancel buttons); the selector was scoped before the final run."
+  ]
+}

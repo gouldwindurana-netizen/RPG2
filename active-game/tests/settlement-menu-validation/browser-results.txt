@@ -1,0 +1,83 @@
+[
+  {
+    "label": "before",
+    "name": "desktop",
+    "errors": [],
+    "bodyWidth": 1280,
+    "fonts": []
+  },
+  {
+    "label": "before",
+    "name": "mobile",
+    "errors": [],
+    "bodyWidth": 390,
+    "fonts": []
+  },
+  {
+    "label": "before",
+    "name": "narrow",
+    "errors": [],
+    "bodyWidth": 320,
+    "fonts": []
+  },
+  {
+    "label": "after",
+    "name": "desktop",
+    "errors": [],
+    "bodyWidth": 1280,
+    "fonts": [
+      {
+        "text": "WardenHealthy",
+        "font": "13px"
+      },
+      {
+        "text": "HP43 / 100",
+        "font": "13px"
+      },
+      {
+        "text": "43 / 100",
+        "font": "13px"
+      }
+    ]
+  },
+  {
+    "label": "after",
+    "name": "mobile",
+    "errors": [],
+    "bodyWidth": 390,
+    "fonts": [
+      {
+        "text": "WardenHealthy",
+        "font": "13px"
+      },
+      {
+        "text": "HP43 / 100",
+        "font": "13px"
+      },
+      {
+        "text": "43 / 100",
+        "font": "13px"
+      }
+    ]
+  },
+  {
+    "label": "after",
+    "name": "narrow",
+    "errors": [],
+    "bodyWidth": 320,
+    "fonts": [
+      {
+        "text": "WardenHealthy",
+        "font": "13px"
+      },
+      {
+        "text": "HP43 / 100",
+        "font": "13px"
+      },
+      {
+        "text": "43 / 100",
+        "font": "13px"
+      }
+    ]
+  }
+]

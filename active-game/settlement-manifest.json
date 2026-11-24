@@ -1,0 +1,141 @@
+{
+  "baseline_file": "settlement-baseline.html",
+  "baseline_sha256": "c566c3d5c2a7eee911ce7a449d50fb9203f8298ee12f3b698eca1c1f20519218",
+  "working_file": "The_Road_Beyond_the_Bells.html",
+  "working_sha256": "2d33e151dc0fc08ab4e4f9f39e6586f18d2a3216ff011c9b35d68b2c17ea555b",
+  "working_bytes": 1742807,
+  "modules": [
+    "settlement_shops",
+    "settlement_npcs",
+    "settlement_soften",
+    "settlement_menu"
+  ],
+  "module_sha256": {
+    "settlement_shops": "a47f570cc5b7e81c3096ec431a49ba191b475d84e5738c2f2f59c6e2ab2d863c",
+    "settlement_npcs": "7195ac0bfe6804086093247cf154220d50f8db972eeee4530eaba91ec6701528",
+    "settlement_soften": "70e473a8a1bcae241acf588b0c8647b6c88101bfc12ba71b53fb6174273d765d",
+    "settlement_menu": "9f0c9931fab467abab6e39f033363a0361aff85fe9623dd672f1724e7c07a4b2"
+  },
+  "changes": [
+    "create paired safe interiors for twelve existing weapon and skill shop buildings",
+    "move each original shopkeeper inside while preserving outdoor supply counters and world sites",
+    "paint original warm shop rooms with counters shelving rugs and visible return doors",
+    "show a shop entrance outside and a human shopkeeper inside instead of a duplicate service counter",
+    "create one reusable warm timber shop doorway without changing world gates or travel geometry",
+    "shop interiors do not create an unintended inn or recovery service",
+    "give indoor shop visits a local merchant and exit objective instead of the remote main quest",
+    "show only applicable interaction controls inside shops while preserving outdoor lodging controls",
+    "new adventures offer wandering townspeople as a saved presentation setting",
+    "version-one journeys inherit the optional town movement setting",
+    "older and malformed optional movement preferences normalize without resetting a valid save",
+    "moving citizen coordinates are shared by map collision interaction and rendering",
+    "keep bounded citizen movement ephemeral and independent of encounter randomness",
+    "expose a guarded movement tick and save the validated Wander or Still preference",
+    "connect the scene to the bounded engine movement callback",
+    "track the idle movement cadence without background timers",
+    "retain the existing scene lifecycle while accepting town movement ticks",
+    "pause town movement during menus dialogue transitions pathing keyboard input and battles",
+    "invoke movement through the same authoritative game engine as other world actions",
+    "animate citizen steps and nameplates together while respecting reduced motion",
+    "reuse existing citizen sprites and labels for short bounded walking tweens",
+    "provide the optional town movement control beside other game settings",
+    "apply the town movement preference and retain keyboard focus",
+    "replace stepped rectangular canopies with layered organic foliage and curved bark",
+    "soften shorelines with irregular banks and continuous curved water highlights",
+    "blend road and grass joins with rounded corners and quiet natural fringes",
+    "bake soft radial lantern light instead of nested rectangular light blocks",
+    "give the title landscape flowing hill silhouettes instead of angular polygon ridges",
+    "soften window corners and title silhouettes without smoothing pixel characters",
+    "make party commands clear while preserving all eight accessible destinations",
+    "show current HP MP job level and condition for every traveler in the main menu",
+    "give the party menu a consistent responsive hierarchy and reachable keyboard focus"
+  ],
+  "protected_combat_and_stats_unchanged": true,
+  "preserved": [
+    "Growth upload, MP, party jobs, skill practice, difficulty and saved journeys",
+    "Regional encounters, rare equipment drops, copy accounting and shop economy",
+    "Original story, dungeon floors, canonical world sites and paired travel",
+    "Completed title, UI, world and battle visual polish",
+    "Offline delivery and third-party notices"
+  ],
+  "pushed": false,
+  "published": false,
+  "status": "complete",
+  "completed_date": "2026-11-23",
+  "save_version": 4,
+  "features": {
+    "walk_in_shops": 12,
+    "merchant_categories": [
+      "weapon",
+      "magic"
+    ],
+    "outdoor_item_counters_preserved": true,
+    "town_movement_options": [
+      "wander",
+      "still"
+    ],
+    "main_menu_destinations_preserved": 8,
+    "main_menu_party_hp_mp": true,
+    "softer_original_art": true
+  },
+  "validation": {
+    "core_and_renderer": {
+      "command": "node --test tests/*core.test.cjs tests/*renderer.test.cjs",
+      "passed": 416,
+      "failed": 0,
+      "game_sha256": "2d33e151dc0fc08ab4e4f9f39e6586f18d2a3216ff011c9b35d68b2c17ea555b",
+      "log": "tests/settlement-validation/final-core-results.txt"
+    },
+    "browser": {
+      "passed": 9,
+      "failed": 0,
+      "game_sha256": "2d33e151dc0fc08ab4e4f9f39e6586f18d2a3216ff011c9b35d68b2c17ea555b",
+      "unexpected_page_errors": 0,
+      "receipt": "tests/settlement-final-verified-browser-artifacts/qa-run-status.json",
+      "log": "tests/settlement-validation/final-browser-results.txt"
+    },
+    "component_receipts": [
+      "tests/settlement-shops-validation/component-checks.json",
+      "tests/settlement-soften-validation/component-checks.json",
+      "tests/settlement-menu-validation/component-checks.json",
+      "tests/visual-battle-validation/component-checks.json"
+    ],
+    "visual_review": [
+      "Original title/creator and curved landscape",
+      "Softened terrain and architecture with contextual town labels",
+      "All twelve paired stores and readable indoor merchants",
+      "Party menu at1280/390/320px with current HP/MP and conditions",
+      "One/four/eight/nine foe battle layouts",
+      "NPC wandering and settings dialogue",
+      "Mobile shops, inventory, Jobs and Journal"
+    ],
+    "fixed_irregularities": [
+      "Outdoor Orchard/Crown battles now use outdoor scenery; deeper floors remain interiors.",
+      "Nearby character nameplates no longer crowd town squares.",
+      "Shops show local counter/exit prompts and do not provide an unintended rest service.",
+      "Shop entries use dedicated timber doors rather than world-gate grilles.",
+      "NPC wandering resumes after closing System with a navigation control focused.",
+      "Main party menu now includes current MP as well as HP."
+    ],
+    "limits": [
+      "Declared bounded fixtures and browser routes, not a complete earned campaign, economy balance study or hardware performance benchmark."
+    ],
+    "game_development_studio": "Localgame-dev CLI unavailable; existing Phaser renderer and Playwright used.",
+    "qodo": "Unavailable: no installed CLI or callable tool.",
+    "advisor": "Unavailable: installed launcher absent."
+  },
+  "delivery": {
+    "command": "npm run build",
+    "syntax_check": "passed",
+    "source": "/workspace/active-game/The_Road_Beyond_the_Bells.html",
+    "outputs": [
+      "/workspace/RPG2/demo/index.html",
+      "/workspace/RPG2/dist/index.html"
+    ],
+    "repository_snapshot": "/workspace/RPG2/active-game/The_Road_Beyond_the_Bells.html",
+    "exact_bytes_verified": true,
+    "preview_exact_bytes_verified": true,
+    "sha256": "2d33e151dc0fc08ab4e4f9f39e6586f18d2a3216ff011c9b35d68b2c17ea555b",
+    "bytes": 1742807
+  }
+}

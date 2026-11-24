@@ -1,0 +1,37 @@
+{
+  "status": "passed",
+  "baseline_sha256": "2d33e151dc0fc08ab4e4f9f39e6586f18d2a3216ff011c9b35d68b2c17ea555b",
+  "module_sha256": "eb5f821c6ba8f274fe9a19ce26d6fffaa435fff10c3cc13b8fe9a28d88d528c4",
+  "candidate_sha256": "8ccd6c9bc3d3ff1368920a55782167c8ee1198de0adce6dd39c7da4a84866002",
+  "candidate_bytes": 1756220,
+  "patches": 5,
+  "gameplay_prefix_unchanged": true,
+  "embedded_script_syntax": "passed",
+  "final_checks": {
+    "scroll_keyboard_help_cancel": 3,
+    "moon_cutout_render": 2,
+    "page_errors": 0
+  },
+  "visual_review": [
+    "Desktop title is a complete viewport overlay, with four original party figures around a campfire.",
+    "390px title has clear current-journey summary and reachable actions.",
+    "320px and short landscape have actual internal scrolling; expanded help and footer can be reached.",
+    "Moon cutout shows the true sky gradient, with no painted dark disc."
+  ],
+  "screenshots": [
+    "/tmp/camp-title-final-1280.png",
+    "/tmp/camp-title-final-390.png",
+    "/tmp/camp-title-moon-1280.png",
+    "/tmp/camp-title-moon-390.png",
+    "/tmp/camp-title-help-320.png",
+    "/tmp/camp-title-help-844.png"
+  ],
+  "notes": [
+    "Earlier eight before/after captures occurred before the final moon-only correction; their hash is retained separately.",
+    "The final help and moon receipts use the same final candidate hash.",
+    "Explicit generated-save fixtures isolate layout and cancel preservation; not a campaign playthrough."
+  ],
+  "active_html_edited": false,
+  "published": false,
+  "pushed": false
+}

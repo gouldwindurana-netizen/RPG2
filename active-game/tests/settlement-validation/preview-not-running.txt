@@ -1,0 +1,504 @@
+
+Running 9 tests using 1 worker
+
+(node:3019) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/settlement-browser.spec.mjs:115:1 › title and four-member creation keep clear actions and usable mobile choices (633ms)
+(node:3176) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/settlement-browser.spec.mjs:125:1 › town world and dungeon art preserve exploration input and modal boundaries (558ms)
+(node:3336) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  3 tests/settlement-browser.spec.mjs:134:1 › one and four foe battles keep actors resources and command resolution readable (773ms)
+(node:3498) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  4 tests/settlement-browser.spec.mjs:141:1 › eight and nine foe mobile battles preserve target scrolling and cell geometry (713ms)
+(node:3655) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  5 tests/settlement-browser.spec.mjs:162:1 › all twelve shop doors enter real safe interiors and leave beside their own building (475ms)
+(node:3813) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  6 tests/settlement-browser.spec.mjs:175:1 › indoor merchants retain weapon quantities regional skills and reload and old shop saves (518ms)
+(node:3967) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  7 tests/settlement-browser.spec.mjs:193:1 › townspeople can wander pause for menus and dialogue and stay still after reload (471ms)
+(node:4125) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  8 tests/settlement-browser.spec.mjs:216:1 › main menu inventory jobs and journal show resources collection and preserve saves (440ms)
+(node:4283) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  9 tests/settlement-browser.spec.mjs:230:1 › reduced motion and short landscape keep essential controls reachable (499ms)
+
+
+  1) tests/settlement-browser.spec.mjs:115:1 › title and four-member creation keep clear actions and usable mobile choices 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:5173/
+    Call log:
+      - navigating to "http://127.0.0.1:5173/", waiting until "load"
+
+
+      27 |     booted.add(page);
+      28 |   }
+    > 29 |   const response=await page.goto(gameURL);expect(digest(await response.body()),'tested page uses recorded build').toBe(gameHash);
+         |                             ^
+      30 |   await page.waitForFunction(() => window.__AVEL__?.map);
+      31 | }
+      32 | async function settled(page) { await page.waitForFunction(() => {const v=window.__AVEL__?.viewport(),s=window.__AVEL__?.snapshot();return v&&s&&v.area===s.area&&!v.transitioning;}); }
+        at open (/workspace/active-game/tests/settlement-browser.spec.mjs:29:29)
+        at /workspace/active-game/tests/settlement-browser.spec.mjs:116:3
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "Failed to read the 'sessionStorage' property from 'Window': Access is denied for this document.",
+    + ]
+
+      21 |   if(process.env.SETTLEMENT_ROUTE === '1')await page.route(gameURL, route => route.fulfill({status:200,contentType:'text/html',body:html}));
+      22 | });
+    > 23 | test.afterEach(async ({page}) => { expect(errors.get(page)||[]).toEqual([]); });
+         |                                                                 ^
+      24 | async function open(page) {
+      25 |   if(!booted.has(page)) {
+      26 |     await page.addInitScript(() => { const value=sessionStorage.getItem('settlement-next-save');if(value){localStorage.setItem('avel-demo-v1',value);sessionStorage.removeItem('settlement-next-save');} });
+        at /workspace/active-game/tests/settlement-browser.spec.mjs:23:65
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/settlement-final-all-browser-artifacts/settlement-browser-title-a-b5a67-s-and-usable-mobile-choices/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: tests/settlement-final-all-browser-artifacts/settlement-browser-title-a-b5a67-s-and-usable-mobile-choices/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/settlement-final-all-browser-artifacts/settlement-browser-title-a-b5a67-s-and-usable-mobile-choices/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/settlement-final-all-browser-artifacts/settlement-browser-title-a-b5a67-s-and-usable-mobile-choices/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests/settlement-browser.spec.mjs:125:1 › town world and dungeon art preserve exploration input and modal boundaries 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:5173/
+    Call log:
+      - navigating to "http://127.0.0.1:5173/", waiting until "load"
+
+
+      27 |     booted.add(page);
+      28 |   }
+    > 29 |   const response=await page.goto(gameURL);expect(digest(await response.body()),'tested page uses recorded build').toBe(gameHash);
+         |                             ^
+      30 |   await page.waitForFunction(() => window.__AVEL__?.map);
+      31 | }
+      32 | async function settled(page) { await page.waitForFunction(() => {const v=window.__AVEL__?.viewport(),s=window.__AVEL__?.snapshot();return v&&s&&v.area===s.area&&!v.transitioning;}); }
+        at open (/workspace/active-game/tests/settlement-browser.spec.mjs:29:29)
+        at load (/workspace/active-game/tests/settlement-browser.spec.mjs:46:24)
+        at /workspace/active-game/tests/settlement-browser.spec.mjs:126:3
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "Failed to read the 'sessionStorage' property from 'Window': Access is denied for this document.",
+    + ]
+
+      21 |   if(process.env.SETTLEMENT_ROUTE === '1')await page.route(gameURL, route => route.fulfill({status:200,contentType:'text/html',body:html}));
+      22 | });
+    > 23 | test.afterEach(async ({page}) => { expect(errors.get(page)||[]).toEqual([]); });
+         |                                                                 ^
+      24 | async function open(page) {
+      25 |   if(!booted.has(page)) {
+      26 |     await page.addInitScript(() => { const value=sessionStorage.getItem('settlement-next-save');if(value){localStorage.setItem('avel-demo-v1',value);sessionStorage.removeItem('settlement-next-save');} });
+        at /workspace/active-game/tests/settlement-browser.spec.mjs:23:65
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/settlement-final-all-browser-artifacts/settlement-browser-town-wo-9c484--input-and-modal-boundaries/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: tests/settlement-final-all-browser-artifacts/settlement-browser-town-wo-9c484--input-and-modal-boundaries/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/settlement-final-all-browser-artifacts/settlement-browser-town-wo-9c484--input-and-modal-boundaries/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/settlement-final-all-browser-artifacts/settlement-browser-town-wo-9c484--input-and-modal-boundaries/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) tests/settlement-browser.spec.mjs:134:1 › one and four foe battles keep actors resources and command resolution readable 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:5173/
+    Call log:
+      - navigating to "http://127.0.0.1:5173/", waiting until "load"
+
+
+      27 |     booted.add(page);
+      28 |   }
+    > 29 |   const response=await page.goto(gameURL);expect(digest(await response.body()),'tested page uses recorded build').toBe(gameHash);
+         |                             ^
+      30 |   await page.waitForFunction(() => window.__AVEL__?.map);
+      31 | }
+      32 | async function settled(page) { await page.waitForFunction(() => {const v=window.__AVEL__?.viewport(),s=window.__AVEL__?.snapshot();return v&&s&&v.area===s.area&&!v.transitioning;}); }
+        at open (/workspace/active-game/tests/settlement-browser.spec.mjs:29:29)
+        at load (/workspace/active-game/tests/settlement-browser.spec.mjs:46:24)
+        at formation (/workspace/active-game/tests/settlement-browser.spec.mjs:90:66)
+        at /workspace/active-game/tests/settlement-browser.spec.mjs:135:3
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "Failed to read the 'sessionStorage' property from 'Window': Access is denied for this document.",
+    + ]
+
+      21 |   if(process.env.SETTLEMENT_ROUTE === '1')await page.route(gameURL, route => route.fulfill({status:200,contentType:'text/html',body:html}));
+      22 | });
+    > 23 | test.afterEach(async ({page}) => { expect(errors.get(page)||[]).toEqual([]); });
+         |                                                                 ^
+      24 | async function open(page) {
+      25 |   if(!booted.has(page)) {
+      26 |     await page.addInitScript(() => { const value=sessionStorage.getItem('settlement-next-save');if(value){localStorage.setItem('avel-demo-v1',value);sessionStorage.removeItem('settlement-next-save');} });
+        at /workspace/active-game/tests/settlement-browser.spec.mjs:23:65
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/settlement-final-all-browser-artifacts/settlement-browser-one-and-f8dc1-command-resolution-readable/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: tests/settlement-final-all-browser-artifacts/settlement-browser-one-and-f8dc1-command-resolution-readable/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/settlement-final-all-browser-artifacts/settlement-browser-one-and-f8dc1-command-resolution-readable/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/settlement-final-all-browser-artifacts/settlement-browser-one-and-f8dc1-command-resolution-readable/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) tests/settlement-browser.spec.mjs:141:1 › eight and nine foe mobile battles preserve target scrolling and cell geometry 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:5173/
+    Call log:
+      - navigating to "http://127.0.0.1:5173/", waiting until "load"
+
+
+      27 |     booted.add(page);
+      28 |   }
+    > 29 |   const response=await page.goto(gameURL);expect(digest(await response.body()),'tested page uses recorded build').toBe(gameHash);
+         |                             ^
+      30 |   await page.waitForFunction(() => window.__AVEL__?.map);
+      31 | }
+      32 | async function settled(page) { await page.waitForFunction(() => {const v=window.__AVEL__?.viewport(),s=window.__AVEL__?.snapshot();return v&&s&&v.area===s.area&&!v.transitioning;}); }
+        at open (/workspace/active-game/tests/settlement-browser.spec.mjs:29:29)
+        at load (/workspace/active-game/tests/settlement-browser.spec.mjs:46:24)
+        at formation (/workspace/active-game/tests/settlement-browser.spec.mjs:90:66)
+        at /workspace/active-game/tests/settlement-browser.spec.mjs:142:65
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "Failed to read the 'sessionStorage' property from 'Window': Access is denied for this document.",
+    + ]
+
+      21 |   if(process.env.SETTLEMENT_ROUTE === '1')await page.route(gameURL, route => route.fulfill({status:200,contentType:'text/html',body:html}));
+      22 | });
+    > 23 | test.afterEach(async ({page}) => { expect(errors.get(page)||[]).toEqual([]); });
+         |                                                                 ^
+      24 | async function open(page) {
+      25 |   if(!booted.has(page)) {
+      26 |     await page.addInitScript(() => { const value=sessionStorage.getItem('settlement-next-save');if(value){localStorage.setItem('avel-demo-v1',value);sessionStorage.removeItem('settlement-next-save');} });
+        at /workspace/active-game/tests/settlement-browser.spec.mjs:23:65
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/settlement-final-all-browser-artifacts/settlement-browser-eight-a-6b9e4-scrolling-and-cell-geometry/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: tests/settlement-final-all-browser-artifacts/settlement-browser-eight-a-6b9e4-scrolling-and-cell-geometry/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/settlement-final-all-browser-artifacts/settlement-browser-eight-a-6b9e4-scrolling-and-cell-geometry/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/settlement-final-all-browser-artifacts/settlement-browser-eight-a-6b9e4-scrolling-and-cell-geometry/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) tests/settlement-browser.spec.mjs:162:1 › all twelve shop doors enter real safe interiors and leave beside their own building 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:5173/
+    Call log:
+      - navigating to "http://127.0.0.1:5173/", waiting until "load"
+
+
+      27 |     booted.add(page);
+      28 |   }
+    > 29 |   const response=await page.goto(gameURL);expect(digest(await response.body()),'tested page uses recorded build').toBe(gameHash);
+         |                             ^
+      30 |   await page.waitForFunction(() => window.__AVEL__?.map);
+      31 | }
+      32 | async function settled(page) { await page.waitForFunction(() => {const v=window.__AVEL__?.viewport(),s=window.__AVEL__?.snapshot();return v&&s&&v.area===s.area&&!v.transitioning;}); }
+        at open (/workspace/active-game/tests/settlement-browser.spec.mjs:29:29)
+        at load (/workspace/active-game/tests/settlement-browser.spec.mjs:46:24)
+        at enterShop (/workspace/active-game/tests/settlement-browser.spec.mjs:153:111)
+        at /workspace/active-game/tests/settlement-browser.spec.mjs:165:19
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "Failed to read the 'sessionStorage' property from 'Window': Access is denied for this document.",
+    + ]
+
+      21 |   if(process.env.SETTLEMENT_ROUTE === '1')await page.route(gameURL, route => route.fulfill({status:200,contentType:'text/html',body:html}));
+      22 | });
+    > 23 | test.afterEach(async ({page}) => { expect(errors.get(page)||[]).toEqual([]); });
+         |                                                                 ^
+      24 | async function open(page) {
+      25 |   if(!booted.has(page)) {
+      26 |     await page.addInitScript(() => { const value=sessionStorage.getItem('settlement-next-save');if(value){localStorage.setItem('avel-demo-v1',value);sessionStorage.removeItem('settlement-next-save');} });
+        at /workspace/active-game/tests/settlement-browser.spec.mjs:23:65
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/settlement-final-all-browser-artifacts/settlement-browser-all-twe-8afc9-e-beside-their-own-building/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: tests/settlement-final-all-browser-artifacts/settlement-browser-all-twe-8afc9-e-beside-their-own-building/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/settlement-final-all-browser-artifacts/settlement-browser-all-twe-8afc9-e-beside-their-own-building/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/settlement-final-all-browser-artifacts/settlement-browser-all-twe-8afc9-e-beside-their-own-building/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) tests/settlement-browser.spec.mjs:175:1 › indoor merchants retain weapon quantities regional skills and reload and old shop saves 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:5173/
+    Call log:
+      - navigating to "http://127.0.0.1:5173/", waiting until "load"
+
+
+      27 |     booted.add(page);
+      28 |   }
+    > 29 |   const response=await page.goto(gameURL);expect(digest(await response.body()),'tested page uses recorded build').toBe(gameHash);
+         |                             ^
+      30 |   await page.waitForFunction(() => window.__AVEL__?.map);
+      31 | }
+      32 | async function settled(page) { await page.waitForFunction(() => {const v=window.__AVEL__?.viewport(),s=window.__AVEL__?.snapshot();return v&&s&&v.area===s.area&&!v.transitioning;}); }
+        at open (/workspace/active-game/tests/settlement-browser.spec.mjs:29:29)
+        at load (/workspace/active-game/tests/settlement-browser.spec.mjs:46:24)
+        at enterShop (/workspace/active-game/tests/settlement-browser.spec.mjs:153:111)
+        at /workspace/active-game/tests/settlement-browser.spec.mjs:176:44
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "Failed to read the 'sessionStorage' property from 'Window': Access is denied for this document.",
+    + ]
+
+      21 |   if(process.env.SETTLEMENT_ROUTE === '1')await page.route(gameURL, route => route.fulfill({status:200,contentType:'text/html',body:html}));
+      22 | });
+    > 23 | test.afterEach(async ({page}) => { expect(errors.get(page)||[]).toEqual([]); });
+         |                                                                 ^
+      24 | async function open(page) {
+      25 |   if(!booted.has(page)) {
+      26 |     await page.addInitScript(() => { const value=sessionStorage.getItem('settlement-next-save');if(value){localStorage.setItem('avel-demo-v1',value);sessionStorage.removeItem('settlement-next-save');} });
+        at /workspace/active-game/tests/settlement-browser.spec.mjs:23:65
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/settlement-final-all-browser-artifacts/settlement-browser-indoor--030f0-d-reload-and-old-shop-saves/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: tests/settlement-final-all-browser-artifacts/settlement-browser-indoor--030f0-d-reload-and-old-shop-saves/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/settlement-final-all-browser-artifacts/settlement-browser-indoor--030f0-d-reload-and-old-shop-saves/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/settlement-final-all-browser-artifacts/settlement-browser-indoor--030f0-d-reload-and-old-shop-saves/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) tests/settlement-browser.spec.mjs:193:1 › townspeople can wander pause for menus and dialogue and stay still after reload 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:5173/
+    Call log:
+      - navigating to "http://127.0.0.1:5173/", waiting until "load"
+
+
+      27 |     booted.add(page);
+      28 |   }
+    > 29 |   const response=await page.goto(gameURL);expect(digest(await response.body()),'tested page uses recorded build').toBe(gameHash);
+         |                             ^
+      30 |   await page.waitForFunction(() => window.__AVEL__?.map);
+      31 | }
+      32 | async function settled(page) { await page.waitForFunction(() => {const v=window.__AVEL__?.viewport(),s=window.__AVEL__?.snapshot();return v&&s&&v.area===s.area&&!v.transitioning;}); }
+        at open (/workspace/active-game/tests/settlement-browser.spec.mjs:29:29)
+        at load (/workspace/active-game/tests/settlement-browser.spec.mjs:46:24)
+        at /workspace/active-game/tests/settlement-browser.spec.mjs:194:3
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "Failed to read the 'sessionStorage' property from 'Window': Access is denied for this document.",
+    + ]
+
+      21 |   if(process.env.SETTLEMENT_ROUTE === '1')await page.route(gameURL, route => route.fulfill({status:200,contentType:'text/html',body:html}));
+      22 | });
+    > 23 | test.afterEach(async ({page}) => { expect(errors.get(page)||[]).toEqual([]); });
+         |                                                                 ^
+      24 | async function open(page) {
+      25 |   if(!booted.has(page)) {
+      26 |     await page.addInitScript(() => { const value=sessionStorage.getItem('settlement-next-save');if(value){localStorage.setItem('avel-demo-v1',value);sessionStorage.removeItem('settlement-next-save');} });
+        at /workspace/active-game/tests/settlement-browser.spec.mjs:23:65
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/settlement-final-all-browser-artifacts/settlement-browser-townspe-a2f34-and-stay-still-after-reload/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: tests/settlement-final-all-browser-artifacts/settlement-browser-townspe-a2f34-and-stay-still-after-reload/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/settlement-final-all-browser-artifacts/settlement-browser-townspe-a2f34-and-stay-still-after-reload/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/settlement-final-all-browser-artifacts/settlement-browser-townspe-a2f34-and-stay-still-after-reload/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) tests/settlement-browser.spec.mjs:216:1 › main menu inventory jobs and journal show resources collection and preserve saves 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:5173/
+    Call log:
+      - navigating to "http://127.0.0.1:5173/", waiting until "load"
+
+
+      27 |     booted.add(page);
+      28 |   }
+    > 29 |   const response=await page.goto(gameURL);expect(digest(await response.body()),'tested page uses recorded build').toBe(gameHash);
+         |                             ^
+      30 |   await page.waitForFunction(() => window.__AVEL__?.map);
+      31 | }
+      32 | async function settled(page) { await page.waitForFunction(() => {const v=window.__AVEL__?.viewport(),s=window.__AVEL__?.snapshot();return v&&s&&v.area===s.area&&!v.transitioning;}); }
+        at open (/workspace/active-game/tests/settlement-browser.spec.mjs:29:29)
+        at load (/workspace/active-game/tests/settlement-browser.spec.mjs:46:24)
+        at /workspace/active-game/tests/settlement-browser.spec.mjs:217:194
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "Failed to read the 'sessionStorage' property from 'Window': Access is denied for this document.",
+    + ]
+
+      21 |   if(process.env.SETTLEMENT_ROUTE === '1')await page.route(gameURL, route => route.fulfill({status:200,contentType:'text/html',body:html}));
+      22 | });
+    > 23 | test.afterEach(async ({page}) => { expect(errors.get(page)||[]).toEqual([]); });
+         |                                                                 ^
+      24 | async function open(page) {
+      25 |   if(!booted.has(page)) {
+      26 |     await page.addInitScript(() => { const value=sessionStorage.getItem('settlement-next-save');if(value){localStorage.setItem('avel-demo-v1',value);sessionStorage.removeItem('settlement-next-save');} });
+        at /workspace/active-game/tests/settlement-browser.spec.mjs:23:65
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/settlement-final-all-browser-artifacts/settlement-browser-main-me-e2afb-llection-and-preserve-saves/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: tests/settlement-final-all-browser-artifacts/settlement-browser-main-me-e2afb-llection-and-preserve-saves/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/settlement-final-all-browser-artifacts/settlement-browser-main-me-e2afb-llection-and-preserve-saves/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/settlement-final-all-browser-artifacts/settlement-browser-main-me-e2afb-llection-and-preserve-saves/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  9) tests/settlement-browser.spec.mjs:230:1 › reduced motion and short landscape keep essential controls reachable 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:5173/
+    Call log:
+      - navigating to "http://127.0.0.1:5173/", waiting until "load"
+
+
+      27 |     booted.add(page);
+      28 |   }
+    > 29 |   const response=await page.goto(gameURL);expect(digest(await response.body()),'tested page uses recorded build').toBe(gameHash);
+         |                             ^
+      30 |   await page.waitForFunction(() => window.__AVEL__?.map);
+      31 | }
+      32 | async function settled(page) { await page.waitForFunction(() => {const v=window.__AVEL__?.viewport(),s=window.__AVEL__?.snapshot();return v&&s&&v.area===s.area&&!v.transitioning;}); }
+        at open (/workspace/active-game/tests/settlement-browser.spec.mjs:29:29)
+        at load (/workspace/active-game/tests/settlement-browser.spec.mjs:46:24)
+        at /workspace/active-game/tests/settlement-browser.spec.mjs:232:104
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "Failed to read the 'sessionStorage' property from 'Window': Access is denied for this document.",
+    + ]
+
+      21 |   if(process.env.SETTLEMENT_ROUTE === '1')await page.route(gameURL, route => route.fulfill({status:200,contentType:'text/html',body:html}));
+      22 | });
+    > 23 | test.afterEach(async ({page}) => { expect(errors.get(page)||[]).toEqual([]); });
+         |                                                                 ^
+      24 | async function open(page) {
+      25 |   if(!booted.has(page)) {
+      26 |     await page.addInitScript(() => { const value=sessionStorage.getItem('settlement-next-save');if(value){localStorage.setItem('avel-demo-v1',value);sessionStorage.removeItem('settlement-next-save');} });
+        at /workspace/active-game/tests/settlement-browser.spec.mjs:23:65
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/settlement-final-all-browser-artifacts/settlement-browser-reduced-fdbf6-ssential-controls-reachable/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: tests/settlement-final-all-browser-artifacts/settlement-browser-reduced-fdbf6-ssential-controls-reachable/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/settlement-final-all-browser-artifacts/settlement-browser-reduced-fdbf6-ssential-controls-reachable/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/settlement-final-all-browser-artifacts/settlement-browser-reduced-fdbf6-ssential-controls-reachable/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  9 failed
+    tests/settlement-browser.spec.mjs:115:1 › title and four-member creation keep clear actions and usable mobile choices 
+    tests/settlement-browser.spec.mjs:125:1 › town world and dungeon art preserve exploration input and modal boundaries 
+    tests/settlement-browser.spec.mjs:134:1 › one and four foe battles keep actors resources and command resolution readable 
+    tests/settlement-browser.spec.mjs:141:1 › eight and nine foe mobile battles preserve target scrolling and cell geometry 
+    tests/settlement-browser.spec.mjs:162:1 › all twelve shop doors enter real safe interiors and leave beside their own building 
+    tests/settlement-browser.spec.mjs:175:1 › indoor merchants retain weapon quantities regional skills and reload and old shop saves 
+    tests/settlement-browser.spec.mjs:193:1 › townspeople can wander pause for menus and dialogue and stay still after reload 
+    tests/settlement-browser.spec.mjs:216:1 › main menu inventory jobs and journal show resources collection and preserve saves 
+    tests/settlement-browser.spec.mjs:230:1 › reduced motion and short landscape keep essential controls reachable 

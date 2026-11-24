@@ -27,7 +27,33 @@ test('every physical gate crosses in both directions without using encounter RNG
 
 test('new route geometry preserves all regional story gates with no walking bypass',()=>{const{context:c}=create();const expected={0:['camp','works'],1:['camp','works'],2:['camp','works','dunmere'],3:['camp','works','dunmere','tollhouse'],4:['camp','works','dunmere','tollhouse','fen','granary'],5:['camp','works','dunmere','tollhouse','fen','granary','orchard'],6:['camp','works','dunmere','tollhouse','fen','granary','orchard','crown'],7:['camp','works','dunmere','tollhouse','fen','granary','orchard','crown','veyr'],8:['camp','works','dunmere','tollhouse','fen','granary','orchard','crown','veyr','heart']};for(const[stage,areas]of Object.entries(expected))assert.deepEqual(reachableSites(c,+stage),areas.sort(),`stage ${stage}`)});
 
-test('all six settlements have separate reachable item, weapon and magic shops in safe service areas',()=>{const{context:c}=create();for(const area of ['camp','dunmere','fen','orchard','crown','veyr']){const map=c.he[area],entry=c.g[`enter-${area}`],seen=floorReachable(c,area,entry);const shops=map.entities.filter(e=>e.shopKind);assert.equal(shops.length,3,area);assert.deepEqual(plain(shops.map(e=>e.shopKind).sort()),['items','magic','weapon']);for(const shop of shops){assert.equal(c.p(area,shop.x,shop.y),true,`${area}/${shop.id} is safe`);assert.ok(dirs.some(([,dx,dy])=>seen.has(`${shop.x+dx},${shop.y+dy}`)),`${area}/${shop.id} reachable`)} }assert.equal(c.p('orchard',23,10),false);assert.equal(c.p('crown',24,10),false)});
+test('all six settlements retain safe reachable item counters and paired weapon and skill-store interiors',()=>{
+  const{context:c}=create();
+  for(const area of ['camp','dunmere','fen','orchard','crown','veyr']){
+    const map=c.he[area],entry=c.g[`enter-${area}`],seen=floorReachable(c,area,entry);
+    const counter=map.entities.filter(entity=>entity.kind==='npc'&&entity.shopKind==='items');
+    assert.equal(counter.length,1,`${area} retains one outdoor item counter`);
+    assert.equal(c.p(area,counter[0].x,counter[0].y),true);
+    assert.ok(dirs.some(([,dx,dy])=>seen.has(`${counter[0].x+dx},${counter[0].y+dy}`)));
+    const stores=c.settlementShopRecords.filter(store=>store.parent===area);
+    assert.deepEqual(plain(stores.map(store=>store.kind).sort()),['magic','weapon']);
+    for(const store of stores){
+      const door=map.entities.find(entity=>entity.id===store.doorId),target=c.g[store.doorId];
+      assert.equal(door.kind,'exit');assert.equal(target.area,store.area);
+      assert.equal(c.p(area,door.x,door.y),true);
+      assert.ok(seen.has(`${store.approach.x},${store.approach.y}`),`${area}/${store.kind} doorway is reachable`);
+      assert.equal(map.entities.some(entity=>entity.id===store.merchantId),false,'the merchant is not duplicated outdoors');
+      const room=c.he[store.area],inside=floorReachable(c,store.area,target);
+      const merchants=room.entities.filter(entity=>entity.kind==='npc'&&entity.shopKind===store.kind);
+      assert.equal(merchants.length,1);assert.equal(merchants[0].id,store.merchantId);
+      assert.equal(c.p(store.area,merchants[0].x,merchants[0].y),true);
+      assert.equal(c.M(store.area,merchants[0].x,merchants[0].y),store.region);
+      assert.ok(dirs.some(([,dx,dy])=>inside.has(`${merchants[0].x+dx},${merchants[0].y+dy}`)),`${store.area} merchant reachable from door`);
+      assert.deepEqual(plain({area:c.g[store.exitId].area,x:c.g[store.exitId].x,y:c.g[store.exitId].y}),{area,...plain(store.approach)});
+    }
+  }
+  assert.equal(c.p('orchard',23,10),false);assert.equal(c.p('crown',24,10),false);
+});
 
 test('canonical local story/service interactions retain a reachable adjacent tile',()=>{const{context:c}=create();for(const[area,map]of Object.entries(c.he)){const entry=c.g[`enter-${area}`];if(!entry)continue;const seen=floorReachable(c,area,entry);for(const entity of map.entities)assert.ok(dirs.some(([,dx,dy])=>seen.has(`${entity.x+dx},${entity.y+dy}`)),`${area}/${entity.id}`)}});
 

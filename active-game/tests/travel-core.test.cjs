@@ -308,7 +308,7 @@ test('current positions at removed shortcuts survive reload with equipment copie
   const hx = { Mara: 12, Tavin: 52, Iona: 130, Soren: 256 };
   game.state.hx = hx;
   game.state.xp = 777;
-  game.state.settings = { battleSpeed: 3, encounters: 'off' };
+  game.state.settings = { battleSpeed: 3, encounters: 'off', npcMovement: 'still' };
   game.state.inventory.R02_COMMON_CHARM = 4;
   for (const hero of game.state.heroes) assert.equal(game.equip(hero.id, 'R02_COMMON_CHARM'), true);
   const inventory = plain(game.state.inventory);
@@ -324,7 +324,7 @@ test('current positions at removed shortcuts survive reload with equipment copie
     assert.equal(restored.state.xp, 777);
     assert.deepEqual(plain(restored.state.inventory), inventory);
     assert.deepEqual(plain(restored.state.heroes.map(hero => hero.equipment.charm)), Array(4).fill('R02_COMMON_CHARM'));
-    assert.deepEqual(plain(restored.state.settings), { battleSpeed: 3, encounters: 'off' });
+    assert.deepEqual(plain(restored.state.settings), { battleSpeed: 3, encounters: 'off', npcMovement: 'still' });
   }
   assert.equal(context.we(JSON.stringify(game.state), 7321).area, 'veyr');
 });

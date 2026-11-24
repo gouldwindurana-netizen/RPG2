@@ -1,0 +1,12 @@
+{
+  "date": "2026-11-23",
+  "status": "passed",
+  "game_sha256": "2d33e151dc0fc08ab4e4f9f39e6586f18d2a3216ff011c9b35d68b2c17ea555b",
+  "core_passed": 416,
+  "core_failed": 0,
+  "browser_passed": 9,
+  "browser_failed": 0,
+  "unexpected_page_errors": 0,
+  "pushed": false,
+  "published": false
+}

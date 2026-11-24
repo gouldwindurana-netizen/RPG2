@@ -7,6 +7,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const test = require('node:test');
 const vm = require('node:vm');
+const { visitShop } = require('./shop-fixture.cjs');
 const htmlPath = process.env.GAME_HTML ? path.resolve(process.env.GAME_HTML)
   : path.resolve(__dirname, '..', 'The_Road_Beyond_the_Bells.html');
 const html = fs.readFileSync(htmlPath, 'utf8');
@@ -316,12 +317,7 @@ test('fresh starter party earns its R01 levels through actual battles and can de
 });
 
 function openService(context,game,area,kind){
-  clearMessages(game);
-  const npc=context.he[area].entities.find(entity=>entity.shopKind===kind);
-  assert.ok(npc,`${area} has a real ${kind} shop`);
-  at(game,area,{x:npc.x,y:npc.y+1});
-  game.interact(npc.id);
-  assert.equal(game.state.message?.speaker,{weapon:'Weapon Shop',magic:'Skill Shop',items:'Item Shop'}[kind]);
+  return visitShop(context,game,area,kind);
 }
 function gearUp(context,game,area,tier){
   openService(context,game,area,'weapon');

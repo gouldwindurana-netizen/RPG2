@@ -1,0 +1,76 @@
+{
+  "date": "2026-11-21",
+  "scope": "Battle presentation component candidate; main integrated visual QA is recorded separately.",
+  "candidate_sha256": "594df6f51028927b81083449944cec5db63ad0edd4a55b850023387accad78cc",
+  "module_sha256": "4a5873a3f0cf1dc837829df894394631fe921e7e0b34f9e1c1b95b77562d0cb3",
+  "renderer_tests": {
+    "passed": 85,
+    "failed": 0
+  },
+  "actual_ui_captures": [
+    {
+      "count": 1,
+      "size": "desktop",
+      "screenshot": "/tmp/visual-battle-1-desktop.png",
+      "errors": [],
+      "actors": 5
+    },
+    {
+      "count": 1,
+      "size": "mobile",
+      "screenshot": "/tmp/visual-battle-1-mobile.png",
+      "errors": [],
+      "actors": 5
+    },
+    {
+      "count": 4,
+      "size": "desktop",
+      "screenshot": "/tmp/visual-battle-4-desktop.png",
+      "errors": [],
+      "actors": 8
+    },
+    {
+      "count": 4,
+      "size": "mobile",
+      "screenshot": "/tmp/visual-battle-4-mobile.png",
+      "errors": [],
+      "actors": 8
+    },
+    {
+      "count": 8,
+      "size": "desktop",
+      "screenshot": "/tmp/visual-battle-8-desktop.png",
+      "errors": [],
+      "actors": 12
+    },
+    {
+      "count": 8,
+      "size": "mobile",
+      "screenshot": "/tmp/visual-battle-8-mobile.png",
+      "errors": [],
+      "actors": 12
+    },
+    {
+      "count": 4,
+      "size": "desktop",
+      "screenshot": "/tmp/visual-battle-orchard-4-desktop.png",
+      "errors": [],
+      "actors": 8
+    },
+    {
+      "count": 4,
+      "size": "desktop",
+      "screenshot": "/tmp/visual-battle-crown-4-desktop.png",
+      "errors": [],
+      "actors": 8
+    }
+  ],
+  "geometry": "Every sprite/label/bar rect within unchanged actor cells for1/4/8foes atdesktop/mobile.",
+  "visual_review": [
+    "Four-foe bellworks desktop shows original slatefloor, recessedarches and warmbronze bell.",
+    "Eight-foe mobile retains all8enemies and4heroes with readable selection via DOMtargetcontrols.",
+    "Orchard dangerousbase route correctlyusesorchardfield outdoors; crownroute useshighland."
+  ],
+  "no_new_scene_objects": true,
+  "no_gameplay_changes": true
+}

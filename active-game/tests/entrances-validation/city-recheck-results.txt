@@ -1,0 +1,39 @@
+
+Running 1 test using 1 worker
+
+(node:3325) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/entrances-browser.spec.mjs:207:1 › every city uses the same western route and arrival pause without crossing-step encounters (2.6m)
+
+
+  1) tests/entrances-browser.spec.mjs:207:1 › every city uses the same western route and arrival pause without crossing-step encounters 
+
+    Test timeout of 150000ms exceeded.
+
+    Error: keyboard.up: Target page, context or browser has been closed
+
+      222 |       // Observe the new area without waiting for that gate to clear first.
+      223 |       await expect.poll(async () => (await snapshot(page)).area).toBe(town);
+    > 224 |       await page.waitForTimeout(450);
+          |                                     ^
+      225 |       expect((await snapshot(page)).player).toMatchObject({x:3,y:14,facing:'right'});
+      226 |       expect((await snapshot(page)).battle).toBeNull();
+      227 |     } finally { await page.keyboard.up('ArrowUp'); }
+        at /workspace/active-game/tests/entrances-browser.spec.mjs:224:37
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/entrances-city-recheck-artifacts/entrances-browser-every-ci-ce050-ut-crossing-step-encounters/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: tests/entrances-city-recheck-artifacts/entrances-browser-every-ci-ce050-ut-crossing-step-encounters/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/entrances-city-recheck-artifacts/entrances-browser-every-ci-ce050-ut-crossing-step-encounters/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/entrances-city-recheck-artifacts/entrances-browser-every-ci-ce050-ut-crossing-step-encounters/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/entrances-browser.spec.mjs:207:1 › every city uses the same western route and arrival pause without crossing-step encounters 

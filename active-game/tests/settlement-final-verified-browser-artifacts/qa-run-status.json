@@ -1,0 +1,37 @@
+{
+  "date": "2026-11-23",
+  "status": "passed",
+  "game_sha256": "2d33e151dc0fc08ab4e4f9f39e6586f18d2a3216ff011c9b35d68b2c17ea555b",
+  "game_bytes": 1742807,
+  "command": "/workspace/RPG2/node_modules/.bin/playwright test -c tests/settlement-playwright.config.mjs --output=tests/settlement-final-verified-browser-artifacts",
+  "passed": 9,
+  "failed": 0,
+  "unique_scenarios": 9,
+  "elapsed_reported": "1.2m",
+  "page_errors": [],
+  "log": "tests/settlement-validation/final-browser-results.txt",
+  "checks": [
+    "Title and four-member creation remain usable at desktop and390px with customized lead and companion jobs.",
+    "Town, world and deep-dungeon art render; modals block exploration movement; maps fit mobile.",
+    "One- and four-foe battles preserve actor/resource geometry and actual command/victory resolution.",
+    "Eight- and nine-foe mobile formations retain actor/readout/shadow cell bounds, target scrolling and readable DOM controls.",
+    "All twelve weapon/skill shop doors are entered by actual walking, contain one original merchant and return beside their own exterior; regional stock, inventory, funds and overworld return stay unchanged; no indoor Rest control and local merchant/door objective.",
+    "Actual indoor merchants buy five charm copies and teach regional Rally for100G without MP refill; interior reload and a genuine pre-interior outdoor-open-shop save preserve resources.",
+    "Townspeople move while idle, pause in menus/dialogue, retain Still after reload, and resume after enabling Wander and closing settings without another canvas click; interacting with a walker uses its current position and combat RNG stays unchanged.",
+    "Main Party menu shows all four current HP/MP values, both meters, conditions, exact eight accessible destinations, keyboard Tab focus and reachable mobile cards; all destinations open; potion use, Jobs, Journal and save/reload remain functional.",
+    "Reduced-motion short-landscape exploration/inventory/battle retain reachable controls and request no foreign assets."
+  ],
+  "visual_review": [
+    "390px main menu has all eight commands, four identity/condition cards and distinguishable HP/MP bars; close control remains clear and final traveler reachable.",
+    "390px weapon interior shows counter, original shopkeeper, shelves/rug and paired south wooden doorway; shop-local objective replaces remote quest and Rest is absent.",
+    "Desktop camp has softer rounded canopies, worn terrain/shore edges, fitted wooden store thresholds and legible service labels.",
+    "390px eight-foe battle keeps actors/readouts inside their cells, movement controls absent and the command/party windows unobstructed."
+  ],
+  "notes": [
+    "Fixtures are generated from the real engine and declare level, story access, area, resources and encounter seed; actions then use player UI. Readonly window.__AVEL__ calls inspect state/map/viewport only.",
+    "No live game mutation API was added or used. sessionStorage pending-save fixtures are applied on navigation before game boot to avoid outgoing-page autosave replacing them.",
+    "Initial final-run launch occurred while preview was stopped after environment resume; ERR_CONNECTION_REFUSED infrastructure evidence remains in preview-not-running.txt. After restarting Vite, all nine final scenarios pass on the recorded hash.",
+    "An earlier preliminary case asserted a boolean return from legacy interact(), whose real API returns void; corrected to assert its actual Weapon Shop message. No product fix was made for that test-only error.",
+    "This is bounded feature, visual and compatibility QA, not a complete earned campaign or hardware performance benchmark."
+  ]
+}

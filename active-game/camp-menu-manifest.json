@@ -1,0 +1,96 @@
+{
+  "baseline_file": "camp-menu-baseline.html",
+  "baseline_sha256": "2d33e151dc0fc08ab4e4f9f39e6586f18d2a3216ff011c9b35d68b2c17ea555b",
+  "working_file": "The_Road_Beyond_the_Bells.html",
+  "working_sha256": "c6ba59e2cfd83388a87e01011901718060b4da83332c35f0740dfa36038d34d1",
+  "working_bytes": 1769990,
+  "modules": [
+    "camp_title",
+    "camp_ledger"
+  ],
+  "module_sha256": {
+    "camp_title": "eb5f821c6ba8f274fe9a19ce26d6fffaa435fff10c3cc13b8fe9a28d88d528c4",
+    "camp_ledger": "216414c828644b4fcda7bb0e141a08a6ae7edb40b80a3ea39150fa664925b41f"
+  },
+  "changes": [
+    "give the opening menu an original dusk camp and distant bell landscape",
+    "show the actual current journey and party beside the existing continue action",
+    "keep clear keyboard and touch actions with responsive reduced-motion-friendly art",
+    "make the title help a persistent collapsible keyboard and touch guide",
+    "cut the crescent moon transparently so its inner edge reveals the actual dusk sky",
+    "replace the party card stack with a compact ruled travel ledger and existing commands",
+    "show the current road shop or battle context beside live party resources",
+    "give the ledger a distinct heading while preserving its menu key and navigation",
+    "keep ledger commands roster objective and return action readable on narrow screens"
+  ],
+  "gameplay_model_unchanged": true,
+  "gameplay_model_sha256": "fecdadfd0a4a3d8aaa4c6daae787108fcd534b3a9fe2b8c445a7b240d74b9916",
+  "gameplay_model_bytes": 272282,
+  "preserved": [
+    "Existing journeys, growth, MP, skills, jobs and equipment ownership",
+    "Regional rare drops, shop interiors, optional NPC movement and travel",
+    "Original party identities, story, world art and battle behavior",
+    "Offline delivery and third-party notices"
+  ],
+  "pushed": false,
+  "published": false,
+  "status": "complete",
+  "completed_date": "2026-11-23",
+  "save_version": 4,
+  "features": [
+    "Original camp-at-dusk opening screen and current-party illustration",
+    "Truthful journey preview and preserved Continue/New Adventure flows",
+    "Persistent keyboard-accessible How to Play disclosure",
+    "Compact Travel ledger with eight destinations and current HP/MP",
+    "Transparent crescent moon revealing the real sky"
+  ],
+  "validation": {
+    "core_and_renderer": {
+      "passed": 416,
+      "failed": 0,
+      "game_sha256": "c6ba59e2cfd83388a87e01011901718060b4da83332c35f0740dfa36038d34d1",
+      "command": "node --test tests/*core.test.cjs tests/*renderer.test.cjs",
+      "log": "tests/camp-menu-validation/core-results.txt"
+    },
+    "browser": {
+      "passed": 7,
+      "failed": 0,
+      "game_sha256": "c6ba59e2cfd83388a87e01011901718060b4da83332c35f0740dfa36038d34d1",
+      "unexpected_page_errors": 0,
+      "receipt": "tests/camp-menu-final-browser-artifacts/qa-run-status.json",
+      "log": "tests/camp-menu-validation/browser-results.txt"
+    },
+    "moon_regression": {
+      "transparent_hole_alpha": 0,
+      "lit_crescent_alpha": 199,
+      "opaque_cover_count": 0,
+      "evidence": "tests/camp-menu-final-browser-artifacts/camp-menu-browser-fresh-ti-a4079-ns-and-four-member-creation/moon-cutout-evidence.json"
+    },
+    "title_component_receipt": "tests/camp-title-validation/component-checks.json",
+    "visual_review": [
+      "Desktop and390px camp title with transparent moon",
+      "Actual current journey, party and chapter/location previews",
+      "Compact Travel ledger with live resources, conditions and objective",
+      "320px and short-landscape controls and persistent guide scrolling"
+    ],
+    "limits": [
+      "Bounded menu and adjacent gameplay checks, not a full campaign or hardware performance benchmark."
+    ],
+    "advisor": "Unavailable: installed launcher absent.",
+    "qodo": "Unavailable: no installed CLI or callable tool."
+  },
+  "delivery": {
+    "command": "npm run build",
+    "syntax_check": "passed",
+    "source": "/workspace/active-game/The_Road_Beyond_the_Bells.html",
+    "outputs": [
+      "/workspace/RPG2/demo/index.html",
+      "/workspace/RPG2/dist/index.html"
+    ],
+    "repository_snapshot": "/workspace/RPG2/active-game/The_Road_Beyond_the_Bells.html",
+    "exact_bytes_verified": true,
+    "preview_exact_bytes_verified": true,
+    "sha256": "c6ba59e2cfd83388a87e01011901718060b4da83332c35f0740dfa36038d34d1",
+    "bytes": 1769990
+  }
+}

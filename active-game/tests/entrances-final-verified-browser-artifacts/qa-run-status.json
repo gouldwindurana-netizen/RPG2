@@ -1,0 +1,33 @@
+{
+  "date": "2026-11-24",
+  "status": "passed",
+  "game_sha256": "46caab2dad71d678e0a5f93864095dfa66b5ea33fc24416e2876706f1b2e3e8e",
+  "game_bytes": 1783734,
+  "command": "/workspace/RPG2/node_modules/.bin/playwright test -c tests/entrances-playwright.config.mjs --output=tests/entrances-final-verified-browser-artifacts",
+  "passed": 6,
+  "failed": 0,
+  "unexpected_page_errors": [],
+  "elapsed_report": "1.4m",
+  "log": "tests/entrances-validation/final-browser-results.txt",
+  "checks": [
+    "All four Reedbank buildings can be entered by clicking their drawn openings and return beside the same entrance; shelter conversations grant no resources.",
+    "All twelve original shop merchants retain their category and paired service, and actual quantity purchases work.",
+    "All six towns leave west and arrive facing inward with held-key arrival protection and no crossing-step encounter or resource changes.",
+    "Genuine preceding-build saves retain an eastern camp position; eight newly blocked footprints normalize player/checkpoints without losing resources or progression.",
+    "390px touch interaction, area map, shelter reload and western boardwalk exit remain usable without horizontal overflow.",
+    "A new hero meets Bessa and walks through the corrected exit to Merewatch and back."
+  ],
+  "visual_review": [
+    "Desktop Reedbank: four centered single-opening facades, distinct building labels and visible western boardwalk replace floating doors/gate.",
+    "390px Reedbank: all entrances and boardwalk visible; no horizontal overflow.",
+    "390px quiet shelter: resident, furnished room and south return opening visible; no rest service."
+  ],
+  "notes": [
+    "Initial pre-preview run failed on ERR_CONNECTION_REFUSED and chrome-error-origin storage errors; Vite was started before this verified run.",
+    "An earlier ready-server run passed five cases and exposed only a test expectation that player includes area; corrected to compare actual player x/y while checking state.area separately.",
+    "The first city recheck waited for arrival transition to finish while the movement key was intentionally held. It was interrupted and corrected to observe arrival while held, release, then wait for settled state.",
+    "All six cases then passed on one unchanged product hash; root rebuilt the path-only candidate after this full run reached terminal exit0.",
+    "Declared engine-generated fixtures establish locations/resources and legacy save states; movements, purchases, conversations and crossings use actual player input. This is bounded travel/save QA, not a complete campaign playthrough.",
+    "Subsequent path-only candidate receives a separate affected-case smoke receipt."
+  ]
+}

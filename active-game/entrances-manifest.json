@@ -1,0 +1,82 @@
+{
+  "baseline_file": "entrances-baseline.html",
+  "baseline_sha256": "c6ba59e2cfd83388a87e01011901718060b4da83332c35f0740dfa36038d34d1",
+  "working_file": "The_Road_Beyond_the_Bells.html",
+  "working_sha256": "5041bdf18a5d1e3b8ffb1d81c235f389630955842d2248d3a07f04e886e8a67f",
+  "working_bytes": 1783804,
+  "modules": [
+    "entrances_world",
+    "entrances_render"
+  ],
+  "module_sha256": {
+    "entrances_world": "9bad675cace00b9895db078f3473d923fe3052c993bb904193e3905df37a07f6",
+    "entrances_render": "036165d83516f23d7b4da3da1327b98b0d648dd54e7602ddade5861c4341b6e8"
+  },
+  "changes": [
+    "describe real facade thresholds and add two safe paired Reedbank shelter interiors",
+    "align all twelve shops and Reedbank homes before validating or drawing local maps",
+    "preserve old journeys by relocating only positions on newly widened Reedbank wall cells",
+    "let shelter residents speak through the existing dialogue framework without rewards or progression",
+    "keep new homes as conversation spaces rather than adding free inn recovery",
+    "show the correct resident and return-door guidance while keeping inappropriate rest controls hidden",
+    "give the travel ledger truthful context inside the newly enterable homes",
+    "connect both resident-house approaches to the existing Reedbank streets",
+    "paint quiet shelter rooms and share explicit entrance geometry with the visible facades",
+    "draw each active building once with its opening contained in the actual door tile",
+    "use subtle entry sills and a westward road marker instead of duplicate standing doors or barred town gates",
+    "place building labels above their roofs rather than across the entrance",
+    "report readonly painted opening bounds for pointer and alignment verification"
+  ],
+  "protected_combat_and_stats_unchanged": true,
+  "preserved": [
+    "Saved journeys, progression, story switches and existing merchant services",
+    "Ten canonical exterior world sites and their overworld approaches",
+    "Growth, MP/jobs, equipment ownership and regional rare drops",
+    "Optional NPC motion, camp menu, moon fix and travel ledger",
+    "Offline delivery and third-party notices"
+  ],
+  "pushed": false,
+  "published": false,
+  "date": "2026-11-24",
+  "status": "complete",
+  "save_version": 4,
+  "validation": {
+    "core_and_renderer": {
+      "command": "node --test tests/*core.test.cjs tests/*renderer.test.cjs",
+      "passed": 428,
+      "failed": 0,
+      "skipped": 0,
+      "game_sha256": "5041bdf18a5d1e3b8ffb1d81c235f389630955842d2248d3a07f04e886e8a67f",
+      "log": "tests/entrances-validation/final-core-results.txt"
+    },
+    "browser_full": {
+      "passed": 6,
+      "failed": 0,
+      "game_sha256": "46caab2dad71d678e0a5f93864095dfa66b5ea33fc24416e2876706f1b2e3e8e",
+      "receipt": "tests/entrances-validation/browser-status.json"
+    },
+    "browser_final_affected_repeat": {
+      "passed": 2,
+      "failed": 0,
+      "game_sha256": "5041bdf18a5d1e3b8ffb1d81c235f389630955842d2248d3a07f04e886e8a67f",
+      "receipt": "tests/entrances-validation/final-smoke-status.json"
+    },
+    "browser_unique_scenarios": 6,
+    "unexpected_page_errors": 0,
+    "final_revision": "Only connecting dirt-path cells changed after the full browser run; the two affected building/mobile scenarios were repeated on the final hash.",
+    "component_receipt": "tests/entrances-validation/component-checks.json",
+    "independent_read_only_review": "No blocking issue found in final entrance modules, migration, paired travel or candidate artifact scope.",
+    "limits": "Bounded travel, UI and save-compatibility coverage; not a full campaign or economy playthrough."
+  },
+  "delivery": {
+    "embedded_script_syntax": "passed",
+    "packaging": "npm run build passed",
+    "exact_copies": [
+      "/workspace/RPG2/demo/index.html",
+      "/workspace/RPG2/dist/index.html"
+    ],
+    "preview": "http://127.0.0.1:5173/",
+    "push_requested": true,
+    "state_at_validation": "Before requested GitHub commit and push; no site publishing requested."
+  }
+}

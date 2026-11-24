@@ -7,6 +7,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const test = require('node:test');
 const vm = require('node:vm');
+const { visitShop } = require('./shop-fixture.cjs');
 const root = path.resolve(__dirname, '..');
 const htmlPath = process.env.GAME_HTML || path.join(root, 'The_Road_Beyond_the_Bells.html');
 const plain = value => JSON.parse(JSON.stringify(value));
@@ -124,9 +125,7 @@ test('new light and dark spells retain school, tier and eligible jobs and requir
   assert.equal(game.buySpell('Iona', 'lumen'), false);
   assert.equal(context.knowsSpell(game.state, hero(game, 'Soren'), context.te.find(s => s.id === 'lumen')), false);
   // Reaching the regional merchant replaces character-level purchase gates.
-  game.state.area = 'fen';
-  const merchant = context.he.fen.entities.find(entity => entity.shopKind === 'magic');
-  game.state.player = { x: merchant.x, y: merchant.y + 1, facing: 'up' };
+  visitShop(context, game, 'fen', 'magic');
   assert.equal(hero(game, 'Iona').level, 1);
   assert.equal(game.buySpell('Iona', 'radiance'), true);
   assert.ok(fix.reload().state.learnedSpells.Iona.includes('radiance'));

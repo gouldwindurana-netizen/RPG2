@@ -1,0 +1,19 @@
+✔ all buildings have real paired thresholds, with centered Reedbank facades (92.840285ms)
+✔ all four starting buildings are reached by real paths from the watchfire and return to their own approaches (34.821399ms)
+✔ every relocated shop can be walked through, used at its original keeper, and exited without changing travel resources (31.345539ms)
+✔ Reedbank boardwalk and the six town western exits share a safe outward/inward travel rule (31.568915ms)
+✔ the two new residents provide repeatable conversations without rewards, progression, or recovery (21.92399ms)
+✔ genuine prior saves on exactly the eight newly blocked wall cells relocate only the player and checkpoint (167.224293ms)
+✔ old eastern arrivals, old shop approaches and unrelated invalid-save rejection remain unchanged (101.151485ms)
+✔ known-cell recovery is scoped separately to the camp player and camp checkpoint (51.09262ms)
+✔ all fourteen new and existing interiors save and reload at safe, usable room positions (42.986501ms)
+✔ the painted opening is contained in, and clicks into, the authored threshold cell (27.876832ms)
+✔ entrance corrections do not change item, skill, enemy, progression, or story-switch catalogues (32.990003ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 798.256644
